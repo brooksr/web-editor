@@ -162,7 +162,7 @@ summary {
   margin: 1%;
   padding: 2%;
   position: relative;
-  max-height: 20em;
+  max-height: 100%;
   text-align:center;
   background: #222;
 }
