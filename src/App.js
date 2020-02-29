@@ -14,6 +14,14 @@ import {uml_export} from './templates/uml_export.js';
 import {keys} from "./keys.js";
 
 let config = {
+  toolbar: {
+    show_images: true,
+    outlines: true,
+    menuOpen: false,
+    zoom: 1,
+    view: "visual",
+    device: "desktop"
+  },
   campaigns: [
     {
       name: "Inboxed Incentive | Save Your Cart",
@@ -309,7 +317,7 @@ function Toolbar(props) {
         .catch((error) => {
           console.error('Error:', error);
         });
-  }
+  };
   return (
       <div id="toolbar">
         <div className="button-group">
@@ -428,7 +436,7 @@ function Canvas(props) {
   return (
       <div className={classes}>
         <iframe id="canvas" srcDoc={props.html} onLoad={handleLoad} style={{transform: `scale(${props.zoom})`}}>
-          <h1>Testing</h1>
+
         </iframe>
       </div>
   );
@@ -533,22 +541,15 @@ class App extends React.Component {
     this.changeDevice = this.changeDevice.bind(this);
     this.toggleView = this.toggleView.bind(this);
     this.toggleOutlines = this.toggleOutlines.bind(this);
-    this.state = {
-      show_images: true,
-      outlines: true,
-      menuOpen: false,
-      zoom: 1,
-      view: "visual",
-      device: "desktop"
-    }
+    this.state = config;
   }
 
   render() {
     return (
         <div>
           <Toolbar
-              view={this.state.view}
-              device={this.state.device}
+              view={this.state.toolbar.view}
+              device={this.state.toolbar.device}
               toggleImages={this.toggleImages}
               toggleMenu={this.toggleMenu}
               changeZoom={this.changeZoom}
@@ -557,15 +558,15 @@ class App extends React.Component {
               toggleOutlines={this.toggleOutlines}
           />
           <Menu
-              open={this.state.menuOpen}
+              open={this.state.toolbar.menuOpen}
               toggleMenu={this.toggleMenu}
           />
           <Canvas
-              show_images={this.state.show_images}
-              outlines={this.state.outlines}
-              device={this.state.device}
-              zoom={this.state.zoom}
-              html={config.templates[0].html}
+              show_images={this.state.toolbar.show_images}
+              outlines={this.state.toolbar.outlines}
+              device={this.state.toolbar.device}
+              zoom={this.state.toolbar.zoom}
+              html={this.state.templates[0].html}
           />
           <div id="canvasNotice"></div>
           <Editor />
