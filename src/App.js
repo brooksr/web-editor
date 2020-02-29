@@ -259,6 +259,26 @@ let setDrag = (elm) => {
   }, false);
 };
 let editor = {};
+function ImageMenu(props) {
+  return (
+      <div className={"cm_wrap modal menu" + (props.open ? "" : " invisible")}>
+        <button id="menuClose" className="button-small" onClick={props.toggleImageMenu}>×</button>
+        <h3>Images</h3>
+        <form action="" method="post" encType="multipart/form-data">
+          <input type="file" name="fileToUpload" id="fileToUpload" />
+          <input type="submit" value="Upload Image" name="submit" />
+        </form>
+        <ul>
+          {config.images.map((i) =>
+              <li key={i}>
+                <img src={i}/>
+                <a href={i} target="_blank">{i}</a><span className="image-size">99kb</span>
+              </li>
+          )}
+        </ul>
+      </div>
+  )
+}
 function Menu(props) {
   return (
       <div className={"cm_wrap modal menu" + (props.open ? "" : " invisible")}>
@@ -266,7 +286,7 @@ function Menu(props) {
         <div className="newItem">
           <h3>New</h3>
           <ul>
-            {config.templates.map((i, index) =>
+            {config.templates.map((i) =>
                 <li key={i.name}>
                   {i.icon}
                   <h4>{i.name}</h4>
@@ -278,11 +298,12 @@ function Menu(props) {
           <h3>Open</h3>
           {config.campaigns.map((campaign, ind) =>
               <div key={campaign.desc} className="campaignWrapper">
-                <h4><a href={campaign.opp} target="_blank">{campaign.name}</a></h4>
+                <h4><a href={campaign.opp} rel="noopener noreferrer" target="_blank">{campaign.name}</a></h4>
                 <p>{campaign.desc}</p>
-                <div>
+                <div className="radio-buttons">
                   {campaign.modal && campaign.modal.map((i, index) => (<button key={index}>{i.name}</button>))}
-                  <br /><br />
+                </div>
+                <div className="radio-buttons">
                   {campaign.email && campaign.email.map((i, index) => (<button key={index}>{i.name}</button>))}
                 </div>
               </div>
@@ -325,7 +346,7 @@ function Toolbar(props) {
             <i className="fas fa-bars"></i>
             <span className="tablet-tooltip">Menu</span>
           </button>
-          <button type="button" id="manageImages">
+          <button type="button" id="manageImages" onClick={props.toggleImageMenu}>
             <i className="far fa-images"></i>
             <span className="tablet-tooltip">Manage Images</span>
           </button>
@@ -537,11 +558,20 @@ class App extends React.Component {
     super(props);
     this.toggleImages = this.toggleImages.bind(this);
     this.toggleMenu = this.toggleMenu.bind(this);
+    this.toggleImageMenu = this.toggleImageMenu.bind(this);
     this.changeZoom = this.changeZoom.bind(this);
     this.changeDevice = this.changeDevice.bind(this);
     this.toggleView = this.toggleView.bind(this);
     this.toggleOutlines = this.toggleOutlines.bind(this);
-    this.state = config;
+    this.state = {
+      show_images: true,
+      outlines: true,
+      menuOpen: false,
+      imageMenuOpen: false,
+      zoom: 1,
+      view: "visual",
+      device: "desktop"
+    }
   }
 
   render() {
@@ -552,6 +582,7 @@ class App extends React.Component {
               device={this.state.toolbar.device}
               toggleImages={this.toggleImages}
               toggleMenu={this.toggleMenu}
+              toggleImageMenu={this.toggleImageMenu}
               changeZoom={this.changeZoom}
               changeDevice={this.changeDevice}
               toggleView={this.toggleView}
@@ -560,6 +591,10 @@ class App extends React.Component {
           <Menu
               open={this.state.toolbar.menuOpen}
               toggleMenu={this.toggleMenu}
+          />
+          <ImageMenu
+              open={this.state.imageMenuOpen}
+              toggleImageMenu={this.toggleImageMenu}
           />
           <Canvas
               show_images={this.state.toolbar.show_images}
@@ -594,6 +629,13 @@ class App extends React.Component {
     this.setState((state, props) => {
       return {
         menuOpen: !this.state.menuOpen,
+      }
+    });
+  }
+  toggleImageMenu(event) {
+    this.setState((state, props) => {
+      return {
+        imageMenuOpen: !this.state.imageMenuOpen,
       }
     });
   }
