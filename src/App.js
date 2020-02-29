@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import {keys} from "./keys.js";
 
 // Blocks
 import {elements} from './elements.js';
@@ -13,47 +14,8 @@ import {modal} from './templates/modal.js';
 import {bar} from './templates/bar.js';
 import {uml} from './templates/uml.js';
 import {uml_export} from './templates/uml_export.js';
-import {keys} from "./keys.js";
 
 let editor = {};
-let setDrag = (elm) => {
-  elm.draggable = "true";
-  elm.addEventListener('dragstart', function dragStart(e) {
-    e.stopPropagation();
-    editor.drag = this;
-  }, false);
-  elm.addEventListener('dragend', function dragEnd(e) {
-    e.stopPropagation();
-  }, false);
-  elm.addEventListener('dragover', function dragOver(e) {
-    e.preventDefault();
-    e.stopPropagation();
-  }, false);
-  elm.addEventListener('dragenter', function dragEnter(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    let name = "";
-    if (this.id) name += "#" + this.id;
-    if (this.className) name += "." + this.className;
-    document.getElementById("canvasNotice").textContent = name;
-    this.parentNode.style.paddingTop = "1em";
-    this.classList.toggle("hover");
-  }, false);
-  elm.addEventListener('dragleave', function dragLeave(e) {
-    e.stopPropagation();
-    this.parentNode.style.paddingTop = "";
-    this.classList.toggle("hover");
-  }, false);
-  elm.addEventListener('drop', function dragDrop(e) {
-    e.stopPropagation();
-    this.parentNode.style.paddingTop = "";
-    this.classList.toggle("hover");
-    document.getElementById("canvasNotice").textContent = "";
-    if (elements[this.tagName.toLowerCase()] == null || elements[this.tagName.toLowerCase()].droppable === false) return;
-    this.append(editor.drag);
-    //editor.updateIds();
-  }, false);
-};
 function ImageMenu(props) {
   return (
       <div className={"cm_wrap modal menu" + (props.open ? "" : " invisible")}>
@@ -82,7 +44,7 @@ function Menu(props) {
           <h3>New</h3>
           <ul>
             {props.templates.map((i) =>
-                <li key={i.name}>
+                <li key={i.name} onClick={e => props.setTemplate(i.html)}>
                   {i.icon}
                   <h4>{i.name}</h4>
                 </li>
@@ -96,10 +58,10 @@ function Menu(props) {
                 <h4><a href={campaign.opp} rel="noopener noreferrer" target="_blank">{campaign.name}</a></h4>
                 <p>{campaign.desc}</p>
                 <div className="radio-buttons">
-                  {campaign.modal && campaign.modal.map((i, index) => (<button key={index}>{i.name}</button>))}
+                  {campaign.modal && campaign.modal.map((i, index) => (<button key={index} onClick={e => props.setTemplate(i.html)}>{i.name}</button>))}
                 </div>
                 <div className="radio-buttons">
-                  {campaign.email && campaign.email.map((i, index) => (<button key={index}>{i.name}</button>))}
+                  {campaign.email && campaign.email.map((i, index) => (<button key={index} onClick={e => props.setTemplate(i.html)}>{i.name}</button>))}
                 </div>
               </div>
           )}
@@ -285,6 +247,45 @@ function Canvas(props) {
         outline: none !important;
     }   
 `;
+
+    let setDrag = (elm) => {
+      elm.draggable = "true";
+      elm.addEventListener('dragstart', function dragStart(e) {
+        e.stopPropagation();
+        editor.drag = this;
+      }, false);
+      elm.addEventListener('dragend', function dragEnd(e) {
+        e.stopPropagation();
+      }, false);
+      elm.addEventListener('dragover', function dragOver(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+      elm.addEventListener('dragenter', function dragEnter(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let name = "";
+        if (this.id) name += "#" + this.id;
+        if (this.className) name += "." + this.className;
+        document.getElementById("canvasNotice").textContent = name;
+        this.parentNode.style.paddingTop = "1em";
+        this.classList.toggle("hover");
+      }, false);
+      elm.addEventListener('dragleave', function dragLeave(e) {
+        e.stopPropagation();
+        this.parentNode.style.paddingTop = "";
+        this.classList.toggle("hover");
+      }, false);
+      elm.addEventListener('drop', function dragDrop(e) {
+        e.stopPropagation();
+        this.parentNode.style.paddingTop = "";
+        this.classList.toggle("hover");
+        document.getElementById("canvasNotice").textContent = "";
+        if (elements[this.tagName.toLowerCase()] == null || elements[this.tagName.toLowerCase()].droppable === false) return;
+        this.append(editor.drag);
+        //editor.updateIds();
+      }, false);
+    };
     let [style, setCanvasStyle] = useState(canvasStyle);
     let handleLoad = () => {
     let canvas_style = document.createElement("style");
@@ -508,7 +509,7 @@ function App() {
       }
     ],
     templates: [
-        {
+    {
       html: modal,
       name: "Modal 1",
       icon: '<i class="fas fa-ad"></i>'
@@ -582,12 +583,17 @@ function App() {
   const [zoom, changeZoom] = useState(1);
   const [view, toggleView] = useState("visual");
   const [device, changeDevice] = useState("desktop");
-  
+
   const setZoom = function (e, to) {
     let newT = 1;
     if (to === "in") newT = zoom + 0.25;
     else if (to === "out") newT = zoom / 1.25;
     changeZoom(newT);
+  };
+
+  const setActiveTemplate = function(html){
+    toggleMenu(false);
+    setTemplate(html);
   };
 
   return (
@@ -608,6 +614,7 @@ function App() {
             templates={templates}
             open={menu_open}
             toggleMenu={toggleMenu}
+            setTemplate={setActiveTemplate}
         />
         <ImageMenu
             images={images}
