@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
+// Blocks
 import {elements} from './elements.js';
 import {modalBlocks} from './modal-blocks.js';
 import {emailBlocks} from './email-blocks.js';
 
+// Templates
 import {email} from './templates/email.js';
 import {email2} from './templates/email2.js';
 import {modal} from './templates/modal.js';
@@ -13,213 +15,7 @@ import {uml} from './templates/uml.js';
 import {uml_export} from './templates/uml_export.js';
 import {keys} from "./keys.js";
 
-let config = {
-  toolbar: {
-    show_images: true,
-    outlines: true,
-    menuOpen: false,
-    zoom: 1,
-    view: "visual",
-    device: "desktop"
-  },
-  campaigns: [
-    {
-      name: "Inboxed Incentive | Save Your Cart",
-      desc: "Summary of campaign. Testing instructions.",
-      rules: {
-        lift_test: 0.90,
-        languages: ["en"],
-        locales: ["us"],
-        pages: ["home"],
-        stages: ["active_cart"],
-        visitors: ["new"],
-        notes: "",
-      },
-      features: {
-        other: ["cart_rebuilder", "coupon_reminder"],
-        coupon: {
-          source: "SAVE10",
-          expiration: "2020-12-31",
-          apply: "Only from email"
-        },
-        notes: "",
-      },
-      admin: {
-        site_id: "23456",
-        tracking: "https://www.example.com?url=",
-        sale_window: 86400 * 30,
-        opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
-        design_notes: "This is an area for design notes and feedback. Add links to client references and assets.",
-        dev_notes: "Notes for the development team. Comments on specific functionality.",
-        qa_notes: "Notes for QA. Links to QA docs.",
-      },
-      modal: [{
-        name: "Lead Capture",
-        html: modal,
-        split: "",
-        launch_method: "abandonment",
-        launch_settings: 6,
-        link: "https://www.destination.com/cart",
-        notes: "",
-      },{
-        name: "Coupon reminder",
-        html: bar,
-        notes: "",
-      }],
-      email: [{
-        name: "Email 1",
-        time: 3600,
-        html: uml_export,
-        link: "https://www.destination.com/cart",
-        notes: "",
-      },{
-        name: "Email 2",
-        time: 86400 - 3600,
-        html: email,
-        link: "https://www.destination.com/cart",
-        notes: "",
-      },{
-        name: "Email 3",
-        time: 86400 * 2,
-        html: email2,
-        link: "https://www.destination.com/cart",
-        notes: "",
-      }]
-    },
-    {
-      name: "Precise Promotion | Free Shipping",
-      desc: "Example description here.",
-      opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
-      modal: [{
-        name: "FS",
-        html: modal,
-        split: "",
-        launch_method: "abandonment",
-        launch_settings: 6,
-        link: "https://www.destination.com/cart",
-        notes: "",
-      }]
-    }
-  ],
-  templates: [{
-    html: modal,
-    name: "Modal 1",
-    icon: '<i class="fas fa-ad"></i>'
-  },{
-    html: email,
-    name: "Email 1",
-    icon: '<i class="far fa-envelope"></i>'
-  },{
-    html: email2,
-    name: "Email 2",
-    icon: '<i class="far fa-envelope"></i>'
-  },{
-    html: bar,
-    name: "bar 1",
-    icon: '<i class="fas fa-ad"></i>'
-  },{
-    html: uml,
-    name: "uml 1",
-    icon: '<i class="fab fa-html5"></i>'
-  },{
-    html: uml_export,
-    name: "uml_export",
-    icon: '<i class="fab fa-html5"></i>'
-  }],
-  blocks: [{
-    name: "Modal blocks",
-    blocks: modalBlocks
-  },{
-    name: "Email blocks",
-    blocks: emailBlocks
-  }],
-  images: [
-    "https://via.placeholder.com/600x50?text=LOGO",
-    "https://via.placeholder.com/50x50?text=1",
-    "https://via.placeholder.com/250x250?text2",
-    "https://via.placeholder.com/50x300?text=3",
-    "https://via.placeholder.com/50x50?text=4",
-  ],
-  fonts: [{
-    name: "SamsungSansRegular",
-    path: "./fonts/SamsungSansRegular-webfont"
-  },{
-    name: "SamsungSansSharp",
-    path: "./fonts/SamsungSharpSans-Medium"
-  }],
-  styles: {
-    "display-font": "SamsungSansSharp",
-    "text-font": "SamsungSansRegular",
-    "main-bg-color": "hsl(0, 0, 0)",
-    "main-font-color": "hsl(0, 0%, 98%)",
-    "primary-color": "hsl(231, 78%, 35%)",
-    "primary-color-dark": "hsl(231, 78%, 30%)",
-    "primary-color-text": "hsl(0, 0%, 98%)",
-    "overlay-color": "hsla(0, 0%, 0%, 0.5)"
-  },
-};
-let canvasStyle = `
-    ${config.fonts.reduce((acc, style) => acc += `
-    @font-face {
-        font-family: "${style.name}";
-        src: url("${style.path}.eot"); /* IE9 Compat Modes */
-        src: url("${style.path}.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-            url("${style.path}.otf") format("opentype"), /* Open Type Font */
-            url("${style.path}.svg") format("svg"), /* Legacy iOS */
-            url("${style.path}.ttf") format("truetype"), /* Safari, Android, iOS */
-            url("${style.path}.woff") format("woff"), /* Modern Browsers */
-            url("${style.path}.woff2") format("woff2"); /* Modern Browsers */
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-    }`, "")}
-    body, html {
-        min-height:100vh;
-    }
-    body {
-        margin:0;
-        transform: scale(1);
-        overflow: auto;
-        transform-origin: top left;
-        transition: transform 0.5s ease;
-        box-sizing: border-box;
-        ${Object.keys(config.styles).map(style => `--${style}: ${config.styles[style]};`).join("\n")}
-    }
-    .hover {
-        opacity: 0.2;
-    }
-    * {
-    box-sizing: inherit;
-        outline: 1px dashed rgba(100, 100, 100, 0.5);
-    }
-    *:hover {
-        outline: 1px dashed rgba(47,165,228, 0.5);
-    }
-    [data-status="active"] {
-        outline: 1px dashed #4db357;
-    }
-    [draggable] {
-        user-select: none;
-    }
-    [data-status="match"]:before {
-        content: "Match";
-        float: left;
-        position: absolute;
-        width: 4em;
-        left: -4em;
-        background: #4db357;
-        color: #fff;
-        border-radius: 5px;
-        font-size: 0.5rem;
-        padding: 0.25em;
-        overflow: visible;
-        white-space: nowrap;
-        word-break: normal;
-    }
-    .no-outline * {
-        outline: none !important;
-    }   
-`;
+let editor = {};
 let setDrag = (elm) => {
   elm.draggable = "true";
   elm.addEventListener('dragstart', function dragStart(e) {
@@ -258,7 +54,6 @@ let setDrag = (elm) => {
     //editor.updateIds();
   }, false);
 };
-let editor = {};
 function ImageMenu(props) {
   return (
       <div className={"cm_wrap modal menu" + (props.open ? "" : " invisible")}>
@@ -269,7 +64,7 @@ function ImageMenu(props) {
           <input type="submit" value="Upload Image" name="submit" />
         </form>
         <ul>
-          {config.images.map((i) =>
+          {props.images.map((i) =>
               <li key={i}>
                 <img src={i}/>
                 <a href={i} target="_blank">{i}</a><span className="image-size">99kb</span>
@@ -286,7 +81,7 @@ function Menu(props) {
         <div className="newItem">
           <h3>New</h3>
           <ul>
-            {config.templates.map((i) =>
+            {props.templates.map((i) =>
                 <li key={i.name}>
                   {i.icon}
                   <h4>{i.name}</h4>
@@ -296,7 +91,7 @@ function Menu(props) {
         </div>
         <div className="openItem">
           <h3>Open</h3>
-          {config.campaigns.map((campaign, ind) =>
+          {props.campaigns.map((campaign, ind) =>
               <div key={campaign.desc} className="campaignWrapper">
                 <h4><a href={campaign.opp} rel="noopener noreferrer" target="_blank">{campaign.name}</a></h4>
                 <p>{campaign.desc}</p>
@@ -428,14 +223,79 @@ function Toolbar(props) {
   );
 }
 function Canvas(props) {
-  let handleLoad = () => {
-    let canvas = document.getElementById("canvas").contentDocument;
+  let canvasStyle = `
+    ${props.fonts.reduce((acc, style) => acc += `
+    @font-face {
+        font-family: "${style.name}";
+        src: url("${style.path}.eot"); /* IE9 Compat Modes */
+        src: url("${style.path}.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+            url("${style.path}.otf") format("opentype"), /* Open Type Font */
+            url("${style.path}.svg") format("svg"), /* Legacy iOS */
+            url("${style.path}.ttf") format("truetype"), /* Safari, Android, iOS */
+            url("${style.path}.woff") format("woff"), /* Modern Browsers */
+            url("${style.path}.woff2") format("woff2"); /* Modern Browsers */
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }`, "")}
+    body, html {
+        min-height:100vh;
+    }
+    body {
+        margin:0;
+        transform: scale(1);
+        overflow: auto;
+        transform-origin: top left;
+        transition: transform 0.5s ease;
+        box-sizing: border-box;
+        ${Object.keys(props.styles).map(style => `--${style}: ${props.styles[style]};`).join("\n")}
+    }
+    .hover {
+        opacity: 0.2;
+    }
+    * {
+    box-sizing: inherit;
+        outline: 1px dashed rgba(100, 100, 100, 0.5);
+    }
+    *:hover {
+        outline: 1px dashed rgba(47,165,228, 0.5);
+    }
+    [data-status="active"] {
+        outline: 1px dashed #4db357;
+    }
+    [draggable] {
+        user-select: none;
+    }
+    [data-status="match"]:before {
+        content: "Match";
+        float: left;
+        position: absolute;
+        width: 4em;
+        left: -4em;
+        background: #4db357;
+        color: #fff;
+        border-radius: 5px;
+        font-size: 0.5rem;
+        padding: 0.25em;
+        overflow: visible;
+        white-space: nowrap;
+        word-break: normal;
+    }
+    .no-outline * {
+        outline: none !important;
+    }   
+`;
+    let [style, setCanvasStyle] = useState(canvasStyle);
+    let handleLoad = () => {
     let canvas_style = document.createElement("style");
     canvas_style.title = "editor";
-    canvas_style.innerHTML = canvasStyle;
+    canvas_style.innerHTML = style;
+    let canvas = document.getElementById("canvas").contentDocument;
     canvas.head.appendChild(canvas_style);
     canvas.body.addEventListener("focusin", e => {
-      if (canvas.querySelector("[data-status]")) canvas.querySelector("[data-status]").removeAttribute("data-status");
+      if (canvas.querySelector("[data-status]")) {
+        canvas.querySelector("[data-status]").removeAttribute("data-status");
+      }
       e.target.setAttribute("data-status", "active");
     });
     canvas.body.querySelectorAll("*:not(style):not(script)").forEach((elm, index) => {
@@ -459,6 +319,7 @@ function Canvas(props) {
         <iframe id="canvas" srcDoc={props.html} onLoad={handleLoad} style={{transform: `scale(${props.zoom})`}}>
 
         </iframe>
+        <div id="canvasNotice"></div>
       </div>
   );
 }
@@ -482,10 +343,10 @@ function Attribute(props) {
 function ValueInput(props) {
   return (
       <input name="value" type="text" autoComplete="off"
-             value={props.value} //"${value.replace(/"/g, "'")}"
-             pattern={props.pattern} //"${styles[prop]}"
-             className={props.className} //"${/^[rgb|hsl|#]/.test(value) ? `rgb` : "nonrgb"}"
-          //${/^[rgb|hsl|#]/.test(value) ? `style="background-color:${value};"` : ""}
+        value={props.value} //"${value.replace(/"/g, "'")}"
+        pattern={props.pattern} //"${styles[prop]}"
+        className={props.className} //"${/^[rgb|hsl|#]/.test(value) ? `rgb` : "nonrgb"}"
+        //${/^[rgb|hsl|#]/.test(value) ? `style="background-color:${value};"` : ""}
       />
   )
 }
@@ -506,8 +367,8 @@ function StyleRule(props) {
           <input name="selector" type="text" defaultValue=".usi_display button"/>
           <div className="css-line">
             <input name="property" type="text" autoComplete="off"
-                   value={props.property}
-                   pattern="font-family|font-style|font-weight|font-size|line-height|letter-spacing|word-spacing|color|text-transform|text-decoration|text-align|text-indent|text-shadow|word-wrap|white-space|text-overflow|height|width|min-width|max-width|min-height|max-height|overflow|overflow-x|overflow-y|flex|flex-grow|flex-shrink|flex-basis|resize|position|top|right|bottom|left|margin|margin-top|margin-left|margin-bottom|margin-right|padding|padding-top|padding-left|padding-bottom|padding-right|clear|float|display|flex-direction|flex-wrap|flex-flow|justify-content|alignment-baseline|align-items|align-content|order|z-index|background|background-color|background-image|background-repeat|background-attachment|background-position|background-size|filter|border|border-width|border-style|border-color|border-radius|outline|outline-width|outline-style|outline-color|opacity|box-shadow|transition|transform|visibility|cursor|content|text-size-adjust|list-style-type|border-spacing|border-collapse|table-layout|direction|box-sizing"
+               value={props.property}
+               pattern="font-family|font-style|font-weight|font-size|line-height|letter-spacing|word-spacing|color|text-transform|text-decoration|text-align|text-indent|text-shadow|word-wrap|white-space|text-overflow|height|width|min-width|max-width|min-height|max-height|overflow|overflow-x|overflow-y|flex|flex-grow|flex-shrink|flex-basis|resize|position|top|right|bottom|left|margin|margin-top|margin-left|margin-bottom|margin-right|padding|padding-top|padding-left|padding-bottom|padding-right|clear|float|display|flex-direction|flex-wrap|flex-flow|justify-content|alignment-baseline|align-items|align-content|order|z-index|background|background-color|background-image|background-repeat|background-attachment|background-position|background-size|filter|border|border-width|border-style|border-color|border-radius|outline|outline-width|outline-style|outline-color|opacity|box-shadow|transition|transform|visibility|cursor|content|text-size-adjust|list-style-type|border-spacing|border-collapse|table-layout|direction|box-sizing"
             />
             <ValueInput />
             <ValueSelect />
@@ -516,7 +377,27 @@ function StyleRule(props) {
       </form>
   )
 }
-function Editor() {
+function Elements(props) {
+  return (
+      <details>
+        <summary>Elements</summary>
+        {Object.keys(props.elements).map((tagName, i) => {
+          return props.elements[tagName].html ? <Block key={tagName} id={tagName} html={props.elements[tagName].html} /> : "";
+        })}
+      </details>
+  )
+}
+function BlockGroup(props) {
+  return (
+      <details>
+        <summary>{props.name}</summary>
+        {props.blocks.map((block, i) =>
+            <Block key={block.id} id={block.id} html={block.html} />
+        )}
+      </details>
+  )
+}
+function Editor(props) {
   return (
       <div id="editor">
         <div id="tab_panels" className="scroll">
@@ -532,143 +413,219 @@ function Editor() {
               </details>
             </div>
             <div className="blocks_tab">
-              {config.blocks.map((blockGroup, i) =>
-                  <details key={blockGroup.name}>
-                    <summary>{blockGroup.name}</summary>
-                    {blockGroup.blocks.map((block, i) =>
-                        <Block key={block.id} id={block.id} html={block.html} />
-                    )}
-                  </details>
+              {props.blocks.map((group, i) =>
+                  <BlockGroup key={group.name} name={group.name} blocks={group.blocks} />
               )}
-              <details>
-                <summary>Elements</summary>
-                {Object.keys(elements).map((tagName, i) => {
-                  return elements[tagName].html ? <Block key={tagName} id={tagName} html={elements[tagName].html} /> : "";
-                })}
-              </details>
+              <Elements elements={elements} />
             </div>
           </div>
         </div>
+        <ul id="hint"></ul>
       </div>
   );
 }
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.toggleImages = this.toggleImages.bind(this);
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.toggleImageMenu = this.toggleImageMenu.bind(this);
-    this.changeZoom = this.changeZoom.bind(this);
-    this.changeDevice = this.changeDevice.bind(this);
-    this.toggleView = this.toggleView.bind(this);
-    this.toggleOutlines = this.toggleOutlines.bind(this);
-    this.state = {
-      show_images: true,
-      outlines: true,
-      menuOpen: false,
-      imageMenuOpen: false,
-      zoom: 1,
-      view: "visual",
-      device: "desktop"
-    }
-  }
+function App() {
 
-  render() {
-    return (
-        <div>
-          <Toolbar
-              view={this.state.toolbar.view}
-              device={this.state.toolbar.device}
-              toggleImages={this.toggleImages}
-              toggleMenu={this.toggleMenu}
-              toggleImageMenu={this.toggleImageMenu}
-              changeZoom={this.changeZoom}
-              changeDevice={this.changeDevice}
-              toggleView={this.toggleView}
-              toggleOutlines={this.toggleOutlines}
-          />
-          <Menu
-              open={this.state.toolbar.menuOpen}
-              toggleMenu={this.toggleMenu}
-          />
-          <ImageMenu
-              open={this.state.imageMenuOpen}
-              toggleImageMenu={this.toggleImageMenu}
-          />
-          <Canvas
-              show_images={this.state.toolbar.show_images}
-              outlines={this.state.toolbar.outlines}
-              device={this.state.toolbar.device}
-              zoom={this.state.toolbar.zoom}
-              html={this.state.templates[0].html}
-          />
-          <div id="canvasNotice"></div>
-          <Editor />
-          <ul id="hint"></ul>
-        </div>
-    )
-  }
-  toggleImages(event) {
-    alert("unfinished");
-    this.setState((state, props) => {
-      return {
-        show_images: !this.state.show_images,
+  let defaultConfig = {
+    campaigns: [
+      {
+        name: "Inboxed Incentive | Save Your Cart",
+        desc: "Summary of campaign. Testing instructions.",
+        rules: {
+          lift_test: 0.90,
+          languages: ["en"],
+          locales: ["us"],
+          pages: ["home"],
+          stages: ["active_cart"],
+          visitors: ["new"],
+          notes: "",
+        },
+        features: {
+          other: ["cart_rebuilder", "coupon_reminder"],
+          coupon: {
+            source: "SAVE10",
+            expiration: "2020-12-31",
+            apply: "Only from email"
+          },
+          notes: "",
+        },
+        admin: {
+          site_id: "23456",
+          tracking: "https://www.example.com?url=",
+          sale_window: 86400 * 30,
+          opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
+          design_notes: "This is an area for design notes and feedback. Add links to client references and assets.",
+          dev_notes: "Notes for the development team. Comments on specific functionality.",
+          qa_notes: "Notes for QA. Links to QA docs.",
+        },
+        modal: [{
+          name: "Lead Capture",
+          html: modal,
+          split: "",
+          launch_method: "abandonment",
+          launch_settings: 6,
+          link: "https://www.destination.com/cart",
+          notes: "",
+        },{
+          name: "Coupon reminder",
+          html: bar,
+          notes: "",
+        }],
+        email: [{
+          name: "Email 1",
+          time: 3600,
+          html: uml_export,
+          link: "https://www.destination.com/cart",
+          notes: "",
+        },{
+          name: "Email 2",
+          time: 86400 - 3600,
+          html: email,
+          link: "https://www.destination.com/cart",
+          notes: "",
+        },{
+          name: "Email 3",
+          time: 86400 * 2,
+          html: email2,
+          link: "https://www.destination.com/cart",
+          notes: "",
+        }]
+      },
+      {
+        name: "Precise Promotion | Free Shipping",
+        desc: "Example description here.",
+        opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
+        modal: [{
+          name: "FS",
+          html: modal,
+          split: "",
+          launch_method: "abandonment",
+          launch_settings: 6,
+          link: "https://www.destination.com/cart",
+          notes: "",
+        }]
       }
-    });
-  }
-  toggleOutlines(event) {
-    alert("unfinished");
-    this.setState((state, props) => {
-      return {
-        outlines: !this.state.outlines,
-      }
-    });
-  }
-  toggleMenu(event) {
-    this.setState((state, props) => {
-      return {
-        menuOpen: !this.state.menuOpen,
-      }
-    });
-  }
-  toggleImageMenu(event) {
-    this.setState((state, props) => {
-      return {
-        imageMenuOpen: !this.state.imageMenuOpen,
-      }
-    });
-  }
-  changeZoom(event, to) {
-    let canvas = document.querySelector("#canvas");
+    ],
+    templates: [
+        {
+      html: modal,
+      name: "Modal 1",
+      icon: '<i class="fas fa-ad"></i>'
+    },{
+      html: email,
+      name: "Email 1",
+      icon: '<i class="far fa-envelope"></i>'
+    },{
+      html: email2,
+      name: "Email 2",
+      icon: '<i class="far fa-envelope"></i>'
+    },{
+      html: bar,
+      name: "bar 1",
+      icon: '<i class="fas fa-ad"></i>'
+    },{
+      html: uml,
+      name: "uml 1",
+      icon: '<i class="fab fa-html5"></i>'
+    },{
+      html: uml_export,
+      name: "uml_export",
+      icon: '<i class="fab fa-html5"></i>'
+    }],
+    blocks: [
+    {
+      name: "Modal blocks",
+      blocks: modalBlocks
+    },{
+      name: "Email blocks",
+      blocks: emailBlocks
+    }],
+    images: [
+      "https://via.placeholder.com/600x50?text=LOGO",
+      "https://via.placeholder.com/50x50?text=1",
+      "https://via.placeholder.com/250x250?text2",
+      "https://via.placeholder.com/50x300?text=3",
+      "https://via.placeholder.com/50x50?text=4",
+    ],
+    fonts: [
+        {
+      name: "SamsungSansRegular",
+      path: "./fonts/SamsungSansRegular-webfont"
+    },{
+      name: "SamsungSansSharp",
+      path: "./fonts/SamsungSharpSans-Medium"
+    }],
+    styles: {
+      "display-font": "SamsungSansSharp",
+      "text-font": "SamsungSansRegular",
+      "main-bg-color": "hsl(0, 0, 0)",
+      "main-font-color": "hsl(0, 0%, 98%)",
+      "primary-color": "hsl(231, 78%, 35%)",
+      "primary-color-dark": "hsl(231, 78%, 30%)",
+      "primary-color-text": "hsl(0, 0%, 98%)",
+      "overlay-color": "hsla(0, 0%, 0%, 0.5)"
+    },
+  };
+  const [campaigns, setCampaigns] = useState(defaultConfig.campaigns);
+  const [templates, setTemplates] = useState(defaultConfig.templates);
+  const [blocks, setBlocks] = useState(defaultConfig.blocks);
+  const [images, setImages] = useState(defaultConfig.images);
+  const [fonts, setFonts] = useState(defaultConfig.fonts);
+  const [styles, setStyles] = useState(defaultConfig.styles);
+  const [active_template, setTemplate] = useState(templates[0].html);
+
+  const [show_images, toggleImages] = useState(true);
+  const [outlines, toggleOutlines] = useState(true);
+  const [menu_open, toggleMenu] = useState(false);
+  const [image_menu_open, toggleImageMenu] = useState(false);
+  const [zoom, changeZoom] = useState(1);
+  const [view, toggleView] = useState("visual");
+  const [device, changeDevice] = useState("desktop");
+  
+  const setZoom = function (e, to) {
     let newT = 1;
-    if (to == "in") {
-      newT = this.state.zoom + 0.25;
-    } else if (to == "out") {
-      newT = this.state.zoom / 1.25;
-    }
-    this.setState((state, props) => {
-      return {
-        zoom: newT,
-      }
-    });
-  }
-  changeDevice (e) {
-    e.persist();
-    this.setState((state, props) => {
-      return {
-        device: e.target.value,
-      }
-    });
-  }
-  toggleView (e) {
-    e.persist();
-    this.setState((state, props) => {
-      return {
-        view: e.target.value,
-      }
-    });
-  }
+    if (to === "in") newT = zoom + 0.25;
+    else if (to === "out") newT = zoom / 1.25;
+    changeZoom(newT);
+  };
+
+  return (
+      <div>
+        <Toolbar
+            view={view}
+            device={device}
+            toggleImages={() => toggleImages(!show_images)}
+            toggleOutlines={() => toggleOutlines(!outlines)}
+            toggleMenu={() => toggleMenu(!menu_open)}
+            toggleImageMenu={() => toggleImageMenu(!image_menu_open)}
+            changeZoom={setZoom}
+            toggleView={() => toggleView(view === "visual" ? "code" : "visual")}
+            changeDevice={() => changeDevice(device === "desktop" ? "mobile" : "desktop")}
+        />
+        <Menu
+            campaigns={campaigns}
+            templates={templates}
+            open={menu_open}
+            toggleMenu={toggleMenu}
+        />
+        <ImageMenu
+            images={images}
+            open={image_menu_open}
+            toggleImageMenu={toggleImageMenu}
+        />
+        <Canvas
+            html={active_template}
+            fonts={fonts}
+            styles={styles}
+            show_images={show_images}
+            outlines={outlines}
+            device={device}
+            zoom={zoom}
+        />
+        <Editor blocks={blocks} />
+      </div>
+  )
 }
 
 export default App;
