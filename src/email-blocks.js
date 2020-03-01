@@ -194,12 +194,12 @@ export const emailBlocks = [
         </table>
     </td>
 </tr>`
-  },, {
+  }, {
     id: "Spacer",
     html: `<tr>
     <td aria-hidden="true" height="40" class="spacer"></td> &nbsp;</td>
 </tr>`
-  },, {
+  }, {
     id: "text 2",
     html: `<tr>
     <td class="content-bg">
@@ -210,7 +210,7 @@ export const emailBlocks = [
         </table>
     </td>
 </tr>`
-  },, {
+  }, {
     id: "footer",
     html: `<table align="center" width="600" class="email-container">
     <tr>
@@ -225,7 +225,7 @@ export const emailBlocks = [
         </td>
     </tr>
 </table>`
-  },, {
+  }, {
     id: "Full width",
     html: `<table width="100%" class="primary-bg">
     <tr>

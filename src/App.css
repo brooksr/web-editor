@@ -283,7 +283,7 @@ summary {
 .input-group {
   display: flex;
   flex-wrap: wrap;
-  align-items: start;
+  align-items: flex-start;
   padding-bottom: 0.25em;
 }
 .input-group label {
@@ -291,7 +291,7 @@ summary {
   padding: .25em 0.5em;
   color: #4db357;
 }
-.input-group input, .input-group select{
+.input-group input, .input-group select, .input-group textarea{
   flex: 1 0 auto;
   width: 3em;
   color:#ddd;
