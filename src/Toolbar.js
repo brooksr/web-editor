@@ -59,15 +59,15 @@ export function Toolbar(props) {
                         <i className="fas fa-table"> </i>
                         <span className="tablet-tooltip">Campaign Specs</span>
                     </label>
-                    <input id="editor-view-visual" name="editor-view" type="radio" value="visual" defaultChecked/>
-                    <label htmlFor="editor-view-visual">
-                        <i className="fas fa-eye"> </i>
-                        <span className="tablet-tooltip">Visual</span>
-                    </label>
                     <input id="editor-view-code" name="editor-view" type="radio" value="code"/>
                     <label htmlFor="editor-view-code">
                         <i className="fas fa-code"> </i>
                         <span className="tablet-tooltip">Code</span>
+                    </label>
+                    <input id="editor-view-visual" name="editor-view" type="radio" value="visual" defaultChecked/>
+                    <label htmlFor="editor-view-visual">
+                        <i className="fas fa-eye"> </i>
+                        <span className="tablet-tooltip">Visual</span>
                     </label>
                 </div>
                 <div className="save-group">

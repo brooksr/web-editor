@@ -6,7 +6,10 @@ import {data} from './data.js';
 import {Canvas} from './Canvas.js';
 import {Toolbar} from './Toolbar.js';
 import {Editor} from './Editor.js';
-import {Menu, ImageMenu, ClientSettings} from './Menu.js';
+import {Menu, ImageMenu, ClientSettings, CodeEditor} from './Menu.js';
+let CodeMirror = require('react-codemirror');
+require('codemirror/lib/codemirror.css');
+require('codemirror/mode/htmlmixed/htmlmixed');
 
 function App() {
     console.log(JSON.stringify(data, null, "\t"));
@@ -34,7 +37,7 @@ function App() {
         changeZoom(newT);
     };
     const setActiveTemplate = function (html) {
-        setView("visual");
+        //setView("visual");
         setTemplate(html);
     };
 
@@ -69,6 +72,12 @@ function App() {
                 setStyles={setStyles}
                 campaigns={campaigns}
                 setTemplate={setActiveTemplate}
+            />
+            <CodeEditor
+                view={view}
+                src_doc={src_doc}
+                setActiveTemplate={setActiveTemplate}
+                CodeMirror={CodeMirror}
             />
             <Canvas
                 src_doc={src_doc}

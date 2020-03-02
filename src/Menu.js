@@ -1,4 +1,6 @@
 import React from "react";
+let CodeMirror = require('react-codemirror');
+
 export function Menu(props) {
     return (
         <div className={"cm_wrap modal menu" + (props.view === "menu" ? "" : " invisible")}>
@@ -20,23 +22,37 @@ export function Menu(props) {
     )
 }
 export function ImageMenu(props) {
-    return (
-        <div className={"cm_wrap modal menu" + (props.view === "images" ? "" : " invisible")}>
-            <h3>Images</h3>
-            <form action="" method="post" encType="multipart/form-data">
-                <input type="file" name="fileToUpload" id="fileToUpload"/>
-                <input type="submit" value="Upload Image" name="submit"/>
-            </form>
-            <ul>
-                {props.images.map((i) =>
-                    <li key={i.src}>
-                        <img src={i.src} alt={i.alt} />
-                        <a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a><span className="image-size">i.size</span>
-                    </li>
-                )}
-            </ul>
-        </div>
-    )
+  return (
+      <div className={"cm_wrap modal menu" + (props.view === "images" ? "" : " invisible")}>
+        <h3>Images</h3>
+        <form action="" method="post" encType="multipart/form-data">
+          <input type="file" name="fileToUpload" id="fileToUpload"/>
+          <input type="submit" value="Upload Image" name="submit"/>
+        </form>
+        <ul>
+          {props.images.map((i) =>
+              <li key={i.src}>
+                <img src={i.src} alt={i.alt} />
+                <a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a><span className="image-size">i.size</span>
+              </li>
+          )}
+        </ul>
+      </div>
+  )
+}
+export function CodeEditor(props) {
+  let options = {
+    lineNumbers: true,
+    lineWrapping: true,
+    theme: "darcula",
+    mode: "htmlmixed"
+  };
+  return (
+      <div className={"cm_wrap modal menu" + (props.view === "code" ? "" : " invisible")}>
+        <h3>CodeMirror</h3>
+        <CodeMirror value={props.src_doc} onChange={props.setActiveTemplate} options={options} />
+      </div>
+  )
 }
 export function ClientSettings(props) {
     return (
