@@ -453,6 +453,26 @@ input:invalid {
   padding: 1em;
   margin-bottom: 1em;
 }
+.iframeWrapper {
+  position: relative;
+  height: 10em;
+  width: 10em;
+  float: left;
+
+}
+.iframeWrapper iframe {
+  height: 35em;
+  width: 35em;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: top left;
+  transform: scale(0.2);
+  zoom: 1.25;
+
+  transform: scale(0.125);
+  zoom: 2;
+}
 .scroll {
   overflow-y: auto;
 }

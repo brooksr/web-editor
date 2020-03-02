@@ -97,7 +97,7 @@ function CampaignSummary(props){
 function Campaign(props){
     let campaign = props.campaign;
     return (
-        <div className="campaignWrapper">
+        <div className="campaignWrapper clearfix">
             <h4><a href={campaign.admin.opp} rel="noopener noreferrer" target="_blank">{campaign.name}</a></h4>
             <p>{campaign.notes}</p>
             <div className="radio-buttons">
@@ -111,19 +111,22 @@ function Campaign(props){
                 })}
             </div>
             <div>
-                <div className="campaignWrapper">
+                {/*<div className="campaignWrapper">
                     {campaign.modal && Object.keys(campaign.modal.defaults).map(prop => {
                         return (
                             <InputGroup key={prop} label={prop} value={campaign.modal.defaults[prop]} />
                         )
                     })}
-                </div>
+                </div>*/}
                 <div style={{marginLeft:"1em"}}>
                     {campaign.modal && campaign.modal.configs.map((config, index) => {
                         return (
-                            <div key={index} className="campaignWrapper">
-                                {Object.keys(config).map(prop => {
-                                    return (
+                            <div key={index} className="campaignWrapper clearfix">
+                                <div className="iframeWrapper">
+                                    <iframe srcDoc={config.html}></iframe>
+                                </div>
+                                {Object.keys(Object.assign(config, campaign.modal.defaults)).map(prop => {
+                                    return prop === "html" ? "" : (
                                         <InputGroup key={prop} label={prop} value={config[prop]} />
                                     )
                                 })}
@@ -131,20 +134,23 @@ function Campaign(props){
                         )
                     })}
                 </div>
-                <div className="campaignWrapper">
+                {/*<div className="campaignWrapper">
                     {campaign.email && Object.keys(campaign.email.defaults).map(prop => {
                         return (
                             <InputGroup key={prop} label={prop} value={campaign.email.defaults[prop]} />
                         )
                     })}
-                </div>
+                </div>*/}
                 <div style={{marginLeft:"1em"}}>
                     {campaign.email && campaign.email.attempts.map((config, index) => {
                         return (
-                            <div key={index} className="campaignWrapper">
-                                {Object.keys(config).map(prop => {
-                                    return (
-                                        <InputGroup key={prop} label={prop} value={config[prop]} />
+                            <div key={index} className="campaignWrapper clearfix">
+                                <div className="iframeWrapper">
+                                    <iframe srcDoc={config.html}></iframe>
+                                </div>
+                                {Object.keys(Object.assign(config, campaign.email.defaults)).map(prop => {
+                                    return prop === "html" ? "" :  (
+                                            <InputGroup key={prop} label={prop} value={config[prop]} />
                                     )
                                 })}
                             </div>
