@@ -8,6 +8,13 @@ import {modalBlocks} from "./modal-blocks";
 import {emailBlocks} from "./email-blocks";
 
 export let data = {
+    company: {
+        address: "123 Easy St. | Anytown, CA, USA, 98765",
+        legal: "&copy {{date_now:yyyy}} | Company Name, LLC. All rights reserved.",
+        facebook: "https://www.facebook.com/",
+        twitter: "https://www.twitter.com/",
+        linkedin: "https://www.linkedin.com/",
+    },
     campaigns: [
         {
             name: "Inboxed Incentive | Save Your Cart",
@@ -57,19 +64,27 @@ export let data = {
             },
             email: {
                 defaults: {
+                    from_name: "Samsung Support",
+                    from_email: "support@samsung.com",
                     link: "https://www.destination.com/cart",
                 },
                 attempts: [
                     {
                         name: "Email 1",
+                        subject: "subject line 1",
+                        preheader: "preheader line 1",
                         time: 3600,
                         html: uml_export,
                     }, {
                         name: "Email 2",
+                        subject: "subject line 2",
+                        preheader: "preheader line 2",
                         time: 86400 - 3600,
                         html: email,
                     }, {
                         name: "Email 3",
+                        subject: "subject line 3",
+                        preheader: "preheader line 3",
                         time: 86400 * 2,
                         html: email2,
                     }

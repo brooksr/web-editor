@@ -10,6 +10,7 @@ import {Menu, ImageMenu, ClientSettings} from './Menu.js';
 
 function App() {
     console.log(JSON.stringify(data, null, "\t"));
+    const [company, setCompany] = useState(data.company);
     const [campaigns, setCampaigns] = useState(data.campaigns);
     const [templates, setTemplates] = useState(data.templates);
     const [blocks, setBlocks] = useState(data.blocks);
@@ -20,14 +21,11 @@ function App() {
 
     const [show_images, toggleImages] = useState(true);
     const [outlines, toggleOutlines] = useState(true);
-    const [menu_open, toggleMenu] = useState(false);
-    const [csd_open, toggleCampaignView] = useState(false);
-    const [image_menu_open, toggleImageMenu] = useState(false);
     const [zoom, changeZoom] = useState(1);
-    const [view, toggleView] = useState("visual");
-    const [device, changeDevice] = useState("desktop");
     const [drag, setDragging] = useState(null);
     const [active_element, setActive] = useState(null);
+    const [view, setView] = useState("visual");
+    const [device, changeDevice] = useState("desktop");
 
     const setZoom = function (e, to) {
         let newT = 1;
@@ -36,12 +34,9 @@ function App() {
         changeZoom(newT);
     };
     const setActiveTemplate = function (html) {
-        toggleMenu(false);
+        setView("visual");
         setTemplate(html);
     };
-    const setImageMenu = () => toggleImageMenu(!image_menu_open);
-    const setMenu = () => toggleMenu(!menu_open);
-    const setCampaignView = () => toggleCampaignView(!csd_open);
 
     return (
         <div>
@@ -51,34 +46,29 @@ function App() {
                 device={device}
                 toggleImages={() => toggleImages(!show_images)}
                 toggleOutlines={() => toggleOutlines(!outlines)}
-                toggleMenu={setMenu}
-                toggleImageMenu={setImageMenu}
                 changeZoom={setZoom}
-                toggleCampaignView={toggleCampaignView}
-                toggleView={() => toggleView(view === "visual" ? "code" : "visual")}
-                changeDevice={() => changeDevice(device === "desktop" ? "mobile" : "desktop")}
+                setView={setView}
+                changeDevice={changeDevice}
             />
             <Menu
+                view={view}
                 campaigns={campaigns}
                 templates={templates}
-                open={menu_open}
-                toggleMenu={setMenu}
                 setTemplate={setActiveTemplate}
             />
             <ImageMenu
+                view={view}
                 images={images}
-                open={image_menu_open}
-                toggleImageMenu={setImageMenu}
             />
             <ClientSettings
-                open={csd_open}
+                view={view}
+                company={company}
                 fonts={fonts}
                 styles={styles}
                 setFonts={setFonts}
                 setStyles={setStyles}
                 campaigns={campaigns}
                 setTemplate={setActiveTemplate}
-                toggleMenu={setCampaignView}
             />
             <Canvas
                 src_doc={src_doc}
