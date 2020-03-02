@@ -1,13 +1,15 @@
 import {elements} from "./elements";
+import {styles} from "./styles";
 import React, {useState} from "react";
 
 function Block(props) {
     let createNode = t => document.createRange().createContextualFragment(t);
-    let handleDragStart = e => props.setDragging(createNode(e.target.textContent));//innerHTML
     return (
         <div className="block">
             <h5>{props.id}</h5>
-            <code id={props.id} draggable="true" onDragStart={handleDragStart}>{props.html}</code>
+            <code id={props.id} draggable="true" onDragStart={e => props.setDragging(createNode(props.html))}>
+                {props.html}
+            </code>
         </div>
     )
 }
@@ -48,7 +50,7 @@ function ValueSelect(props) {
 
 function StyleRule(props) {
     //{/* onChange={editor.replaceCss} onfocusin={editor.updateMatches} onfocusout{editor.removeMatches}*/}
-    //TODO: generate pattern from styles.js
+    let cssNames = Object.assign(...styles).filter(n => n !== "id");
     return (
         <form className="doc_has_match " data-index="4" data-selector={props.selector}>
             <div className="input-group">
@@ -57,7 +59,7 @@ function StyleRule(props) {
                 <div className="css-line">
                     <input name="property" type="text" autoComplete="off"
                            value={props.name}
-                           pattern="font-family|font-style|font-weight|font-size|line-height|letter-spacing|word-spacing|color|text-transform|text-decoration|text-align|text-indent|text-shadow|word-wrap|white-space|text-overflow|height|width|min-width|max-width|min-height|max-height|overflow|overflow-x|overflow-y|flex|flex-grow|flex-shrink|flex-basis|resize|position|top|right|bottom|left|margin|margin-top|margin-left|margin-bottom|margin-right|padding|padding-top|padding-left|padding-bottom|padding-right|clear|float|display|flex-direction|flex-wrap|flex-flow|justify-content|alignment-baseline|align-items|align-content|order|z-index|background|background-color|background-image|background-repeat|background-attachment|background-position|background-size|filter|border|border-width|border-style|border-color|border-radius|outline|outline-width|outline-style|outline-color|opacity|box-shadow|transition|transform|visibility|cursor|content|text-size-adjust|list-style-type|border-spacing|border-collapse|table-layout|direction|box-sizing"
+                           pattern={cssNames.join("|")}
                     />
                     <ValueInput value={props.value} pattern={props.pattern}/>
                     <ValueSelect value={props.value} options={props.options}/>
@@ -92,7 +94,7 @@ function BlockGroup(props) {
 function Attributes(props) {
     let tag = props.active_element ? props.active_element.tagName.toLowerCase() : "body";
     //let attributes = elements[tag].attributes;
-    const [attributes, setActiveAttribute] = useState(elements[tag].attributes);
+    const [attributes, setActiveAttribute] = useState(elements[tag] ? elements[tag].attributes : elements.body.attributes);
     //TODO: resetting outerHTML loses active element
     //TODO: setActiveAttribute not working
     return (

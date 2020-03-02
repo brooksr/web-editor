@@ -23,11 +23,9 @@ export let data = {
             },
             features: {
                 other: ["cart_rebuilder", "coupon_reminder"],
-                coupon: {
-                    source: "SAVE10",
-                    expiration: "2020-12-31",
-                    apply: "Only from email"
-                },
+                coupon_source: "SAVE10",
+                coupon_expiration: "2020-12-31",
+                coupon_apply: "Only from email",
                 notes: "",
             },
             admin: {
@@ -40,7 +38,6 @@ export let data = {
                 qa_notes: "Notes for QA. Links to QA docs.",
             },
             modal: {
-                notes: "",
                 defaults: {
                     link: "https://www.destination.com/cart",
                 },
@@ -55,10 +52,10 @@ export let data = {
                         launch_method: "coupon_reminder",
                         html: bar,
                     }
-                ]
+                ],
+                notes: "",
             },
             email: {
-                notes: "",
                 defaults: {
                     link: "https://www.destination.com/cart",
                 },
@@ -76,7 +73,8 @@ export let data = {
                         time: 86400 * 2,
                         html: email2,
                     }
-                ]
+                ],
+                notes: "",
             }
         }, {
             name: "Precise Promotion | Free Shipping vs Free Gift",
@@ -98,7 +96,7 @@ export let data = {
             },
             modal: {
                 defaults: {
-                    split: 0.50,// 1 / config.length
+                    split: 0.50,// 1 / configs.length
                     launch_method: "abandonment",
                     launch_settings: 6,
                     link: "https://www.destination.com/cart",
@@ -109,7 +107,7 @@ export let data = {
                         name: "Free Shipping",
                         coupon: "FREESHIPPING",
                         html: modal,
-                    },{
+                    }, {
                         name: "Free Gift",
                         coupon: "FREEGIFT",
                         html: modal,
@@ -159,19 +157,19 @@ export let data = {
             src: "https://via.placeholder.com/50x50?text=1",
             alt: "alt placeholder",
             size: "99kb"
-        },{
+        }, {
             src: "https://via.placeholder.com/500x500?text=2",
             alt: "alt placeholder",
             size: "99kb"
-        },{
+        }, {
             src: "https://via.placeholder.com/250x50?text=3",
             alt: "alt placeholder",
             size: "99kb"
-        },{
+        }, {
             src: "https://via.placeholder.com/550x50?text=4",
             alt: "alt placeholder",
             size: "99kb"
-        },{
+        }, {
             src: "https://via.placeholder.com/550x50?text=5",
             alt: "alt placeholder",
             size: "99kb"

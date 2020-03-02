@@ -47,6 +47,10 @@ export function Toolbar(props) {
                     <i className="far fa-images"> </i>
                     <span className="tablet-tooltip">Manage Images</span>
                 </button>
+                <button type="button" id="manageImages" onClick={props.toggleCampaignView}>
+                    <i className="fas fa-table"> </i>
+                    <span className="tablet-tooltip">Campaign Specs</span>
+                </button>
             </div>
             <div className="save-group">
                 <input id="assetName" type="text" placeholder="Enter asset name" defaultValue="" autoComplete="off"/>

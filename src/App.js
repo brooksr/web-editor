@@ -6,7 +6,7 @@ import {data} from './data.js';
 import {Canvas} from './Canvas.js';
 import {Toolbar} from './Toolbar.js';
 import {Editor} from './Editor.js';
-import {Menu, ImageMenu} from './Menu.js';
+import {Menu, ImageMenu, ClientSettings} from './Menu.js';
 
 function App() {
     console.log(JSON.stringify(data, null, "\t"));
@@ -21,6 +21,7 @@ function App() {
     const [show_images, toggleImages] = useState(true);
     const [outlines, toggleOutlines] = useState(true);
     const [menu_open, toggleMenu] = useState(false);
+    const [csd_open, toggleCampaignView] = useState(false);
     const [image_menu_open, toggleImageMenu] = useState(false);
     const [zoom, changeZoom] = useState(1);
     const [view, toggleView] = useState("visual");
@@ -40,6 +41,7 @@ function App() {
     };
     const setImageMenu = () => toggleImageMenu(!image_menu_open);
     const setMenu = () => toggleMenu(!menu_open);
+    const setCampaignView = () => toggleCampaignView(!csd_open);
 
     return (
         <div>
@@ -52,6 +54,7 @@ function App() {
                 toggleMenu={setMenu}
                 toggleImageMenu={setImageMenu}
                 changeZoom={setZoom}
+                toggleCampaignView={toggleCampaignView}
                 toggleView={() => toggleView(view === "visual" ? "code" : "visual")}
                 changeDevice={() => changeDevice(device === "desktop" ? "mobile" : "desktop")}
             />
@@ -66,6 +69,14 @@ function App() {
                 images={images}
                 open={image_menu_open}
                 toggleImageMenu={setImageMenu}
+            />
+            <ClientSettings
+                open={csd_open}
+                fonts={fonts}
+                styles={styles}
+                setFonts={setFonts}
+                setStyles={setStyles}
+                campaigns={campaigns}
             />
             <Canvas
                 src_doc={src_doc}

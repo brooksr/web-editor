@@ -135,10 +135,11 @@ summary {
   z-index: 1;
   padding: 1em;
   top: 0;
-  min-height: 100vh;
+  height: 100vh;
   position: absolute;
   opacity: 1;
   transition: opacity 250ms ease;
+  overflow: auto;
 }
 .image-size {
   font-weight: bold;
@@ -381,6 +382,9 @@ summary {
 .flex > * {
   flex: 1 0 100%;
   order: 0;
+}
+.flex-4 {
+  flex: 1 0 33%;
 }
 .styles_tab h4 {
   margin: 0;

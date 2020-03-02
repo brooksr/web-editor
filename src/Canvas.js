@@ -35,7 +35,7 @@ export function Canvas(props) {
         opacity: 0.2;
     }
     * {
-    box-sizing: inherit;
+        box-sizing: inherit;
         outline: 1px dashed rgba(100, 100, 100, 0.5);
     }
     *:hover {
@@ -154,7 +154,7 @@ export function Canvas(props) {
     //TODO: bind to props.show_images?
     /*
     function () {
-        let imgs = editor.doc.querySelectorAll("img");
+        let imgs = editor.doc.querySelectorAll("img")
         imgs.forEach(img => {
             if (img.src === location.href) {
                 img.src = img.getAttribute("data-src");
