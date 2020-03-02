@@ -77,6 +77,8 @@ function App() {
                 setFonts={setFonts}
                 setStyles={setStyles}
                 campaigns={campaigns}
+                setTemplate={setActiveTemplate}
+                toggleMenu={setCampaignView}
             />
             <Canvas
                 src_doc={src_doc}

@@ -42,8 +42,8 @@ export function ImageMenu(props) {
 }
 export function ClientSettings(props) {
     return (
-        <div className={"cm_wrap modal menu" + (props.open ? "invisible" : " ")}>
-            <button id="menuClose" className="button-small" onClick={props.toggleImageMenu}>×</button>
+        <div className={"cm_wrap modal menu" + (props.open ? "" : " invisible")}>
+            <button id="menuClose" className="button-small" onClick={props.toggleMenu}>×</button>
             <h2>Client Settings</h2>
             <hr />
             <h3>Campaigns</h3>
