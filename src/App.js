@@ -12,7 +12,7 @@ require('codemirror/lib/codemirror.css');
 require('codemirror/mode/htmlmixed/htmlmixed');
 
 function App() {
-    console.log(JSON.stringify(data, null, "\t"));
+    //console.log(JSON.stringify(data, null, "\t"));
     const [company, setCompany] = useState(data.company);
     const [campaigns, setCampaigns] = useState(data.campaigns);
     const [templates, setTemplates] = useState(data.templates);

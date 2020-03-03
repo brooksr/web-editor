@@ -169,7 +169,7 @@ export let data = {
     ],
     images: [
         {
-            src: "https://via.placeholder.com/50x50?text=1",
+            src: "https://via.placeholder.com/50x550?text=1",
             alt: "alt placeholder",
             size: "99kb"
         }, {
@@ -185,7 +185,7 @@ export let data = {
             alt: "alt placeholder",
             size: "99kb"
         }, {
-            src: "https://via.placeholder.com/550x50?text=5",
+            src: "https://via.placeholder.com/50x50?text=5",
             alt: "alt placeholder",
             size: "99kb"
         },

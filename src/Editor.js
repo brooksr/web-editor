@@ -104,6 +104,7 @@ function Attributes(props) {
                 <textarea
                     value={props.active_element ? props.active_element.outerHTML : ""}
                     //onChange={e => props.active_element.outerHTML = e.target.value}
+                    className="scroll"
                     readOnly={true}
                 />
             </div>

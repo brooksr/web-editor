@@ -82,6 +82,10 @@ summary {
 .CodeMirror {
   height: 100% !important;
 }
+.cm-s-darcula span.cm-tag {
+  font-style: normal;
+  text-decoration: none;
+}
 .canvasWrapper {
   background-image: linear-gradient(45deg, #333 25%, transparent 25%, transparent 75%, #333 75%, #333 100%),linear-gradient(45deg, #333 25%, #555 25%, #555 75%, #333 75%, #333 100%);
   background-position: 0 0, 10px 10px;
@@ -167,9 +171,13 @@ summary {
   margin: 1%;
   padding: 2%;
   position: relative;
-  max-height: 100%;
+  max-height: 20em;
   text-align:center;
   background: #222;
+}
+.menu li img {
+  max-width: 100%;
+  max-height: 100%;
 }
 #menu_close {
   border-radius: 50px;
@@ -495,6 +503,9 @@ input:invalid {
   background-color: #666;
   outline: 1px solid #000;
   border-radius: 10px;
+}
+.scroll::-webkit-scrollbar-corner {
+  background-color: #000;
 }
 button:hover .tablet-tooltip, label:hover .tablet-tooltip {
   opacity: 1;

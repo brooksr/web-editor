@@ -33,7 +33,7 @@ export function ImageMenu(props) {
           {props.images.map((i) =>
               <li key={i.src}>
                 <img src={i.src} alt={i.alt} />
-                <a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a><span className="image-size">i.size</span>
+                <a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a><span className="image-size">{i.size}</span>
               </li>
           )}
         </ul>
@@ -49,7 +49,6 @@ export function CodeEditor(props) {
   };
   return (
       <div className={"cm_wrap modal menu" + (props.view === "code" ? "" : " invisible")}>
-        <h3>CodeMirror</h3>
         <CodeMirror value={props.src_doc} onChange={props.setActiveTemplate} options={options} />
       </div>
   )
