@@ -7,6 +7,10 @@ function Block(props) {
     return (
         <div className="block">
             <h5>{props.id}</h5>
+            <div className="button-group button-group-sm">
+                <button disabled={true}>Edit</button>
+                <button disabled={true}>Archive</button>
+            </div>
             <code id={props.id} draggable="true" onDragStart={e => props.setDragging(createNode(props.html))}>
                 {props.html}
             </code>
@@ -72,9 +76,10 @@ function StyleRule(props) {
 function Elements(props) {
     return (
         <details>
-            <summary>Elements</summary>
+            <summary>{props.name}</summary>
+
             {Object.keys(props.elements).map((tagName, i) => {
-                return props.elements[tagName].html ? <Block key={tagName} id={tagName} html={props.elements[tagName].html}/> : "";
+                return props.elements[tagName].html ? <Block setDragging={props.setDragging} key={tagName} id={tagName} html={props.elements[tagName].html}/> : "";
             })}
         </details>
     )
@@ -99,7 +104,11 @@ function Attributes(props) {
     //TODO: setActiveAttribute not working
     return (
         <div className="attributes_tab">
-            <h3>HTML</h3>
+            <h3>Block</h3>
+            <div className="button-group-sm">
+                <button>Save as Block</button>
+                <button>Delete</button>
+            </div>
             <div className="input-group">
                 <textarea
                     value={props.active_element ? props.active_element.outerHTML : ""}
@@ -140,13 +149,17 @@ export function Editor(props) {
                     <div className="blocks_tab">
                         {props.blocks.map((group, i) =>
                             <BlockGroup
-                                setDragging={props.setDragging}
                                 key={group.name}
                                 name={group.name}
                                 blocks={group.blocks}
+                                setDragging={props.setDragging}
                             />
                         )}
-                        <Elements elements={elements}/>
+                        <Elements
+                            name="Elements"
+                            elements={elements}
+                            setDragging={props.setDragging}
+                        />
                     </div>
                 </div>
             </div>

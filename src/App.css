@@ -46,7 +46,7 @@ a {
   color: #2ab34b;
 }
 .button-group {
-  display: flex;
+  display: inline-flex;
 }
 .button-group-sm button {
   padding: 0.5em;
@@ -81,6 +81,9 @@ summary {
 }
 .CodeMirror {
   height: 100% !important;
+}
+.cm-s-darcula.CodeMirror {
+  background: #0f0f0f;
 }
 .cm-s-darcula span.cm-tag {
   font-style: normal;
@@ -177,7 +180,7 @@ summary {
 }
 .menu li img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 70%;
 }
 #menu_close {
   border-radius: 50px;

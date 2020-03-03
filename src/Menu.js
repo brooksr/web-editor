@@ -4,6 +4,7 @@ let CodeMirror = require('react-codemirror');
 export function Menu(props) {
     return (
         <div className={"cm_wrap modal menu" + (props.view === "menu" ? "" : " invisible")}>
+            <button>Save as Template</button>
             <div className="newItem">
                 <h3>New</h3>
                 <ul>
@@ -33,7 +34,9 @@ export function ImageMenu(props) {
           {props.images.map((i) =>
               <li key={i.src}>
                 <img src={i.src} alt={i.alt} />
-                <a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a><span className="image-size">{i.size}</span>
+                <a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a>
+                <p>{i.alt}</p>
+                <span className="image-size">{i.size}</span>
               </li>
           )}
         </ul>
