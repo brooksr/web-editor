@@ -89,6 +89,9 @@ summary {
   font-style: normal;
   text-decoration: none;
 }
+.attributes_tab .CodeMirror-scroll {
+  max-height: 5em;
+}
 .canvasWrapper {
   background-image: linear-gradient(45deg, #333 25%, transparent 25%, transparent 75%, #333 75%, #333 100%),linear-gradient(45deg, #333 25%, #555 25%, #555 75%, #333 75%, #333 100%);
   background-position: 0 0, 10px 10px;

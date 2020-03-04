@@ -1,6 +1,7 @@
 import {elements} from "./elements";
 import {styles} from "./styles";
 import React, {useState} from "react";
+let CodeMirror = require('react-codemirror');
 
 function Block(props) {
 	let createNode = t => document.createRange().createContextualFragment(t);
@@ -134,6 +135,12 @@ function BlockGroup(props) {
 function Attributes(props) {
 	let tag = props.active_element && props.active_element.tagName.toLowerCase();
 	let attributes = elements[tag] ? elements[tag].attributes : elements.body.attributes;
+	let options = {
+		lineNumbers: false,
+		lineWrapping: true,
+		theme: "darcula",
+		mode: "htmlmixed",
+	};
 	//TODO: resetting outerHTML loses active element
 	//TODO: setActiveAttribute not working
 	if (!props.active_element) return <p className="help-text text-center">Select an element</p>
@@ -144,16 +151,6 @@ function Attributes(props) {
 					<button>Save as Block</button>
 					<button>Delete</button>
 				</div>
-				<div className="input-group">
-				<textarea
-						value={props.active_element.outerHTML}
-						//onChange={e => props.active_element.outerHTML = e.target.value}
-						autoComplete="off"
-						className="scroll"
-						readOnly={true}
-				/>
-				</div>
-				<h3>Active Attributes</h3>
 				{Object.keys(attributes).map(attr => {
 					return (
 							<Attribute
@@ -165,6 +162,16 @@ function Attributes(props) {
 							/>
 					)
 				})}
+				<CodeMirror value={props.active_element.outerHTML} options={options}/>
+				{/*<div className="input-group">
+				<textarea
+						value={props.active_element.outerHTML}
+						//onChange={e => props.active_element.outerHTML = e.target.value}
+						autoComplete="off"
+						className="scroll"
+						readOnly={true}
+				/>
+				</div>*/}
 			</div>
 	)
 }

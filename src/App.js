@@ -101,6 +101,7 @@ function App() {
                 active_element={active_element}
                 setDragging={setDragging}
                 setCanvasStyles={setCanvasStyles}
+                CodeMirror={CodeMirror}
             />
         </div>
     )
