@@ -470,7 +470,7 @@ input:invalid {
   position: relative;
   height: 10em;
   width: 10em;
-  float: left;
+  margin: auto;
 
 }
 .iframeWrapper iframe {
@@ -509,6 +509,13 @@ input:invalid {
 }
 .scroll::-webkit-scrollbar-corner {
   background-color: #000;
+}
+.text-center {
+  text-align: center;
+}
+.help-text {
+  font-size:0.9em;
+  color:#666;
 }
 button:hover .tablet-tooltip, label:hover .tablet-tooltip {
   opacity: 1;

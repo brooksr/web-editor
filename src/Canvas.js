@@ -170,7 +170,7 @@ export function Canvas(props) {
     let classes = "canvasWrapper scroll canvas_" + props.device;
     return (
         <div className={classes}>
-            <iframe ref={iframe} id="canvas" title="canvas" srcDoc={props.src_doc} style={{transform: `scale(${props.zoom})`}}>
+            <iframe ref={iframe} id="canvas" title="canvas" onChange={props.setActiveTemplate} srcDoc={props.src_doc} style={{transform: `scale(${props.zoom})`}}>
 
             </iframe>
             <div id="canvasNotice"> </div>

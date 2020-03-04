@@ -88,11 +88,13 @@ function App() {
                 device={device}
                 zoom={zoom}
                 drag={drag}
+                setActiveTemplate={setActiveTemplate}
                 setDragging={setDragging}
                 setActive={setActive}
             />
             <Editor
                 setDragging={setDragging}
+                styles={styles}
                 blocks={blocks}
                 active_element={active_element}
             />
