@@ -132,12 +132,12 @@ function BlockGroup(props) {
 }
 
 function Attributes(props) {
-	let tag = props.active_element ? props.active_element.tagName.toLowerCase() : "body";
-	//let attributes = elements[tag].attributes;
-	const [attributes, setActiveAttribute] = useState(elements[tag] ? elements[tag].attributes : elements.body.attributes);
+	let tag = props.active_element && props.active_element.tagName.toLowerCase();
+	let attributes = elements[tag] ? elements[tag].attributes : elements.body.attributes;
 	//TODO: resetting outerHTML loses active element
 	//TODO: setActiveAttribute not working
-	return !props.active_element ? <p className="help-text text-center">Select an element</p> : (
+	if (!props.active_element) return <p className="help-text text-center">Select an element</p>
+	return (
 			<div className="attributes_tab">
 				<h3>Active Block</h3>
 				<div className="button-group-sm">
