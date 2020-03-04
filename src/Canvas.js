@@ -117,8 +117,8 @@ export function Canvas(props) {
         let initial_styles = Array.from(canvas.styleSheets).reduce((acc, sheet) => {
             return acc.concat((sheet.title !== "editor" && !sheet.href) ? Array.from(sheet.rules) : []);
         }, []);
-        //TODO: how to set state after load? set on App to pass to Editor?
-        console.log(initial_styles);
+        props.setCanvasStyles(initial_styles);
+        //console.log(initial_styles);
         //let [styles, setStyles] = useState(initial_styles);
         //TODO: how to bind outlines class to body?
         if (props.outlines) canvas.body.classList.add("show-outlines");
@@ -145,7 +145,7 @@ export function Canvas(props) {
                 setDrag(elm);
             }
         });
-    };
+    }
 
     useEffect(() => {
         document.getElementById("canvas").addEventListener('load', handleLoad);
@@ -170,9 +170,14 @@ export function Canvas(props) {
     let classes = "canvasWrapper scroll canvas_" + props.device;
     return (
         <div className={classes}>
-            <iframe ref={iframe} id="canvas" title="canvas" onChange={props.setActiveTemplate} srcDoc={props.src_doc} style={{transform: `scale(${props.zoom})`}}>
-
-            </iframe>
+            <iframe
+                ref={iframe}
+                id="canvas"
+                title="canvas"
+                onChange={props.setActiveTemplate}
+                srcDoc={props.src_doc}
+                style={{transform: `scale(${props.zoom})`}}
+            />
             <div id="canvasNotice"> </div>
         </div>
     );

@@ -37,10 +37,11 @@ function Attribute(props) {
 function ValueInput(props) {
 	return (
 			<input name="value" type="text" autoComplete="off"
-						 value={props.value} //"${value.replace(/"/g, "'")}"
-						 pattern={props.pattern} //"${styles[prop]}"
-					//className={props.className} //"${/^[rgb|hsl|#]/.test(value) ? `rgb` : "nonrgb"}"
-					//${/^[rgb|hsl|#]/.test(value) ? `style="background-color:${value};"` : ""}
+				readOnly={true}
+				value={props.value} //"${value.replace(/"/g, "'")}"
+				pattern={props.pattern} //"${styles[prop]}"
+				//className={props.className} //"${/^[rgb|hsl|#]/.test(value) ? `rgb` : "nonrgb"}"
+				//${/^[rgb|hsl|#]/.test(value) ? `style="background-color:${value};"` : ""}
 			/>
 	)
 }
@@ -55,21 +56,47 @@ function ValueSelect(props) {
 
 function StyleRule(props) {
 	//{/* onChange={editor.replaceCss} onfocusin={editor.updateMatches} onfocusout{editor.removeMatches}*/}
+	function parseCSSText(cssText) {
+		var cssTxt = cssText.replace(/\/\*(.|\s)*?\*\//g, " ").replace(/\s+/g, " ");
+		var style = {}, [,ruleName,rule] = cssTxt.match(/ ?(.*?) ?{([^}]*)}/)||[,,cssTxt];
+		//var cssToJs = s => s.replace(/\W+\w/g, match => match.slice(-1).toUpperCase());
+		var properties = rule.split(";").map(o => o.split(":").map(x => x && x.trim()));
+		for (var [property, value] of properties) style[property] = value;
+		return {cssText, ruleName, style};
+	}
+	let rule = {};
+	let classes = "";
+	if (props.rule.cssText && props.rule.selectorText) {
+		rule = parseCSSText(props.rule.cssText);
+		let matches = document.getElementById("canvas").contentDocument.querySelectorAll(props.rule.selectorText.split(":")[0]);
+		let docHasMatch = matches.length > 0;
+		classes = docHasMatch ? "doc_has_match" : "hidden";
+		if (Array.from(matches).indexOf(props.active_element) !== -1) {
+			classes += " matches_active";
+		}
+	} else {
+		return "";
+	}
 	return (
-			<form className="doc_has_match " data-index="4" data-selector={props.selector}>
+			<form className={classes} >
 				<div className="input-group">
 					<input autoComplete="off" name="selector" type="text"
-							value={props.selector}
+						   readOnly={true}
+							value={props.rule.selectorText}
 					/>
-					{/*loop over css lines*/}
-					<div className="css-line">
-						<input name="property" type="text" autoComplete="off"
-									 value={props.name}
-									 list="cssNames"
-						/>
-						<ValueInput value={props.value} pattern={props.pattern}/>
-						{/*<ValueSelect value={props.value} options={props.options}/>*/}
-					</div>
+					{Object.keys(rule.style).map((line, index) => {
+						return (
+							<div key={index} className="css-line">
+								<input name="property" type="text" autoComplete="off"
+									   value={line}
+									   list="cssNames"
+									   readOnly={true}
+								/>
+								<ValueInput value={rule.style[line]} pattern={styles[line]}/>
+								{/*<ValueSelect value={props.value} options={props.options}/>*/}
+							</div>
+						)
+					})}
 				</div>
 			</form>
 	)
@@ -81,8 +108,13 @@ function Elements(props) {
 				<summary>{props.name}</summary>
 
 				{Object.keys(props.elements).map((tagName, i) => {
-					return props.elements[tagName].html ? <Block setDragging={props.setDragging} key={tagName} id={tagName}
-																											 html={props.elements[tagName].html}/> : "";
+					return !props.elements[tagName].html ? "" :
+						<Block
+							setDragging={props.setDragging}
+							key={tagName}
+							id={tagName}
+							html={props.elements[tagName].html}
+						/>
 				})}
 			</details>
 	)
@@ -138,7 +170,6 @@ function Attributes(props) {
 }
 
 export function Editor(props) {
-	let cssNames = Object.keys(Object.assign(...styles)).filter(n => n !== "id");
 	return (
 			<div id="editor">
 				<div id="tab_panels" className="scroll">
@@ -147,8 +178,13 @@ export function Editor(props) {
 						<div className="styles_tab">
 							<details>
 								<summary>Styles</summary>
-								{/*loop over all stylerules*/}
-								<StyleRule selector={""} value={props.value} pattern={props.pattern}/>
+								<div className="flex">
+								{props.canvas_styles.map((rule, index) => {
+									return (
+										<StyleRule active_element={props.active_element} key={index} rule={rule} pattern={props.pattern}/>
+									)
+								})}
+								</div>
 							</details>
 							<datalist id="configStyles">
 								{Object.keys(props.styles).map(name => <option label={props.styles[name]} value={`--var(${name})`} />)}
@@ -157,7 +193,7 @@ export function Editor(props) {
 								{Object.keys(props.styles).map(name => !/^(#|hsl|rgb)/.test(props.styles[name]) ? "" : <option label={name} value={props.styles[name]} />)}
 							</datalist>*/}
 							<datalist id="cssNames">
-								{cssNames.map(name => <option value={name} />)}
+								{Object.keys(styles).map(name => <option value={name} />)}
 							</datalist>
 						</div>
 						<div className="blocks_tab">

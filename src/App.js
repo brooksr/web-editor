@@ -21,6 +21,7 @@ function App() {
     const [fonts, setFonts] = useState(data.fonts);
     const [styles, setStyles] = useState(data.styles);
     const [src_doc, setTemplate] = useState(templates[0].html);
+    const [canvas_styles, setCanvasStyles] = useState([]);
 
     const [show_images, toggleImages] = useState(true);
     const [outlines, toggleOutlines] = useState(true);
@@ -91,12 +92,15 @@ function App() {
                 setActiveTemplate={setActiveTemplate}
                 setDragging={setDragging}
                 setActive={setActive}
+                setCanvasStyles={setCanvasStyles}
             />
             <Editor
-                setDragging={setDragging}
+                canvas_styles={canvas_styles}
                 styles={styles}
                 blocks={blocks}
                 active_element={active_element}
+                setDragging={setDragging}
+                setCanvasStyles={setCanvasStyles}
             />
         </div>
     )
