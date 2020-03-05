@@ -58,6 +58,7 @@ button {
   background: #333;
   border: none;
   padding: 0.5em 1em;
+  position: relative;
 }
 button:hover {
   background: #444;
@@ -253,6 +254,7 @@ summary {
   padding: 0.5em;
 }
 .block {
+  position: relative;
   border: 1px solid #423d42;
   border-radius: 5px;
   margin-bottom: 1em;
@@ -269,6 +271,11 @@ summary {
 .block code * {
   outline: 1px dotted;
   max-width: 100%;
+}
+.block .button-group{
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 #editor {
   width: 25em;
@@ -349,9 +356,13 @@ summary {
   padding: .75px;
 }
 
-.button-group {
-  border-radius: 1em;
-  overflow: hidden;
+.button-group button:first-child {
+  border-top-left-radius: 1em;
+  border-bottom-left-radius: 1em;
+}
+.button-group button:last-child {
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
 }
 .button-group  button:not(:last-child){
   border-right: 1px solid #222;
@@ -360,7 +371,14 @@ summary {
 .radio-buttons {
   display: inline-flex;
   border-radius: 1em;
-  overflow: hidden;
+}
+.radio-buttons input:first-child + label {
+  border-top-left-radius: 1em;
+  border-bottom-left-radius: 1em;
+}
+.radio-buttons label:last-child {
+  border-top-right-radius: 1em;
+  border-bottom-right-radius: 1em;
 }
 .radio-buttons label {
   background: #333;
@@ -394,6 +412,15 @@ summary {
 }
 .styles_tab {
   font-size: 0.9em;
+}
+
+.styles_tab form {
+  position: relative;
+}
+.styles_tab form .button-group{
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 .flex > * {
   flex: 1 0 100%;
@@ -438,22 +465,6 @@ input:invalid {
 .css-line {
   display: flex;
   width: 100%;
-}
-#hint {
-  background: #fff;
-  color: #000;
-  position: fixed;
-  top: -100vh;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  font-size: 0.9em;
-  text-align:right;
-}
-#hint li {
-  transition: height 250ms ease;
-  overflow: hidden;
-  height: 0;
 }
 #canvasNotice {
   position: fixed;
@@ -525,7 +536,8 @@ button:hover .tablet-tooltip, label:hover .tablet-tooltip {
   background: rgba(42, 179, 75, 0.5);
   display: inherit;
   position: absolute;
-  top: 0;
+  top: -2em;
+  left: 0;
   padding: 0.25em;
   border-radius: 5px;
   font-size: 0.75em;

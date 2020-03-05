@@ -9,8 +9,22 @@ function Block(props) {
 			<div className="block">
 				<h5>{props.id}</h5>
 				<div className="button-group button-group-sm">
-					<button disabled={true}>Edit</button>
-					<button disabled={true}>Archive</button>
+					<button disabled={true}>
+						<i className="far fa-edit"></i>
+						<span className="sr-only">Edit</span>
+					</button>
+					<button disabled={true}>
+						<i className="fas fa-archive"></i>
+						<span className="sr-only">Archive</span>
+					</button>
+					<button disabled={true}>
+						<i className="fas fa-arrows-alt"></i>
+						<span className="sr-only">Move</span>
+					</button>
+					<button disabled={true}>
+						<i className="far fa-clone"></i>
+						<span className="sr-only">Clone</span>
+					</button>
 				</div>
 				<code id={props.id} draggable="true" onDragStart={e => props.setDragging(createNode(props.html))}>
 					{props.html}
@@ -23,6 +37,7 @@ function Attribute(props) {
 	return (
 			<div className="input-group">
 				<label htmlFor={props.name}>{props.name}</label>
+				{props.name === "src" ? <button className="button-sm"><i className="far fa-image"></i></button> : ""}
 				<input
 						name={props.name}
 						value={props.value}
@@ -100,8 +115,14 @@ function StyleRule(props) {
 	return (
 			<form className={classes} >
 				<div className="button-group button-group-sm">
-					<button>Delete</button>
-					<button>Clone</button>
+					<button disabled={true}>
+						<i className="fas fa-trash"></i>
+						<span className="sr-only">Delete</span>
+					</button>
+					<button disabled={true}>
+						<i className="far fa-clone"></i>
+						<span className="sr-only">Clone</span>
+					</button>
 				</div>
 				<div className="input-group">
 					<input autoComplete="off" name="selector" type="text" readOnly={true}
@@ -171,11 +192,23 @@ function Attributes(props) {
 	return (
 			<div className="attributes_tab">
 				<h3>Active Block</h3>
-				<div className="button-group button-group-sm">
-					<button>Save as Block</button>
-					<button>Delete</button>
-					<button>Move Up</button>
-					<button>Move Down</button>
+				<div className="button-group">
+					<button>
+						<i className="far fa-save"></i>
+						<span className="tablet-tooltip">Save as Block</span>
+					</button>
+					<button>
+						<i className="fas fa-trash"></i>
+						<span className="tablet-tooltip">Delete</span>
+					</button>
+					<button>
+						<i className="fas fa-arrow-up"></i>
+						<span className="tablet-tooltip">Move Up</span>
+					</button>
+					<button>
+						<i className="fas fa-arrow-down"></i>
+						<span className="tablet-tooltip">Move Down</span>
+					</button>
 				</div>
 				{Object.keys(attributes).map(attr => {
 					return (

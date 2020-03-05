@@ -14,6 +14,21 @@ export function Menu(props) {
 						)}
 					</ul>
 				</div>
+				<div>
+					<h3>Shortcuts</h3>
+					<dl className="flex">
+						<dt>Ctrl + S</dt><dd>Save</dd>
+						<dt>Ctrl + <i className="far fa-arrow-alt-circle-up"></i></dt><dd>Move active element up</dd>
+						<dt>Ctrl + <i className="far fa-arrow-alt-circle-down"></i></dt><dd>Move active element down</dd>
+						<dt>Ctrl + D</dt><dd>Clone active element</dd>
+						<dt>Tab</dt><dd>Move focus to next slement</dd>
+						<dt>Shift + Tab</dt><dd>Move focus to previous next slement</dd>
+						<dt>Ctrl + L</dt><dd>Wrap text in a link</dd>
+						<dt>Ctrl + B</dt><dd>Bold text</dd>
+						<dt>Ctrl + I</dt><dd>Italic text</dd>
+						<dt>Ctrl + U</dt><dd>Underline text</dd>
+					</dl>
+				</div>
 				<div className="openItem">
 					<h3>Open</h3>
 					{props.campaigns.map((campaign, ind) =>
@@ -138,11 +153,26 @@ function AssetList(props) {
 									<iframe srcDoc={config.html} title="campaign preview"></iframe>
 								</div>
 								<div className="button-group button-group-sm flex-auto">
-									<button onClick={e => props.setTemplate(config.html)}>Edit</button>
-									<button disabled={true}>Save</button>
-									<button disabled={true}>Archive</button>
-									<button disabled={true}>Move</button>
-									<button disabled={true}>Clone</button>
+									<button onClick={e => props.setTemplate(config.html)}>
+										<i className="far fa-edit"></i>
+										<span className="tablet-tooltip">Edit</span>
+									</button>
+									<button disabled={true}>
+										<i className="far fa-save"></i>
+										<span className="tablet-tooltip">Save</span>
+									</button>
+									<button disabled={true}>
+										<i className="fa2 fa-archive"></i>
+										<span className="tablet-tooltip">Archive</span>
+									</button>
+									<button disabled={true}>
+										<i className="fa2 fa-arrows-alt"></i>
+										<span className="tablet-tooltip">Move</span>
+									</button>
+									<button disabled={true}>
+										<i className="far fa-clone"></i>
+										<span className="tablet-tooltip">Clone</span>
+									</button>
 								</div>
 								{Object.keys(Object.assign(config, props.list.defaults)).map(prop => {
 									return prop === "html" ? "" : (
