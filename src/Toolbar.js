@@ -40,6 +40,7 @@ export function Toolbar(props) {
         document.body.className = "view_" + e.target.value;
         props.setView(e.target.value);
     };
+    //TODO: Complete, save, toggle outlines, toggle images, autoformat, style inline
     return (
         <div className="scroll">
             <div id="toolbar">

@@ -85,10 +85,11 @@ export function Canvas(props) {
             e.preventDefault();
             e.stopPropagation();
             let name = "";
-            if (this.id) name += "#" + this.id;
+            //TODO: show the element being hovered
+            /*if (this.id) name += "#" + this.id;
             if (this.className) name += "." + this.className;
             document.getElementById("canvasNotice").textContent = name;
-            this.parentNode.style.paddingTop = "1em";
+            this.parentNode.style.paddingTop = "1em";*/
             this.classList.toggle("hover");
         }, false);
         elm.addEventListener('dragleave', function dragLeave(e) {
@@ -100,7 +101,7 @@ export function Canvas(props) {
             e.stopPropagation();
             this.parentNode.style.paddingTop = "";
             this.classList.toggle("hover");
-            document.getElementById("canvasNotice").textContent = "";
+            //document.getElementById("canvasNotice").textContent = "";
             if (elements[this.tagName.toLowerCase()] == null || elements[this.tagName.toLowerCase()].droppable === false) return;
             this.append(props.drag);
             //editor.updateIds();
@@ -145,10 +146,62 @@ export function Canvas(props) {
                 setDrag(elm);
             }
         });
-    }
+        //log mutations
+        const observer = new MutationObserver((mutationsList, observer) => {
+            for(let mutation of mutationsList) {
+                console.log(mutation.target);
+                if (mutation.type === 'childList') {
+                    if (mutation.addedNodes.length > 0) {
+                        console.log('Child node added');
+                        console.log(mutation.addedNodes);
+                    } else if (mutation.removedNodes.length > 0) {
+                        console.log('Child node removed');
+                        console.log(mutation.removedNodes);
+                    }
+                } else if (mutation.type === 'attributes') {
+                    let value = mutation.target.getAttribute(mutation.attributeName);
+                    if (value === null) {
+                        console.log(`${mutation.attributeName} removed`);
+                    } else {
+                        console.log(`${mutation.attributeName}="${value}"`);
+                    }
+                }
+            }
+        });
+        observer.observe(canvas, { attributes: true, childList: true, subtree: true });
+    };
 
     useEffect(() => {
         document.getElementById("canvas").addEventListener('load', handleLoad);
+
+        //rewrite shortcuts for react
+        /*document.getElementById("canvas").addEventListener("keydown", function(event) {
+            let save = event.which === 83 && event.ctrlKey;//S
+            let moveUp = event.which === 38 && event.shiftKey;
+            let moveDown = event.which === 40 && event.shiftKey;
+            let link = event.which === 76 && event.ctrlKey;//L
+            if (save) {
+                event.preventDefault();
+                editor.save();
+            } else if (moveUp) {
+                event.preventDefault();
+                editor.moveUp();
+            } else if (moveDown) {
+                event.preventDefault();
+                editor.moveDown();
+            } else if (link) {
+                event.preventDefault();
+                let sel = editor.doc.getSelection();
+                if (sel.rangeCount) {
+                    let range = sel.getRangeAt(0).cloneRange();
+                    let a = document.createElement("a");
+                    a.href = "#";
+                    range.surroundContents(a);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            }
+        });*/
     });
 
     //TODO: bind to props.show_images?

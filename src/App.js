@@ -42,6 +42,17 @@ function App() {
         setTemplate(html);
     };
 
+    // shortcuts, need to rewrite for react
+    /*useEffect(() => {
+      document.addEventListener("keyup", function(event) {
+        let save = event.which === 83 && event.ctrlKey;
+        if (save) {
+          event.preventDefault();
+          alert("Save!")
+        }
+      });
+    });*/
+
     return (
         <div>
             <Toolbar

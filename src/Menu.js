@@ -53,6 +53,8 @@ export function CodeEditor(props) {
 		theme: "darcula",
 		mode: "htmlmixed"
 	};
+	//TODO: link autoformat button from toolbar (or move here), and add autoformat.js from design_tool
+	//TODO: move inline styles from autoformat.js
 	return (
 			<div className={"scroll modal menu" + (props.view === "code" ? "" : " invisible")}>
 				<CodeMirror value={props.src_doc} onChange={props.setActiveTemplate} options={options}/>

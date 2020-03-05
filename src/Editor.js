@@ -36,6 +36,23 @@ function Attribute(props) {
 }
 
 function ValueInput(props) {
+
+	// shortcuts, need to rewrite for react
+	/*useEffect(() => {
+		document.addEventListener("keyup", function(event) {
+			let changeNum = event.target.tagName === "INPUT" && event.target.name === "value" && (event.which === 38 || event.which === 40);
+			if (changeNum) {
+				let num = event.target.value.replace(/[^0-9]/g, "");
+				let change = 0;
+				if (event.which === 38) change = 1;
+				else if (event.which === 40) change = -1;
+				if (event.shiftKey) change *= 10;
+				else if (event.ctrlKey || event.altKey) change *= 100;
+				event.target.value = event.target.value.replace(num, Number(num) + change);
+			}
+		});
+	});*/
+	//TODO: add color picker, other input types
 	return (
 			<input name="value" type="text" autoComplete="off"
 				readOnly={true}
@@ -78,11 +95,16 @@ function StyleRule(props) {
 	} else {
 		return "";
 	}
+	//TODO: highlight elements in canvas that match the style selector
+	//TODO: allow adding new lines and deleting lines
 	return (
 			<form className={classes} >
+				<div className="button-group button-group-sm">
+					<button>Delete</button>
+					<button>Clone</button>
+				</div>
 				<div className="input-group">
-					<input autoComplete="off" name="selector" type="text"
-						   readOnly={true}
+					<input autoComplete="off" name="selector" type="text" readOnly={true}
 							value={props.rule.selectorText}
 					/>
 					{Object.keys(rule.style).map((line, index) => {
@@ -143,13 +165,17 @@ function Attributes(props) {
 	};
 	//TODO: resetting outerHTML loses active element
 	//TODO: setActiveAttribute not working
+	//TODO: add button by img src to open image menu for selection
+	//TODO: CodeMirror isn't updating with active element
 	if (!props.active_element) return <p className="help-text text-center">Select an element</p>
 	return (
 			<div className="attributes_tab">
 				<h3>Active Block</h3>
-				<div className="button-group-sm">
+				<div className="button-group button-group-sm">
 					<button>Save as Block</button>
 					<button>Delete</button>
+					<button>Move Up</button>
+					<button>Move Down</button>
 				</div>
 				{Object.keys(attributes).map(attr => {
 					return (
@@ -185,6 +211,9 @@ export function Editor(props) {
 						<div className="styles_tab">
 							<details>
 								<summary>Styles</summary>
+								<div className="button-group">
+									<button>New Rule</button>
+								</div>
 								<div className="flex">
 								{props.canvas_styles.map((rule, index) => {
 									return (
@@ -194,13 +223,13 @@ export function Editor(props) {
 								</div>
 							</details>
 							<datalist id="configStyles">
-								{Object.keys(props.styles).map(name => <option label={props.styles[name]} value={`--var(${name})`} />)}
+								{Object.keys(props.styles).map(name => <option key={name} label={props.styles[name]} value={`--var(${name})`} />)}
 							</datalist>
 							{/*<datalist id="configColors">
 								{Object.keys(props.styles).map(name => !/^(#|hsl|rgb)/.test(props.styles[name]) ? "" : <option label={name} value={props.styles[name]} />)}
 							</datalist>*/}
 							<datalist id="cssNames">
-								{Object.keys(styles).map(name => <option value={name} />)}
+								{Object.keys(styles).map(name => <option key={name} value={name} />)}
 							</datalist>
 						</div>
 						<div className="blocks_tab">
@@ -220,7 +249,6 @@ export function Editor(props) {
 						</div>
 					</div>
 				</div>
-				<ul id="hint"></ul>
 			</div>
 	);
 }
