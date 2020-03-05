@@ -21,7 +21,7 @@ function App() {
     const [fonts, setFonts] = useState(data.fonts);
     const [styles, setStyles] = useState(data.styles);
     const [src_doc, setTemplate] = useState(templates[0].html);
-    const [canvas_styles, setCanvasStyles] = useState([]);
+    const [canvas_styles, setCanvasStyles] = useState({css:[],media:[]});
 
     const [show_images, toggleImages] = useState(true);
     const [outlines, toggleOutlines] = useState(true);

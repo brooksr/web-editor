@@ -438,6 +438,10 @@ summary {
   margin-bottom: 0.5em;
   padding: 0.5em;
 }
+.styles_tab .media_query {
+  border: 1px solid #49a152;
+  margin-bottom: 1em;
+}
 .styles_tab .matches_active {
   order: -1;
   background: #333333;

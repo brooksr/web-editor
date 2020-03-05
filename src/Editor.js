@@ -234,6 +234,54 @@ function Attributes(props) {
 			</div>
 	)
 }
+function Style (props) {
+	return (
+			<div className="styles_tab">
+				<details>
+					<summary>Styles</summary>
+					<div className="button-group">
+						<button>New Rule</button>
+					</div>
+					<div className="flex">
+						{props.canvas_styles.media.map((rule, index) => {
+							return (
+									<div key={index} className="media_query flex">
+										<div className="input-group">
+											<label htmlFor={props.name}>@media</label>
+											<input
+													value={rule.media}
+													type="text"
+													autoComplete="off"
+													readOnly={true}
+											/>
+										</div>
+										{Array.from(rule.cssRules).map((rule, index) => {
+											return (
+													<StyleRule key={index} active_element={props.active_element} rule={rule} pattern={props.pattern}/>
+											)
+										})}
+									</div>
+							)
+						})}
+						{props.canvas_styles.css.map((rule, index) => {
+							return (
+									<StyleRule active_element={props.active_element} key={index} rule={rule} pattern={props.pattern}/>
+							)
+						})}
+					</div>
+				</details>
+				<datalist id="configStyles">
+					{Object.keys(props.styles).map(name => <option key={name} label={props.styles[name]} value={`--var(${name})`} />)}
+				</datalist>
+				{/*<datalist id="configColors">
+					{Object.keys(props.styles).map(name => !/^(#|hsl|rgb)/.test(props.styles[name]) ? "" : <option label={name} value={props.styles[name]} />)}
+				</datalist>*/}
+				<datalist id="cssNames">
+					{Object.keys(styles).map(name => <option key={name} value={name} />)}
+				</datalist>
+			</div>
+	)
+}
 
 export function Editor(props) {
 	return (
@@ -241,30 +289,7 @@ export function Editor(props) {
 				<div id="tab_panels" className="scroll">
 					<div className="editor_panel edit_tab editor_active">
 						<Attributes active_element={props.active_element}/>
-						<div className="styles_tab">
-							<details>
-								<summary>Styles</summary>
-								<div className="button-group">
-									<button>New Rule</button>
-								</div>
-								<div className="flex">
-								{props.canvas_styles.map((rule, index) => {
-									return (
-										<StyleRule active_element={props.active_element} key={index} rule={rule} pattern={props.pattern}/>
-									)
-								})}
-								</div>
-							</details>
-							<datalist id="configStyles">
-								{Object.keys(props.styles).map(name => <option key={name} label={props.styles[name]} value={`--var(${name})`} />)}
-							</datalist>
-							{/*<datalist id="configColors">
-								{Object.keys(props.styles).map(name => !/^(#|hsl|rgb)/.test(props.styles[name]) ? "" : <option label={name} value={props.styles[name]} />)}
-							</datalist>*/}
-							<datalist id="cssNames">
-								{Object.keys(styles).map(name => <option key={name} value={name} />)}
-							</datalist>
-						</div>
+						<Style active_element={props.active_element} canvas_styles={props.canvas_styles} styles={props.styles} pattern={props.pattern} />
 						<div className="blocks_tab">
 							{props.blocks.map((group, i) =>
 									<BlockGroup

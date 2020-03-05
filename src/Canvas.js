@@ -114,11 +114,22 @@ export function Canvas(props) {
         styleTag.innerHTML = style;
         let canvas = iframe.current.contentDocument;
         canvas.head.appendChild(styleTag);
-        //get css
+        //get css, reverse so most specific styles are on top.reverse()
+        let styles = {
+            css: [],
+            media: []
+        };
         let initial_styles = Array.from(canvas.styleSheets).reduce((acc, sheet) => {
             return acc.concat((sheet.title !== "editor" && !sheet.href) ? Array.from(sheet.rules) : []);
         }, []);
-        props.setCanvasStyles(initial_styles);
+        initial_styles.forEach(rule => {
+            if (rule.media) {
+                styles.media.push(rule);
+            } else {
+                styles.css.push(rule);
+            }
+        });
+        props.setCanvasStyles(styles);
         //console.log(initial_styles);
         //let [styles, setStyles] = useState(initial_styles);
         //TODO: how to bind outlines class to body?
