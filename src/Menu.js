@@ -1,6 +1,5 @@
 import React from "react";
-
-let CodeMirror = require('react-codemirror');
+import {Controlled as CodeMirror} from 'react-codemirror2'
 
 export function Menu(props) {
 	return (

@@ -1,7 +1,7 @@
 import {elements} from "./elements";
 import {styles} from "./styles";
 import React, {useState} from "react";
-let CodeMirror = require('react-codemirror');
+import {Controlled as CodeMirror} from 'react-codemirror2'
 
 function Block(props) {
 	let createNode = t => document.createRange().createContextualFragment(t);
@@ -70,7 +70,6 @@ function ValueInput(props) {
 	//TODO: add color picker, other input types
 	return (
 			<input name="value" type="text" autoComplete="off"
-				readOnly={true}
 				value={props.value} //"${value.replace(/"/g, "'")}"
 				pattern={props.pattern} //"${styles[prop]}"
 				//className={props.className} //"${/^[rgb|hsl|#]/.test(value) ? `rgb` : "nonrgb"}"
@@ -125,7 +124,7 @@ function StyleRule(props) {
 					</button>
 				</div>
 				<div className="input-group">
-					<input autoComplete="off" name="selector" type="text" readOnly={true}
+					<input autoComplete="off" name="selector" type="text"
 							value={props.rule.selectorText}
 					/>
 					{Object.keys(rule.style).map((line, index) => {
@@ -134,7 +133,6 @@ function StyleRule(props) {
 								<input name="property" type="text" autoComplete="off"
 									   value={line}
 									   list="cssNames"
-									   readOnly={true}
 								/>
 								<ValueInput value={rule.style[line]} pattern={styles[line]}/>
 								{/*<ValueSelect value={props.value} options={props.options}/>*/}
@@ -228,7 +226,6 @@ function Attributes(props) {
 						//onChange={e => props.active_element.outerHTML = e.target.value}
 						autoComplete="off"
 						className="scroll"
-						readOnly={true}
 				/>
 				</div>*/}
 			</div>
@@ -252,7 +249,6 @@ function Style (props) {
 													value={rule.media}
 													type="text"
 													autoComplete="off"
-													readOnly={true}
 											/>
 										</div>
 										{Array.from(rule.cssRules).map((rule, index) => {
