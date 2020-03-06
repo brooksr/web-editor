@@ -8,8 +8,8 @@ import {Toolbar} from './Toolbar.js';
 import {Editor} from './Editor.js';
 import {Menu, ImageMenu, ClientSettings, CodeEditor} from './Menu.js';
 import {Controlled as CodeMirror} from 'react-codemirror2'
-require('codemirror/lib/codemirror.css');
-require('codemirror/mode/htmlmixed/htmlmixed');
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/htmlmixed/htmlmixed';
 
 function App() {
     //console.log(JSON.stringify(data, null, "\t"));

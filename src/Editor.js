@@ -42,7 +42,7 @@ function Attribute(props) {
 						name={props.name}
 						value={props.value}
 						type="text"
-						pattern={props.pattern}
+						pattern={Array.isArray(props.pattern) ? props.pattern.join("|") : props.pattern}
 						onChange={e => props.setActiveAttribute(e.target.value)}
 						autoComplete="off"
 				/>
@@ -71,7 +71,7 @@ function ValueInput(props) {
 	return (
 			<input name="value" type="text" autoComplete="off"
 				value={props.value} //"${value.replace(/"/g, "'")}"
-				pattern={props.pattern} //"${styles[prop]}"
+				pattern={Array.isArray(props.pattern) ? props.pattern.join("|") : props.pattern}
 				//className={props.className} //"${/^[rgb|hsl|#]/.test(value) ? `rgb` : "nonrgb"}"
 				//${/^[rgb|hsl|#]/.test(value) ? `style="background-color:${value};"` : ""}
 			/>
@@ -81,7 +81,7 @@ function ValueInput(props) {
 function ValueSelect(props) {
 	return (
 			<select value={props.value} name="value" autoComplete="off">
-				{props.options.map(value => <option value={value}>{value}</option>)}
+				{props.options.map(value => <option key={value} value={value}>{value}</option>)}
 			</select>
 	)
 }
@@ -89,12 +89,14 @@ function ValueSelect(props) {
 function StyleRule(props) {
 	//{/* onChange={editor.replaceCss} onfocusin={editor.updateMatches} onfocusout{editor.removeMatches}*/}
 	function parseCSSText(cssText) {
-		var cssTxt = cssText.replace(/\/\*(.|\s)*?\*\//g, " ").replace(/\s+/g, " ");
-		var style = {}, [,ruleName,rule] = cssTxt.match(/ ?(.*?) ?{([^}]*)}/)||[,,cssTxt];
-		//var cssToJs = s => s.replace(/\W+\w/g, match => match.slice(-1).toUpperCase());
-		var properties = rule.split(";").map(o => o.split(":").map(x => x && x.trim()));
-		for (var [property, value] of properties) style[property] = value;
-		return {cssText, ruleName, style};
+		let style = {};
+		let cssTxt = cssText.substring(cssText.indexOf("{") + 1, cssText.lastIndexOf("}"));
+		cssTxt.split(";").forEach(o => {
+			let property = o.substring(0, o.indexOf(":")).trim();
+			let value = o.substring(o.indexOf(":") + 1).trim();
+			if (property !== "") style[property] = value;
+		});
+		return {style};
 	}
 	let rule = {};
 	let classes = "";
@@ -134,8 +136,10 @@ function StyleRule(props) {
 									   value={line}
 									   list="cssNames"
 								/>
-								<ValueInput value={rule.style[line]} pattern={styles[line]}/>
-								{/*<ValueSelect value={props.value} options={props.options}/>*/}
+								{Array.isArray(styles[line]) ?
+										<ValueSelect value={rule.style[line]} options={styles[line]}/> :
+										<ValueInput value={rule.style[line]} pattern={styles[line]}/>
+								}
 							</div>
 						)
 					})}
@@ -236,13 +240,17 @@ function Style (props) {
 			<div className="styles_tab">
 				<details>
 					<summary>Styles</summary>
-					<div className="button-group">
-						<button>New Rule</button>
+					<div className="button-group button-group-sm">
+						<button>New CSS Rule</button>
+						<button>New Media Rule</button>
 					</div>
 					<div className="flex">
 						{props.canvas_styles.media.map((rule, index) => {
 							return (
 									<div key={index} className="media_query flex">
+										<div className="button-group button-group-sm">
+											<button>New CSS Rule</button>
+										</div>
 										<div className="input-group">
 											<label htmlFor={props.name}>@media</label>
 											<input
