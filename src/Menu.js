@@ -13,7 +13,13 @@ export function Menu(props) {
 						)}
 					</ul>
 				</div>
-				<div>
+				<div className="openItem">
+					<h3>Open</h3>
+					{props.campaigns.map((campaign, ind) =>
+							<CampaignSummary setTemplate={props.setTemplate} campaign={campaign} key={ind}/>
+					)}
+				</div>
+				<div className="shortcuts">
 					<h3>Shortcuts</h3>
 					<dl className="flex">
 						<dt>Ctrl + S</dt><dd>Save</dd>
@@ -27,12 +33,6 @@ export function Menu(props) {
 						<dt>Ctrl + I</dt><dd>Italic text</dd>
 						<dt>Ctrl + U</dt><dd>Underline text</dd>
 					</dl>
-				</div>
-				<div className="openItem">
-					<h3>Open</h3>
-					{props.campaigns.map((campaign, ind) =>
-							<CampaignSummary setTemplate={props.setTemplate} campaign={campaign} key={ind}/>
-					)}
 				</div>
 			</div>
 	)
@@ -69,9 +69,10 @@ export function CodeEditor(props) {
 	};
 	//TODO: link autoformat button from toolbar (or move here), and add autoformat.js from design_tool
 	//TODO: move inline styles from autoformat.js
+	// causing an error: onChange={props.setActiveTemplate}
 	return (
 			<div className={"scroll modal menu" + (props.view === "code" ? "" : " invisible")}>
-				<CodeMirror value={props.src_doc} onChange={props.setActiveTemplate} options={options}/>
+				<CodeMirror value={props.src_doc} options={options}/>
 			</div>
 	)
 }
@@ -161,11 +162,11 @@ function AssetList(props) {
 										<span className="tablet-tooltip">Save</span>
 									</button>
 									<button disabled={true}>
-										<i className="fa2 fa-archive"></i>
+										<i className="fas fa-archive"></i>
 										<span className="tablet-tooltip">Archive</span>
 									</button>
 									<button disabled={true}>
-										<i className="fa2 fa-arrows-alt"></i>
+										<i className="fas fa-arrows-alt"></i>
 										<span className="tablet-tooltip">Move</span>
 									</button>
 									<button disabled={true}>

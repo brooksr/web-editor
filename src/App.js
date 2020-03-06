@@ -38,7 +38,7 @@ function App() {
         changeZoom(newT);
     };
     const setActiveTemplate = function (html) {
-        //setView("visual");
+        setView("visual");
         setTemplate(html);
     };
 
