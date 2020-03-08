@@ -20,7 +20,7 @@ export let data = {
             name: "Inboxed Incentive | Save Your Cart",
             notes: "Summary of campaign. Testing instructions.",
             rules: {
-                lift_test: 0.90,
+                lift_test: 90,
                 languages: ["en"],
                 locales: ["us"],
                 pages: ["home"],
@@ -48,16 +48,16 @@ export let data = {
                 defaults: {
                     link: "https://www.destination.com/cart",
                 },
-                configs: [
+                list: [
                     {
                         name: "Lead Capture",
                         html: modal,
+                        launch_settings: 6,
                         launch_method: "abandonment",
-                        launch_settings: 6
                     }, {
                         name: "Coupon reminder",
-                        launch_method: "coupon_reminder",
                         html: bar,
+                        launch_method: "coupon_reminder",
                     }
                 ],
                 notes: "",
@@ -68,7 +68,7 @@ export let data = {
                     from_email: "support@samsung.com",
                     link: "https://www.destination.com/cart",
                 },
-                attempts: [
+                list: [
                     {
                         name: "Email 1",
                         subject: "subject line 1",
@@ -111,13 +111,13 @@ export let data = {
             },
             modal: {
                 defaults: {
-                    split: 0.50,// 1 / configs.length
-                    launch_method: "abandonment",
+                    split: 50,// 1 / configs.length
                     launch_settings: 6,
                     link: "https://www.destination.com/cart",
+                    launch_method: "abandonment",
                     notes: "",
                 },
-                configs: [
+                list: [
                     {
                         name: "Free Shipping",
                         coupon: "FREESHIPPING",

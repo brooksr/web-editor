@@ -26,9 +26,11 @@ function Block(props) {
 						<span className="sr-only">Clone</span>
 					</button>
 				</div>
-				<code id={props.id} draggable="true" onDragStart={e => props.setDragging(createNode(props.html))}>
-					{props.html}
-				</code>
+				<code id={props.id} draggable="true"
+					  onDragStart={e => props.setDragging(createNode(props.html))}
+					  dangerouslySetInnerHTML={{__html: props.html}}
+				/>
+
 			</div>
 	)
 }
@@ -87,7 +89,6 @@ function ValueSelect(props) {
 }
 
 function StyleRule(props) {
-	//{/* onChange={editor.replaceCss} onfocusin={editor.updateMatches} onfocusout{editor.removeMatches}*/}
 	function parseCSSText(cssText) {
 		let style = {};
 		let cssTxt = cssText.substring(cssText.indexOf("{") + 1, cssText.lastIndexOf("}"));
@@ -96,49 +97,60 @@ function StyleRule(props) {
 			let value = o.substring(o.indexOf(":") + 1).trim();
 			if (property !== "") style[property] = value;
 		});
-		return {style};
+		return style;
 	}
-	let rule = {};
-	let classes = "";
-	if (props.rule.cssText && props.rule.selectorText) {
-		rule = parseCSSText(props.rule.cssText);
-		let matches = document.getElementById("canvas").contentDocument.querySelectorAll(props.rule.selectorText.split(":")[0]);
-		let docHasMatch = matches.length > 0;
-		classes = docHasMatch ? "doc_has_match" : "hidden";
-		if (Array.from(matches).indexOf(props.active_element) !== -1) {
-			classes += " matches_active";
-		}
-	} else {
-		return "";
+	let hightlightMatches = function(selector){
+		document.getElementById("canvas").contentDocument.querySelectorAll(selector).forEach((match) => {
+			if (!match.getAttribute("data-status")) match.setAttribute("data-status", "match");
+		})
+	};
+	let unHightlightMatches = function(){
+		document.getElementById("canvas").contentDocument.querySelectorAll("[data-status='match']").forEach((match) => {
+			match.removeAttribute("data-status");
+		})
+	};
+	let rules = parseCSSText(props.rule.cssText);
+	let matches = document.getElementById("canvas").contentDocument.querySelectorAll(props.rule.selectorText.split(":")[0]);
+	let docHasMatch = matches.length > 0;
+	let classes = docHasMatch ? "doc_has_match" : "hidden";
+	if (Array.from(matches).indexOf(props.active_element) !== -1) {
+		classes += " matches_active";
 	}
-	//TODO: highlight elements in canvas that match the style selector
-	//TODO: allow adding new lines and deleting lines
+	//TODO: calculate selector specificity to show what properties are inherited or overwritten
 	return (
-			<form className={classes} >
+			<form className={classes} onFocus={e => hightlightMatches(props.rule.selectorText)} onBlur={unHightlightMatches} >
 				<div className="button-group button-group-sm">
 					<button disabled={true}>
-						<i className="fas fa-trash"></i>
+						<i className="far fa-trash-alt"></i>
 						<span className="sr-only">Delete</span>
 					</button>
 					<button disabled={true}>
 						<i className="far fa-clone"></i>
 						<span className="sr-only">Clone</span>
 					</button>
+					<button disabled={true}>
+						<i className="fas fa-plus"></i>
+						<span className="sr-only">New Line</span>
+					</button>
 				</div>
 				<div className="input-group">
 					<input autoComplete="off" name="selector" type="text"
 							value={props.rule.selectorText}
 					/>
-					{Object.keys(rule.style).map((line, index) => {
+					{Object.keys(rules).map((line, index) => {
 						return (
 							<div key={index} className="css-line">
+								<button className="button-sm button-transparent" disabled={true}>
+									<i className="fas fa-times"></i>
+									<span className="sr-only">Delete</span>
+								</button>
 								<input name="property" type="text" autoComplete="off"
 									   value={line}
 									   list="cssNames"
 								/>
 								{Array.isArray(styles[line]) ?
-										<ValueSelect value={rule.style[line]} options={styles[line]}/> :
-										<ValueInput value={rule.style[line]} pattern={styles[line]}/>
+										<ValueSelect value={rules[line]} options={styles[line]}/> :
+										<ValueInput value={rules[line]} pattern={styles[line]}/>
 								}
 							</div>
 						)
@@ -188,8 +200,6 @@ function Attributes(props) {
 	};
 	//TODO: resetting outerHTML loses active element
 	//TODO: setActiveAttribute not working
-	//TODO: add button by img src to open image menu for selection
-	//TODO: CodeMirror isn't updating with active element
 	if (!props.active_element) return <p className="help-text text-center">Select an element</p>
 	return (
 			<div className="attributes_tab">
@@ -200,7 +210,7 @@ function Attributes(props) {
 						<span className="tablet-tooltip">Save as Block</span>
 					</button>
 					<button>
-						<i className="fas fa-trash"></i>
+						<i className="far fa-trash-alt"></i>
 						<span className="tablet-tooltip">Delete</span>
 					</button>
 					<button>
@@ -224,14 +234,6 @@ function Attributes(props) {
 					)
 				})}
 				<CodeMirror value={props.active_element.outerHTML} options={options}/>
-				{/*<div className="input-group">
-				<textarea
-						value={props.active_element.outerHTML}
-						//onChange={e => props.active_element.outerHTML = e.target.value}
-						autoComplete="off"
-						className="scroll"
-				/>
-				</div>*/}
 			</div>
 	)
 }
@@ -246,10 +248,18 @@ function Style (props) {
 					</div>
 					<div className="flex">
 						{props.canvas_styles.media.map((rule, index) => {
+							//TODO: highlight media query if rule met in canvas
 							return (
 									<div key={index} className="media_query flex">
 										<div className="button-group button-group-sm">
-											<button>New CSS Rule</button>
+											<button>
+												<i className="fas fa-plus"></i>
+												<span className="tablet-tooltip">New CSS Rule</span>
+											</button>
+											<button>
+												<i className="far fa-trash-alt"></i>
+												<span className="tablet-tooltip">Delete</span>
+											</button>
 										</div>
 										<div className="input-group">
 											<label htmlFor={props.name}>@media</label>
