@@ -15,17 +15,19 @@ export let data = {
         twitter: "https://www.twitter.com/",
         linkedin: "https://www.linkedin.com/",
     },
+    conditions: {
+        product_page: "Product Pages",
+        active_cart: "Active Cart",
+        return_visitor: "Return Visitors",
+    },
     campaigns: [
         {
             name: "Inboxed Incentive | Save Your Cart",
             notes: "Summary of campaign. Testing instructions.",
             rules: {
-                lift_test: 90,
-                languages: ["en"],
-                locales: ["us"],
-                pages: ["home"],
-                stages: ["active_cart"],
-                visitors: ["new"],
+                conditions: ["90% Lift Test", "&&", "Not Return Visitor", "&&", ["Cart Total > 0", "||", ["Product Page", "&&", "Direct Traffic"]]],
+                languages: "en",
+                locales: "us",
                 notes: "",
             },
             features: {
@@ -95,9 +97,9 @@ export let data = {
             name: "Precise Promotion | Free Shipping vs Free Gift",
             notes: "Example description here.",
             rules: {
-                languages: ["en"],
-                stages: ["pre_cart"],
-                visitors: ["new"],
+                conditions: ["Not Return Visitor", "&&", "Cart Total == 0"],
+                languages: "en",
+                locales: "us",
                 notes: "",
             },
             admin: {

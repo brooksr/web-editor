@@ -2,7 +2,7 @@
 html {
   background-color:#272427;
   color: #ddd;
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Roboto Mono', serif;
   box-sizing: border-box;
 }
@@ -37,6 +37,9 @@ fieldset {
   border: 0;
   margin: 0;
   padding: 0;
+}
+select, input, button, textarea {
+  font: inherit;
 }
 textarea {
   resize: vertical;
@@ -112,7 +115,7 @@ summary {
   box-sizing: border-box;
   height: calc(100vh - 5em);
   position: absolute;
-  top: 5em;
+  top: 6em;
   left: 0;
   right: 25em;
   margin: auto;
@@ -134,22 +137,12 @@ summary {
   max-width: 768px;
   max-height: 1024px;
 }
-.cm_wrap {
-  height: calc(100vh - 5em);
-  position: absolute;
-  top: 5em;
-  left: 0;
-  right: 25%;
-  margin: auto;
-  width: 100%;
-  z-index: 1;
-}
 .modal {
   background: rgba(0, 0, 0, 0.95);
   width: 100%;
   z-index: 1;
   padding: 1em;
-  top: 5em;
+  top: 6em;
   height: calc(100vh - 5em);
   position: absolute;
   opacity: 1;
@@ -236,9 +229,8 @@ summary {
   /*position: fixed;*/
   top: 0;
   width: 100%;
-  min-width:1200px;
+  min-width:1000px;
   user-select: none;
-  font-size: 0.9em;
 }
 #toolbar > *:not(:last-child) {
   margin-right: 4em;
@@ -268,7 +260,7 @@ summary {
 .block code {
   display: block;
   zoom: 0.5;
-  outline: 1px dotted;
+  outline: 1px dashed hsla(0, 0%, 100%, 0.25);
 }
 .block code * {
   max-width: 100%;
@@ -286,18 +278,44 @@ summary {
   background: none;
   color: #fff;
 }
-
+.conditions.flex {
+  /*flex-wrap: nowrap;*/
+  padding: 0.5em;
+  border: 1px solid hsl(126, 40%, 50%);
+}
+.conditions .conditions {
+  border: 1px solid hsl(80, 40%, 50%);
+}
+.conditions .conditions .conditions {
+  border: 1px solid hsl(40, 40%, 50%);
+}
+.conditions .conditions .conditions .conditions {
+  border: 1px solid hsl(0, 40%, 50%);
+}
+.conditions.flex input, .conditions.flex select {
+  width: auto;
+  text-align: center;
+  border: 1px solid #333;
+}
+.conditions.flex input[list] {
+  padding-left: 1.5em;
+}
+.conditions.flex .operator {
+  width: 3.75em;
+  font-size: 1.1em;
+  font-weight: bold;
+  flex: 0 1;
+}
 #editor {
   width: 25em;
   position: fixed;
   right: 0;
-  top: 5em;
+  top: 6em;
 }
 #tab_panels {
   height: calc(100vh - 5em);
   padding: 1em;
-  background:#131113;
-  /* white-space: pre; */
+  background:#050505;
   user-select: none;
 }
 .panel {
@@ -358,6 +376,7 @@ summary {
   background: transparent;
   line-height: 1.25;
   padding: .25em;
+  font-size: inherit;
 }
 [type="checkbox"] {
   height: 1.25em;
@@ -442,50 +461,46 @@ summary {
   flex-wrap: wrap;
 }
 .styles_tab {
-  font-size: 0.9em;
 }
 
 .styles_tab form {
-  position: relative;
 }
 .styles_tab form .button-group{
   position: absolute;
   right: 0;
   top: 0;
 }
-.flex > * {
+.styles_tab [name="selector"] {
   flex: 1 0 100%;
-  order: 0;
+  color:#6a8759;
 }
-.flex-auto > * {
-  flex: 1 0 auto;
+.styles_tab [name="property"] {
+  color:#ffc66d;
+  font-size: 0.9em;
+}
+.styles_tab [name="value"] {
+  color:#6897bb;
+  font-size: 0.9em;
+}
+.styles_tab select[name="value"] {
+  color:#cc7832;
 }
 .styles_tab h4 {
   margin: 0;
   padding: 0.5em 0 1em 0;
 }
 .styles_tab form {
-  border: 1px dashed #888;
+  position: relative;
   margin-bottom: 0.5em;
   padding: 0.5em;
 }
 .styles_tab .media_query {
-  border: 1px solid #49a152;
+  border: 1px dotted #49a152;
   margin-bottom: 1em;
 }
 .styles_tab .matches_active {
   order: -1;
-  background: #333333;
-}
-.styles_tab .matches_active * {
-  font-weight: bold;
-}
-input:invalid {
-  border-bottom: 1px dashed red;
-}
-.styles_tab [name="selector"] {
-  flex: 1 0 100%;
-  color: #4db357;
+  background: #222;
 }
 .styles_tab [name*="property"] {
   text-align: right;
@@ -500,6 +515,16 @@ input:invalid {
 .css-line {
   display: flex;
   width: 100%;
+}
+input:invalid {
+  border-bottom: 1px dashed red;
+}
+.flex > * {
+  flex: 1 0 100%;
+  order: 0;
+}
+.flex-auto > * {
+  flex: 1 0 auto;
 }
 #canvasNotice {
   position: fixed;

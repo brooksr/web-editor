@@ -72,7 +72,9 @@ export function Canvas(props) {
         elm.draggable = "true";
         elm.addEventListener('dragstart', function dragStart(e) {
             e.stopPropagation();
-            props.setDragging(this);
+            e.dataTransfer.setData("text/plain", Array.from(iframe.current.contentDocument.querySelectorAll("*")).indexOf(e.target));
+            //debugger;
+            //props.setDragging(this);
         }, false);
         elm.addEventListener('dragend', function dragEnd(e) {
             e.stopPropagation();
@@ -103,7 +105,10 @@ export function Canvas(props) {
             this.classList.toggle("hover");
             //document.getElementById("canvasNotice").textContent = "";
             if (elements[this.tagName.toLowerCase()] == null || elements[this.tagName.toLowerCase()].droppable === false) return;
-            this.append(props.drag);
+            //debugger;
+            let data = e.dataTransfer.getData("text");
+            if (!isNaN(Number(data))) this.append(iframe.current.contentDocument.querySelectorAll("*")[data]);
+            else this.append(document.createRange().createContextualFragment(data));
             //editor.updateIds();
         }, false);
     };

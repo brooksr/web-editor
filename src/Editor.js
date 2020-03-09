@@ -4,7 +4,6 @@ import React, {useState} from "react";
 import {Controlled as CodeMirror} from 'react-codemirror2'
 
 function Block(props) {
-	let createNode = t => document.createRange().createContextualFragment(t);
 	return (
 			<div className="block">
 				<h5>{props.id}</h5>
@@ -27,7 +26,7 @@ function Block(props) {
 					</button>
 				</div>
 				<code id={props.id} draggable="true"
-					  onDragStart={e => props.setDragging(createNode(props.html))}
+					  onDragStart={e => e.dataTransfer.setData("text/plain", props.html)}
 					  dangerouslySetInnerHTML={{__html: props.html}}
 				/>
 
@@ -72,7 +71,7 @@ function ValueInput(props) {
 	//TODO: add color picker, other input types
 	return (
 			<input name="value" type="text" autoComplete="off"
-				value={props.value} //"${value.replace(/"/g, "'")}"
+				defaultValue={props.value} //"${value.replace(/"/g, "'")}"
 				pattern={Array.isArray(props.pattern) ? props.pattern.join("|") : props.pattern}
 				//className={props.className} //"${/^[rgb|hsl|#]/.test(value) ? `rgb` : "nonrgb"}"
 				//${/^[rgb|hsl|#]/.test(value) ? `style="background-color:${value};"` : ""}
@@ -82,7 +81,7 @@ function ValueInput(props) {
 
 function ValueSelect(props) {
 	return (
-			<select value={props.value} name="value" autoComplete="off">
+			<select defaultValue={props.value} name="value" autoComplete="off">
 				{props.options.map(value => <option key={value} value={value}>{value}</option>)}
 			</select>
 	)
@@ -135,7 +134,7 @@ function StyleRule(props) {
 				</div>
 				<div className="input-group">
 					<input autoComplete="off" name="selector" type="text"
-							value={props.rule.selectorText}
+						   defaultValue={props.rule.selectorText}
 					/>
 					{Object.keys(rules).map((line, index) => {
 						return (
@@ -145,7 +144,7 @@ function StyleRule(props) {
 									<span className="sr-only">Delete</span>
 								</button>
 								<input name="property" type="text" autoComplete="off"
-									   value={line}
+									   defaultValue={line}
 									   list="cssNames"
 								/>
 								{Array.isArray(styles[line]) ?
@@ -168,7 +167,7 @@ function Elements(props) {
 				{Object.keys(props.elements).map((tagName, i) => {
 					return !props.elements[tagName].html ? "" :
 						<Block
-							setDragging={props.setDragging}
+							//setDragging={props.setDragging}
 							key={tagName}
 							id={tagName}
 							html={props.elements[tagName].html}
@@ -183,7 +182,7 @@ function BlockGroup(props) {
 			<details>
 				<summary>{props.name}</summary>
 				{props.blocks.map((block, i) =>
-						<Block setDragging={props.setDragging} key={block.id} id={block.id} html={block.html}/>
+						<Block key={block.id} id={block.id} html={block.html}/>
 				)}
 			</details>
 	)
@@ -264,7 +263,7 @@ function Style (props) {
 										<div className="input-group">
 											<label htmlFor={props.name}>@media</label>
 											<input
-													value={rule.media}
+													defaultValue={rule.media}
 													type="text"
 													autoComplete="off"
 											/>
@@ -310,13 +309,13 @@ export function Editor(props) {
 											key={group.name}
 											name={group.name}
 											blocks={group.blocks}
-											setDragging={props.setDragging}
+											//setDragging={props.setDragging}
 									/>
 							)}
 							<Elements
 									name="Elements"
 									elements={elements}
-									setDragging={props.setDragging}
+									//setDragging={props.setDragging}
 							/>
 						</div>
 					</div>

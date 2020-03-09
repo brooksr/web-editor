@@ -5,11 +5,12 @@
  * SVG, masking
  * */
 const units =  ["px", "%", "em", "vmax", "vmin", "vh", "vw"];
+const cssVar = '[var(--[a-z|\-])]';
 const defaults = {
   number: `([0-9|.]+(${units.join("|")})?)`,
-  color: 'rgb.*',
+  color: 'rgb.*|' + cssVar,
   border: '(none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset)',
-  size: "(auto|[0-9|.]+("+units.join("|")+")|(min|max|min)-content)",
+  size: "(auto|inherit|[0-9|.]+("+units.join("|")+")|(min|max|min)-content)",
   overflow: ["visible", "hidden", "clip", "scroll", "auto"],
 };
 export const styles = {
@@ -70,13 +71,13 @@ export const styles = {
   "flex-shrink": defaults.number,
   "flex-basis": defaults.size,
   "z-index": "[0-9]+",
-  "background": "",//https://developer.mozilla.org/en-US/docs/Web/CSS/background
+  "background": ".*",//https://developer.mozilla.org/en-US/docs/Web/CSS/background
   "background-color": defaults.color,
-  "background-image": "",//https://developer.mozilla.org/en-US/docs/Web/CSS/background-image
-  "background-repeat": "",//repeat-x", "repeat-y", "[ repeat", "space", "round", "no-repeat ]{1,2}
+  "background-image": ".*",//https://developer.mozilla.org/en-US/docs/Web/CSS/background-image
+  "background-repeat": ".*",//repeat-x", "repeat-y", "[ repeat", "space", "round", "no-repeat ]{1,2}
   "background-attachment": ["scroll","fixed","local"],
-  "background-position": "",//https://developer.mozilla.org/en-US/docs/Web/CSS/background-position
-  "background-size": "",//[ <length-percentage>", "auto ]{1,2}", "cover", "contain
+  "background-position": ".*",//https://developer.mozilla.org/en-US/docs/Web/CSS/background-position
+  "background-size": ".*",//[ <length-percentage>", "auto ]{1,2}", "cover", "contain
   "filter": "", //https://developer.mozilla.org/en-US/docs/Web/CSS/filter
   "border": `none|${defaults.number} ${defaults.border} ${defaults.color}`,
   "border-width": defaults.number,
@@ -88,9 +89,9 @@ export const styles = {
   "outline-style": defaults.border,
   "outline-color": defaults.color,
   "opacity": "0|1|[0-1].[0-9]+",
-  "box-shadow": "",
-  "transition": "",//https://developer.mozilla.org/en-US/docs/Web/CSS/transition
-  "transform": "", //https://developer.mozilla.org/en-US/docs/Web/CSS/transform
+  "box-shadow": ".*",
+  "transition": ".*",//https://developer.mozilla.org/en-US/docs/Web/CSS/transition
+  "transform": ".*", //https://developer.mozilla.org/en-US/docs/Web/CSS/transform
   "visibility": ["visible", "hidden"],
   "cursor": ["auto", "default", "none", "context-menu", "help", "pointer", "progress", "wait", "cell", "crosshair", "text", "vertical-text", "alias", "copy", "move", "no-drop", "not-allowed", "e-resize", "n-resize", "ne-resize", "nw-resize", "s-resize", "se-resize", "sw-resize", "w-resize", "ew-resize", "ns-resize", "nesw-resize", "nwse-resize", "col-resize", "row-resize", "all-scroll", "zoom-in", "zoom-out", "grab", "grabbing"],
   "content": ".*",//https://developer.mozilla.org/en-US/docs/Web/CSS/content

@@ -39,6 +39,9 @@ export function Toolbar(props) {
     let changeView = e => {
         document.body.className = "view_" + e.target.value;
         props.setView(e.target.value);
+        if (e.target.value === "code") {
+            
+        }
     };
     //TODO: Complete, save, toggle outlines, toggle images, autoformat, style inline
     return (

@@ -12,6 +12,12 @@ export default {
 		value: ""
 	},
 	rules: {
+		conditions: {
+			type: "conditions",
+			label: "Conditions",
+			title: "When should this campaign run?",
+			value: [],
+		},
 		lift_test: {
 			type: "number",
 			label: "USI Traffic %",

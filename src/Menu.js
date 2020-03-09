@@ -94,9 +94,9 @@ function ClientOptions(props) {
 								<span className="sr-only">Delete</span>
 							</button>
 							<label className="sr-only">Font Name</label>
-							<input type="text" name="name" value={font.name} onChange={props.setFonts}/>
+							<input type="text" name="name" defaultValue={font.name} onChange={props.setFonts}/>
 							<label className="sr-only">Font Path</label>
-							<input type="text" name="path" value={font.path} onChange={props.setFonts}/>
+							<input type="text" name="path" defaultValue={font.path} onChange={props.setFonts}/>
 						</div>
 					)
 				})}
@@ -115,9 +115,9 @@ function ClientOptions(props) {
 								<span className="sr-only">Delete</span>
 							</button>
 							<label className="sr-only">Name</label>
-							<input type="text" name="name" value={cssVar} onChange={props.setStyles}/>
+							<input type="text" name="name" defaultValue={cssVar} onChange={props.setStyles}/>
 							<label className="sr-only">Value</label>
-							<input type="text" name="value" value={props.styles[cssVar]} onChange={props.setStyles}/>
+							<input type="text" name="value" defaultValue={props.styles[cssVar]} onChange={props.setStyles}/>
 						</div>
 					)
 				})}
@@ -262,8 +262,8 @@ function Campaign(props) {
 					</button>
 				</div>
 
-				<h2><input className="input-heading" value={campaign.name}/></h2>
-				<textarea className="input-desc" value={campaign.notes} />
+				<h2><input className="input-heading" defaultValue={campaign.name}/></h2>
+				<textarea className="input-desc" defaultValue={campaign.notes} />
 
 				<div className="flex">
 					<div>
@@ -320,39 +320,53 @@ function CheckboxList (props) {
 		</div>
 	)
 }
+function Conditions(props) {
+	//debugger;
+	return (
+		<div className="conditions flex flex-auto">
+		{props.value.map((term, index) =>  {
+			return (
+				Array.isArray(term) ? <Conditions key={index} value={term} className="condition" /> :
+				(term === "||" || term === "&&") ? <select key={index} className="operator" defaultValue={term} >
+					<option value="&&">AND</option>
+					<option value="||">OR</option>
+				</select> :
+				<input key={index} list="conditions" type="text" defaultValue={term} size={term.length + 2} />
+			)
+		})}
+		<datalist id="conditions">
+			<option value="Active Cart" label="active_cart"/>
+			<option value="Return Visitor" label="return_visitor"/>
+			<option value="Product Page" label="product_page"/>
+		</datalist>
+		</div>
+	)
+}
 
 function InputGroup(props) {
-	if (!props.config){
-		debugger;
-		return null;
-	}
 	return (
-			<div className="input-group">
-				<label>{props.config.label}</label>
-				{props.config.type === "text" ? <input type="text" name="value" value={props.value} placeholder={props.config.title} /> :
-				props.config.type === "number" ? <input type="number" name="value" min={props.config.min} max={props.config.max} value={props.value} placeholder={props.config.title} /> :
-				props.config.type === "time" ? <input type="number" name="value" min="0" value={props.value} placeholder={props.config.title} /> :
+		<div className="input-group">
+			<label>{props.config.label}</label>
+			{
+				props.config.type === "text" ? <input type="text" name="value" defaultValue={props.value} placeholder={props.config.title} /> :
+				props.config.type === "number" ? <input type="number" name="value" min={props.config.min} max={props.config.max} defaultValue={props.value} placeholder={props.config.title} /> :
+				props.config.type === "time" ? <input type="number" name="value" min="0" defaultValue={props.value} placeholder={props.config.title} /> :
 				props.config.type === "checkbox" ? <div><CheckboxList options={props.config.options} /></div> :
-				props.config.type === "date" ? <input type="date" name="value" value={props.value} placeholder={props.config.title} /> :
-				props.config.type === "textarea" ? <textarea name="value" value={props.value} placeholder={props.config.title} /> : "" }
-
-				{/*{Array.isArray(props.value) ?
-						<input type="text" name="value" value={props.value.join(" & ")} readOnly={true}/> :
-						props.label.indexOf("notes") !== -1 ? <textarea name="value" value={props.value} readOnly={true}/> :
-								<input type="text" name="value" value={props.value} readOnly={true}/>}*/}
-
-			</div>
+				props.config.type === "date" ? <input type="date" name="value" defaultValue={props.value} placeholder={props.config.title} /> :
+				props.config.type === "textarea" ? <textarea name="value" defaultValue={props.value} placeholder={props.config.title} /> :
+				props.config.type === "conditions" ? <Conditions value={props.value} className="condition" /> : ""
+			}
+		</div>
 	)
 }
 
 function Template(props) {
-	let i = props.template;
 	return (
-			<li key={i.name} onClick={e => props.setTemplate(i.html)}>
+			<li key={props.template.name} onClick={e => props.setTemplate(props.template.html)}>
 				<div className="iframeWrapper">
-					<iframe srcDoc={i.html} title="template preview"></iframe>
+					<iframe srcDoc={props.template.html} title="template preview"> </iframe>
 				</div>
-				<h4>{i.name}</h4>
+				<h4>{props.template.name}</h4>
 			</li>
 	)
 }

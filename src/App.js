@@ -26,7 +26,7 @@ function App() {
     const [show_images, toggleImages] = useState(true);
     const [outlines, toggleOutlines] = useState(true);
     const [zoom, changeZoom] = useState(1);
-    const [drag, setDragging] = useState(null);
+    //const [drag, setDragging] = useState(null);
     const [active_element, setActive] = useState(null);
     const [view, setView] = useState("visual");
     const [device, changeDevice] = useState("desktop");
@@ -99,9 +99,9 @@ function App() {
                 outlines={outlines}
                 device={device}
                 zoom={zoom}
-                drag={drag}
+                //drag={drag}
                 setActiveTemplate={setActiveTemplate}
-                setDragging={setDragging}
+                //setDragging={setDragging}
                 setActive={setActive}
                 setCanvasStyles={setCanvasStyles}
             />
@@ -110,7 +110,7 @@ function App() {
                 styles={styles}
                 blocks={blocks}
                 active_element={active_element}
-                setDragging={setDragging}
+                //setDragging={setDragging}
                 setCanvasStyles={setCanvasStyles}
                 CodeMirror={CodeMirror}
             />
