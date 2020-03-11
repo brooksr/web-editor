@@ -1,6 +1,6 @@
 import {elements} from "./elements";
 import {styles} from "./styles";
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Controlled as CodeMirror} from 'react-codemirror2'
 
 function Block(props) {
@@ -88,16 +88,8 @@ function ValueSelect(props) {
 }
 
 function StyleRule(props) {
-	function parseCSSText(cssText) {
-		let style = {};
-		let cssTxt = cssText.substring(cssText.indexOf("{") + 1, cssText.lastIndexOf("}"));
-		cssTxt.split(";").forEach(o => {
-			let property = o.substring(0, o.indexOf(":")).trim();
-			let value = o.substring(o.indexOf(":") + 1).trim();
-			if (property !== "") style[property] = value;
-		});
-		return style;
-	}
+	let [classes, setClasses] = useState("hidden");
+	let [rules, setRules] = useState({});
 	let hightlightMatches = function(selector){
 		document.getElementById("canvas").contentDocument.querySelectorAll(selector).forEach((match) => {
 			if (!match.getAttribute("data-status")) match.setAttribute("data-status", "match");
@@ -108,13 +100,28 @@ function StyleRule(props) {
 			match.removeAttribute("data-status");
 		})
 	};
-	let rules = parseCSSText(props.rule.cssText);
-	let matches = document.getElementById("canvas").contentDocument.querySelectorAll(props.rule.selectorText.split(":")[0]);
-	let docHasMatch = matches.length > 0;
-	let classes = docHasMatch ? "doc_has_match" : "hidden";
-	if (Array.from(matches).indexOf(props.active_element) !== -1) {
-		classes += " matches_active";
-	}
+	useEffect(() => {
+		function parseCSSText(cssText) {
+			let style = {};
+			let cssTxt = cssText.substring(cssText.indexOf("{") + 1, cssText.lastIndexOf("}"));
+			cssTxt.split(";").forEach(o => {
+				let property = o.substring(0, o.indexOf(":")).trim();
+				let value = o.substring(o.indexOf(":") + 1).trim();
+				if (property !== "") style[property] = value;
+			});
+			return style;
+		}
+		let rules = parseCSSText(props.rule.cssText);
+		let matches = document.getElementById("canvas").contentDocument.querySelectorAll(props.rule.selectorText.split(":")[0]);
+		let docHasMatch = matches.length > 0;
+		let classes = docHasMatch ? "doc_has_match" : "hidden";
+		if (Array.from(matches).indexOf(props.active_element) !== -1) {
+			classes += " matches_active";
+		}
+		setClasses(classes);
+		setRules(rules);
+	}, [props.active_element, props.rule]);
+
 	//TODO: calculate selector specificity to show what properties are inherited or overwritten
 	return (
 			<form className={classes} onFocus={e => hightlightMatches(props.rule.selectorText)} onBlur={unHightlightMatches} >

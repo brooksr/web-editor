@@ -5,7 +5,7 @@
  * SVG, masking
  * */
 const units =  ["px", "%", "em", "vmax", "vmin", "vh", "vw"];
-const cssVar = '[var(--[a-z|\-])]';
+const cssVar = '[var(--[a-z|-])]';
 const defaults = {
   number: `([0-9|.]+(${units.join("|")})?)`,
   color: 'rgb.*|' + cssVar,

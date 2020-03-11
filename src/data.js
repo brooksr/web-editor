@@ -9,6 +9,7 @@ import {emailBlocks} from "./email-blocks";
 
 export let data = {
     company: {
+        name: "Samsung",
         address: "123 Easy St. | Anytown, CA, USA, 98765",
         legal: "&copy {{date_now:yyyy}} | Company Name, LLC. All rights reserved.",
         facebook: "https://www.facebook.com/",
