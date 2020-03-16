@@ -82,15 +82,15 @@ function CampaignSummary(props) {
 	let campaign = props.campaign;
 	return (
 			<div className="campaignWrapper">
-				<h4><a href={campaign.admin.opp} rel="noopener noreferrer" target="_blank">{campaign.name}</a></h4>
+				<h4><a href={campaign.data.admin.opp} rel="noopener noreferrer" target="_blank">{campaign.name}</a></h4>
 				<p>{campaign.notes}</p>
 				<div className="radio-buttons">
-					{campaign.modal && campaign.modal.list.map((i, index) => {
+					{campaign.assets.modal && campaign.assets.modal.list.map((i, index) => {
 						return <button key={index} onClick={e => props.setTemplate(i.html)}>{i.name}</button>
 					})}
 				</div>
 				<div className="radio-buttons">
-					{campaign.email && campaign.email.list.map((i, index) => {
+					{campaign.assets.email && campaign.assets.email.list.map((i, index) => {
 						return <button key={index} onClick={e => props.setTemplate(i.html)}>{i.name}</button>
 					})}
 				</div>

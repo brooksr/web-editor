@@ -76,6 +76,8 @@ export function Toolbar(props) {
                                 <i className="fas fa-table"> </i>
                                 <span className="tablet-tooltip">Campaign Specs</span>
                             </label>*/}
+                        </div>
+                        <div className="radio-buttons" id="editor-view" onChange={changeView}>
                             <input id="editor-view-code" name="editor-view" type="radio" value="code"/>
                             <label htmlFor="editor-view-code">
                                 <i className="fas fa-code"> </i>
@@ -87,13 +89,13 @@ export function Toolbar(props) {
                                 <span className="tablet-tooltip">Visual</span>
                             </label>
                         </div>
-                        <div className="save-group">
+                        {/* <div className="save-group">
                             <input id="assetName" type="text" placeholder="Enter asset name" defaultValue="" autoComplete="off"/>
                             <button type="button" id="save">
                                 <i className="far fa-save"> </i>
                                 <span className="tablet-tooltip">Save</span>
                             </button>
-                        </div>
+                        </div> */}
                         <div className="radio-buttons code_control">
                             <button type="button" id="emailInline">Email Inline</button>
                             <button type="button" id="autoFormat">Autoformat</button>
@@ -127,10 +129,6 @@ export function Toolbar(props) {
                             </button>
                         </div>
                         <div className="button-group visual_control">
-                            <button type="button" id="toggleOutlines" onClick={props.toggleOutlines}>
-                                <i className="fas fa-border-none"> </i>
-                                <span className="tablet-tooltip">Toggle Outlines</span>
-                            </button>
                             <button type="button" id="toggleImages" onClick={props.toggleImages}>
                                 <i className="far fa-image"> </i>
                                 <span className="tablet-tooltip">Toggle Images</span>
@@ -138,6 +136,12 @@ export function Toolbar(props) {
                             <button type="button" id="sendTestEmail" onClick={testEmail}>
                                 <i className="far fa-paper-plane"> </i>
                                 <span className="tablet-tooltip">EOA Test</span>
+                            </button>
+                        </div>
+                        <div className="button-group visual_control">
+                            <button type="button" id="toggleOutlines" onClick={props.toggleOutlines}>
+                                <i className="fas fa-border-none"> </i>
+                                <span className="tablet-tooltip">Toggle Outlines</span>
                             </button>
                             <button type="button" id="fullScreen" onClick={toggleFullscreen}>
                                 <i className="fas fa-expand-arrows-alt"> </i>

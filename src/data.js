@@ -16,121 +16,138 @@ export let data = {
         twitter: "https://www.twitter.com/",
         linkedin: "https://www.linkedin.com/",
     },
-    conditions: {
+    /*conditions: {
         product_page: "Product Pages",
         active_cart: "Active Cart",
         return_visitor: "Return Visitors",
-    },
+    },*/
     campaigns: [
         {
-            name: "Inboxed Incentive | Save Your Cart",
-            notes: "Summary of campaign. Testing instructions.",
-            rules: {
-                conditions: ["90% Lift Test", "&&", "Not Return Visitor", "&&", ["Cart Total > 0", "||", ["Product Page", "&&", "Direct Traffic"]]],
-                languages: "en",
-                locales: "us",
-                notes: "",
+            info: {
+                name: "Inboxed Incentive | Save Your Cart",
+                notes: "Summary of campaign. Testing instructions.",
             },
-            features: {
-                other: ["cart_rebuilder", "coupon_reminder"],
-                coupon_source: "SAVE10",
-                coupon_expiration: "2020-12-31",
-                coupon_apply: "Only from email",
-                notes: "",
-            },
-            admin: {
-                site_id: "23456",
-                tracking: "https://www.example.com?url=",
-                sale_window: 86400 * 30,
-                opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
-                design_notes: "This is an area for design notes and feedback. Add links to client references and assets.",
-                dev_notes: "Notes for the development team. Comments on specific functionality.",
-                qa_notes: "Notes for QA. Links to QA docs.",
-            },
-            modal: {
-                defaults: {
-                    link: "https://www.destination.com/cart",
-                },
-                list: [
-                    {
-                        name: "Lead Capture",
-                        html: modal,
-                        launch_settings: 6,
-                        launch_method: "abandonment",
-                    }, {
-                        name: "Coupon reminder",
-                        html: bar,
-                        launch_method: "coupon_reminder",
-                    }
-                ],
-                notes: "",
-            },
-            email: {
-                defaults: {
-                    from_name: "Samsung Support",
-                    from_email: "support@samsung.com",
-                    link: "https://www.destination.com/cart",
-                },
-                list: [
-                    {
-                        name: "Email 1",
-                        subject: "subject line 1",
-                        preheader: "preheader line 1",
-                        time: 3600,
-                        html: uml_export,
-                    }, {
-                        name: "Email 2",
-                        subject: "subject line 2",
-                        preheader: "preheader line 2",
-                        time: 86400 - 3600,
-                        html: email,
-                    }, {
-                        name: "Email 3",
-                        subject: "subject line 3",
-                        preheader: "preheader line 3",
-                        time: 86400 * 2,
-                        html: email2,
-                    }
-                ],
-                notes: "",
-            }
-        }, {
-            name: "Precise Promotion | Free Shipping vs Free Gift",
-            notes: "Example description here.",
-            rules: {
-                conditions: ["Not Return Visitor", "&&", "Cart Total == 0"],
-                languages: "en",
-                locales: "us",
-                notes: "",
-            },
-            admin: {
-                site_id: "23457",
-                tracking: "https://www.example.com?url=",
-                sale_window: 86400 * 30,
-                opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
-                design_notes: "This is an area for design notes and feedback. Add links to client references and assets.",
-                dev_notes: "Notes for the development team. Comments on specific functionality.",
-                qa_notes: "Notes for QA. Links to QA docs.",
-            },
-            modal: {
-                defaults: {
-                    split: 50,// 1 / configs.length
-                    launch_settings: 6,
-                    link: "https://www.destination.com/cart",
-                    launch_method: "abandonment",
+            data: {
+                rules: {
+                    conditions: [
+                        //"is in 90% lift group", "&&",
+                        "is not logged in", "&&",
+                        "has not purchased", "&&",
+                        ["cart total > 0", "||", "is a product page"]]
+                    ,
+                    languages: "en",
+                    locales: "us",
                     notes: "",
                 },
-                list: [
-                    {
-                        name: "Free Shipping",
-                        coupon: "FREESHIPPING",
-                        html: modal,
-                    }, {
-                        name: "Free Gift",
-                        coupon: "FREEGIFT",
-                        html: modal,
-                    }
-                ]
+                features: {
+                    other: ["cart_rebuilder", "coupon_reminder"],
+                    coupon_source: "SAVE10",
+                    coupon_expiration: "2020-12-31",
+                    coupon_apply: "Only from email",
+                    notes: "",
+                },
+                admin: {
+                    site_id: "23456",
+                    tracking: "https://www.example.com?url=",
+                    sale_window: 86400 * 30,
+                    opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
+                    design_notes: "This is an area for design notes and feedback. Add links to client references and assets.",
+                    dev_notes: "Notes for the development team. Comments on specific functionality.",
+                    qa_notes: "Notes for QA. Links to QA docs.",
+                },
+            },
+            assets: {
+                modal: {
+                    defaults: {
+                        link: "https://www.destination.com/cart",
+                    },
+                    list: [
+                        {
+                            name: "Lead Capture",
+                            html: modal,
+                            launch_settings: 6,
+                            launch_method: "abandonment",
+                        }, {
+                            name: "Coupon reminder",
+                            html: bar,
+                            launch_method: "coupon_reminder",
+                        }
+                    ],
+                    notes: "",
+                },
+                email: {
+                    defaults: {
+                        from_name: "Samsung Support",
+                        from_email: "support@samsung.com",
+                        link: "https://www.destination.com/cart",
+                    },
+                    list: [
+                        {
+                            name: "Email 1",
+                            subject: "subject line 1",
+                            preheader: "preheader line 1",
+                            time: 3600,
+                            html: uml_export,
+                        }, {
+                            name: "Email 2",
+                            subject: "subject line 2",
+                            preheader: "preheader line 2",
+                            time: 86400 - 3600,
+                            html: email,
+                        }, {
+                            name: "Email 3",
+                            subject: "subject line 3",
+                            preheader: "preheader line 3",
+                            time: 86400 * 2,
+                            html: email2,
+                        }
+                    ],
+                    notes: "",
+                }
+            }
+        }, {
+            info: {
+                name: "Precise Promotion | Free Shipping vs Free Gift",
+                notes: "Example description here.",
+            },
+            data: {
+                rules: {
+                    conditions: ["Not Return Visitor", "&&", "Cart Total == 0"],
+                    languages: "en",
+                    locales: "us",
+                    notes: "",
+                },
+                admin: {
+                    site_id: "23457",
+                    tracking: "https://www.example.com?url=",
+                    sale_window: 86400 * 30,
+                    opp: "https://upsellit.lightning.force.com/lightning/r/Opportunity/0060g000010TmmNAAS/view",
+                    design_notes: "This is an area for design notes and feedback. Add links to client references and assets.",
+                    dev_notes: "Notes for the development team. Comments on specific functionality.",
+                    qa_notes: "Notes for QA. Links to QA docs.",
+                },
+            },
+            assets: {
+                modal: {
+                    defaults: {
+                        split: 50,// 1 / configs.length
+                        launch_settings: 6,
+                        link: "https://www.destination.com/cart",
+                        launch_method: "abandonment",
+                        notes: "",
+                    },
+                    list: [
+                        {
+                            name: "Free Shipping",
+                            coupon: "FREESHIPPING",
+                            html: modal,
+                        }, {
+                            name: "Free Gift",
+                            coupon: "FREEGIFT",
+                            html: modal,
+                        }
+                    ]
+                }
             }
         }
     ],

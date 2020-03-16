@@ -120,53 +120,41 @@ function Campaign(props) {
 					</button>
 				</div>
 
-				<h2><input className="input-heading" defaultValue={campaign.name}/></h2>
-				<textarea className="input-desc" defaultValue={campaign.notes} />
-
+				{campaign.info && Object.keys(campaign.info).map(prop => {
+					return (
+							<InputGroup
+									key={prop}
+									config={campaignForm.info[prop]}
+									value={campaign.info[prop]}
+							/>
+					)
+				})}
 				<div className="flex">
-					<div>
-						<h4>Rules</h4>
-						{campaign.rules && Object.keys(campaign.rules).map(prop => {
-							return (
-									<InputGroup
-											key={prop}
-											config={campaignForm.rules[prop]}
-											value={campaign.rules[prop]}
-									/>
-							)
-						})}
-					</div>
-					<div>
-						<h4>Features</h4>
-						{campaign.features && Object.keys(campaign.features).map(prop => {
-							return (
-									<InputGroup
-											key={prop}
-											config={campaignForm.features[prop]}
-											value={campaign.features[prop]}
-									/>
-							)
-						})}
-					</div>
-					<div>
-						<h4>Admin</h4>
-						{campaign.admin && Object.keys(campaign.admin).map(prop => {
-							return (
-									<InputGroup
-											key={prop}
-											config={campaignForm.admin[prop]}
-											value={campaign.admin[prop]}
-									/>
-							)
-						})}
-					</div>
+					{campaign.data && Object.keys(campaign.data).map(prop => {
+						return (
+							<div key={prop}>
+								<h4>{prop}</h4>
+								{Object.keys(campaign.data[prop]).map(prop2 => {
+									return (
+											<InputGroup
+													key={prop2}
+													config={campaignForm.data[prop][prop2]}
+													value={campaign.data[prop][prop2]}
+											/>
+									)
+								})}
+							</div>
+						)
+					})}
 				</div>
-				<div>
-					<h5>Modals</h5>
-					{!campaign.modal ? "" : <AssetList type="modal" list={campaign.modal} setTemplate={props.setTemplate}/>}
-					<h5>Emails</h5>
-					{!campaign.email ? "" : <AssetList type="email" list={campaign.email} setTemplate={props.setTemplate}/>}
-				</div>
+				{campaign.assets && Object.keys(campaign.assets).map(prop => {
+					return (
+							<div key={prop}>
+								<h5>{prop}</h5>
+								<AssetList type={prop} list={campaign.assets[prop]} setTemplate={props.setTemplate}/>
+							</div>
+					)
+				})}
 			</div>
 	)
 }
@@ -205,7 +193,7 @@ function AssetList(props) {
 									return prop === "html" ? "" : ( (
 													<InputGroup
 															key={prop}
-															config={campaignForm[props.type].defaults[prop]}
+															config={campaignForm.assets[props.type].defaults[prop]}
 															value={config[prop]}
 													/>
 											)
@@ -243,6 +231,22 @@ function CheckboxList (props) {
 }
 function Conditions(props) {
 	//debugger;
+	let conditions = {
+        "Page | Home Page": "is a home page",
+        "Page | Category Page": "is a category page",
+        "Page | Product Page": "is a product page",
+        "Page | Cart Page": "is a cart page",
+        "Page | Checkout Page": "is a checkout page",
+        "Page | Login Page": "is a login page",
+        "Page | Register Page": "is a register page",
+        "Page | Confirmation Page": "is a confirmation page",
+        "Stage | Pre Cart": "cart total == 0",
+        "Stage | Active Cart": "cart total > 0",
+        "Stage | Post Purchase": "orders > 0",
+    	"Visitor | Return Visitor": "is a return visitor",
+    	"Visitor | Direct Traffic": "is direct traffic",
+    	"Visitor | Logged In": "is logged in",
+    };
 	return (
 			<div className="conditions flex flex-auto">
 				{props.value.map((term, index) =>  {
@@ -256,9 +260,7 @@ function Conditions(props) {
 					)
 				})}
 				<datalist id="conditions">
-					<option value="Active Cart" label="active_cart"/>
-					<option value="Return Visitor" label="return_visitor"/>
-					<option value="Product Page" label="product_page"/>
+					{Object.keys(conditions).map(label => <option value={conditions[label]} label={label} key={label} />)}
 				</datalist>
 			</div>
 	)
