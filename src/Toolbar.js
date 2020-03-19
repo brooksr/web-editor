@@ -1,6 +1,6 @@
 import {keys} from "./keys";
 import React from "react";
-import {Link, Route, Switch} from "react-router-dom";
+import {NavLink, Route, Switch, useParams, useRouteMatch} from "react-router-dom";
 
 export function Toolbar(props) {
     let toggleFullscreen = function () {
@@ -44,22 +44,42 @@ export function Toolbar(props) {
             
         }
     };
+    
+    // let match = useRouteMatch({
+    //     path: '/company/:companyID/',
+    //     strict: true,
+    //     sensitive: true
+    //   });
+    function Breadcrumb (props) {
+        let params = useParams();
+        let to = "/";
+        if (params.companyID) to = `/company/${params.companyID}/`
+        if (params.configID) to += `config/${params.configID}/`
+        return (
+            <li>
+                <NavLink exact to={to}>{props.name}</NavLink>
+            </li>
+        )
+    }
     //TODO: Complete, save, toggle outlines, toggle images, autoformat, style inline
     return (
         <div className="scroll">
             <div id="toolbar">
                 <nav className="navbar">
                     <ul>
-                        <li>
-                            <Link to="/">Overview</Link>
-                        </li>
-                        <li>
-                            <Link to="/edit">Edit</Link>
-                        </li>
+                        <Route path="/">
+                            <Breadcrumb name="List" />
+                        </Route>
+                        <Route path="/company/:companyID/">
+                            <Breadcrumb name="Company" />
+                        </Route>
+                        <Route path="/company/:companyID/config/:configID/">
+                            <Breadcrumb name="Config" />
+                        </Route>
                     </ul>
                 </nav>
                 <Switch>
-                    <Route path="/edit">
+                    <Route path="/company/:companyID/config/:configID/">
                         <div className="radio-buttons" id="editor-view" onChange={changeView}>
                             <input id="editor-view-menu" name="editor-view" type="radio" value="menu"/>
                             <label htmlFor="editor-view-menu">
@@ -87,13 +107,13 @@ export function Toolbar(props) {
                                 <span className="tablet-tooltip">Visual</span>
                             </label>
                         </div>
-                        <div className="save-group">
+                        {/* <div className="save-group">
                             <input id="assetName" type="text" placeholder="Enter asset name" defaultValue="" autoComplete="off"/>
                             <button type="button" id="save">
                                 <i className="far fa-save"> </i>
                                 <span className="tablet-tooltip">Save</span>
                             </button>
-                        </div>
+                        </div> */}
                         <div className="radio-buttons code_control">
                             <button type="button" id="emailInline">Email Inline</button>
                             <button type="button" id="autoFormat">Autoformat</button>

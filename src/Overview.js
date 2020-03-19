@@ -1,5 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
+import {Route, Link, useRouteMatch, Switch} from "react-router-dom"
 import campaignForm from "./campaign";
+import {Canvas} from './Canvas.js';
+import {Editor} from './Editor.js';
+import {Menu, ImageMenu, ClientSettings, CodeEditor} from './Menu.js';
+import {Controlled as CodeMirror} from 'react-codemirror2'
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/mode/htmlmixed/htmlmixed';
 
 function ClientOptions(props) {
 	return (
@@ -71,20 +78,90 @@ function ClientOptions(props) {
 	)
 }
 
-export function Overview(props) {
+export function Company(props) {
+	const [company, setCompany] = useState(props.data.company);
+	const [campaigns, setCampaigns] = useState(props.data.campaigns);
+	const [blocks, setBlocks] = useState(props.data.blocks);
+	const [images, setImages] = useState(props.data.images);
+	const [fonts, setFonts] = useState(props.data.fonts);
+	const [styles, setStyles] = useState(props.data.styles);
+	const [canvas_styles, setCanvasStyles] = useState({css: [], media: []});
+	const [active_element, setActive] = useState(null);
+
+
+	// shortcuts, need to rewrite for react
+	/*useEffect(() => {
+		document.addEventListener("keyup", function(event) {
+			let save = event.which === 83 && event.ctrlKey;
+			if (save) {
+				event.preventDefault();
+				alert("Save!")
+			}
+		});
+	});*/
+	
+	const setActiveTemplate = function (html) {
+		props.setView("visual");
+		props.setTemplate(html);
+	};
 	// + (props.view === "campaigns" ? "" : " invisible")
 	return (
-			<div className={"scroll modal menu"}>
-				<h1>{props.company.name} Campaign Builder</h1>
-				<h2> Settings</h2>
-				<hr/>
-				<ClientOptions fonts={props.fonts} styles={props.styles} company={props.company} />
-				<h3>Campaigns</h3>
-				<button>New Campaign</button>
-				{props.campaigns.map((campaign, ind) =>
-						<Campaign setTemplate={props.setTemplate} campaign={campaign} key={ind}/>
-				)}
-			</div>
+		<Switch>
+				<Route path="/company/:companyID/config/:configID">
+					<Menu
+							view={props.view}
+							campaigns={campaigns}
+							templates={props.templates}
+							setTemplate={setActiveTemplate}
+					/>
+					<ImageMenu
+							view={props.view}
+							images={images}
+					/>
+					<CodeEditor
+							view={props.view}
+							src_doc={props.src_doc}
+							setActiveTemplate={setActiveTemplate}
+							CodeMirror={CodeMirror}
+					/>
+					<Canvas
+							src_doc={props.src_doc}
+							fonts={fonts}
+							styles={styles}
+							show_images={props.show_images}
+							outlines={props.outlines}
+							device={props.device}
+							zoom={props.zoom}
+							//drag={drag}
+							setActiveTemplate={setActiveTemplate}
+							//setDragging={setDragging}
+							setActive={setActive}
+							setCanvasStyles={setCanvasStyles}
+					/>
+					<Editor
+							canvas_styles={canvas_styles}
+							styles={styles}
+							blocks={blocks}
+							active_element={active_element}
+							//setDragging={setDragging}
+							setCanvasStyles={setCanvasStyles}
+							CodeMirror={CodeMirror}
+					/>
+				</Route>
+				<Route path="/company/:companyID">
+				<div className={"scroll modal menu"}>
+					<h1>{company.name} Campaign Builder</h1>
+					<h2> Settings</h2>
+					<hr/>
+					<ClientOptions fonts={fonts} styles={styles} company={company} />
+					<h3>Campaigns</h3>
+					<button>New Campaign</button>
+					{campaigns.map((campaign, ind) =>
+							<Campaign setTemplate={props.setTemplate} campaign={campaign} key={ind}/>
+					)}
+				</div>
+				</Route>
+		</Switch>
 	)
 }
 
@@ -171,6 +248,7 @@ function Campaign(props) {
 	)
 }
 function AssetList(props) {
+  let match = useRouteMatch();
 	return (
 			<div className="flex flex-auto">
 				{(props.list.list).map((config, index) => {
@@ -180,10 +258,11 @@ function AssetList(props) {
 									<iframe srcDoc={config.html} title="campaign preview"> </iframe>
 								</div>
 								<div className="button-group button-group-sm flex-auto">
-									<button onClick={e => props.setTemplate(config.html)}>
+									<Link to={`${match.url}/config/${config.name}`}>{/* onClick={e => props.setTemplate(config.html)} */}
 										<i className="far fa-edit"></i>
+										{/* {JSON.stringify(match, null, "\t")} */}
 										<span className="tablet-tooltip">Edit</span>
-									</button>
+									</Link>
 									<button disabled={true}>
 										<i className="far fa-save"></i>
 										<span className="tablet-tooltip">Save</span>
