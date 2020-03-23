@@ -1,68 +1,72 @@
-import React from "react";
-import campaignForm from "./campaign";
+import React, {useState} from "react";
+import {Route, Link, useRouteMatch, Switch} from "react-router-dom"
+import campaignForm from "./mocks/campaign";
+import Asset from "./Asset";
+import {useGlobalState} from "./hooks/useGlobal";
 
 function ClientOptions(props) {
+	const {data} = useGlobalState();
 	return (
 			<div className="flex flex-auto">
 				<div>
 					<h3>Fonts</h3>
-					<button className="button-sm" disabled={true}>
+					<button className="button-sm">
 						<i className="fas fa-plus"></i>
 						<span className="sr-only">Add</span>
 					</button>
-					{props.fonts.map((font, index) => {
+					{Object.keys(data.fonts).map((font, index) => {
 						return (
 								<div key={index} className="input-group">
-									<button className="button-sm button-transparent" disabled={true}>
+									<button className="button-sm button-transparent">
 										<i className="fas fa-times"></i>
 										<span className="sr-only">Delete</span>
 									</button>
 									<label className="sr-only">Font Name</label>
-									<input type="text" name="name" defaultValue={font.name} onChange={props.setFonts}/>
+									<input type="text" name="name" defaultValue={data.fonts[font].name} readOnly={true} />
 									<label className="sr-only">Font Path</label>
-									<input type="text" name="path" defaultValue={font.path} onChange={props.setFonts}/>
+									<input type="text" name="path" defaultValue={data.fonts[font].path} readOnly={true} />
 								</div>
 						)
 					})}
 				</div>
 				<div>
 					<h3>Styles</h3>
-					<button className="button-sm" disabled={true}>
+					<button className="button-sm">
 						<i className="fas fa-plus"></i>
 						<span className="sr-only">Add</span>
 					</button>
-					{Object.keys(props.styles).map((cssVar, index) => {
+					{Object.keys(data.styles).map((cssVar, index) => {
 						return (
 								<div key={index} className="input-group">
-									<button className="button-sm button-transparent" disabled={true}>
+									<button className="button-sm button-transparent">
 										<i className="fas fa-times"></i>
 										<span className="sr-only">Delete</span>
 									</button>
 									<label className="sr-only">Name</label>
-									<input type="text" name="name" defaultValue={cssVar} onChange={props.setStyles}/>
+									<input type="text" name="name" defaultValue={cssVar} readOnly={true} />
 									<label className="sr-only">Value</label>
-									<input type="text" name="value" defaultValue={props.styles[cssVar]} onChange={props.setStyles}/>
+									<input type="text" name="value" defaultValue={data.styles[cssVar]} readOnly={true} />
 								</div>
 						)
 					})}
 				</div>
 				<div>
-					<h3>Company</h3>
-					<button className="button-sm" disabled={true}>
+					<h3>Vars</h3>
+					<button className="button-sm">
 						<i className="fas fa-plus"></i>
 						<span className="sr-only">Add</span>
 					</button>
-					{Object.keys(props.company).map((name, index) => {
+					{Object.keys(data.vars).map((name, index) => {
 						return (
 								<div key={index} className="input-group">
-									<button className="button-sm button-transparent" disabled={true}>
+									<button className="button-sm button-transparent">
 										<i className="fas fa-times"></i>
 										<span className="sr-only">Delete</span>
 									</button>
 									<label className="sr-only">Name</label>
-									<input type="text" name="name" value={name} readOnly={true}/>
+									<input type="text" name="name" value={name} readOnly={true} />
 									<label className="sr-only">Value</label>
-									<input type="text" name="value" value={props.company[name]} readOnly={true}/>
+									<input type="text" name="value" value={data.vars[name]} readOnly={true} />
 								</div>
 						)
 					})}
@@ -71,20 +75,54 @@ function ClientOptions(props) {
 	)
 }
 
-export function Overview(props) {
-	// + (props.view === "campaigns" ? "" : " invisible")
+export function Company(props) {
+	const {data} = useGlobalState();
+
+	//const [fonts, setFonts] = useState(props.data.fonts);
+	//const [styles, setStyles] = useState(props.data.styles);
+	//const [campaigns, setCampaigns] = useState(props.data.campaigns);
+	//const [vars, setVars] = useState(props.data.vars);
+
+
+	// shortcuts, need to rewrite for react
+	/*useEffect(() => {
+		document.addEventListener("keyup", function(event) {
+			let save = event.which === 83 && event.ctrlKey;
+			if (save) {
+				event.preventDefault();
+				alert("Save!")
+			}
+		});
+	});*/
+	
+	//debugger;
 	return (
-			<div className={"scroll modal menu"}>
-				<h1>{props.company.name} Campaign Builder</h1>
-				<h2> Settings</h2>
-				<hr/>
-				<ClientOptions fonts={props.fonts} styles={props.styles} company={props.company} />
-				<h3>Campaigns</h3>
-				<button>New Campaign</button>
-				{props.campaigns.map((campaign, ind) =>
-						<Campaign setTemplate={props.setTemplate} campaign={campaign} key={ind}/>
-				)}
-			</div>
+		<Switch>
+				<Route path="/company/:companyID/asset/:assetID">
+					<Asset
+						view={props.view}
+						src_doc={props.src_doc}
+						show_images={props.show_images}
+						outlines={props.outlines}
+						device={props.device}
+						zoom={props.zoom}
+						setView={props.setView}
+					/>
+				</Route>
+				<Route path="/company/:companyID">
+				<div className={"scroll modal menu"}>
+					<h1>{data.vars.name}</h1>
+					<h2>Company Data</h2>
+					<hr/>
+					<ClientOptions />
+					<h3>Campaigns</h3>
+					<button>New Campaign</button>
+					{data.campaigns.map((campaign, ind) =>
+							<Campaign campaign={campaign} key={ind}/>
+					)}
+				</div>
+				</Route>
+		</Switch>
 	)
 }
 
@@ -101,22 +139,22 @@ function Campaign(props) {
 	return (
 			<div className="campaignWrapper clearfix">
 
-				<div className="button-group button-group-sm flex-auto">
-					<button disabled={true}>
+				<div className="button-group flex-auto">
+					{/* <button>
 						<i className="far fa-edit"></i>
 						<span className="tablet-tooltip">Edit</span>
-					</button>
-					<button disabled={true}>
+					</button> */}
+					<button>
 						<i className="far fa-save"></i>
-						<span className="tablet-tooltip">Save</span>
+						<span className="">Save</span>
 					</button>
-					<button disabled={true}>
+					<button>
 						<i className="fas fa-archive"></i>
-						<span className="tablet-tooltip">Archive</span>
+						<span className="">Archive</span>
 					</button>
-					<button disabled={true}>
+					<button>
 						<i className="far fa-clone"></i>
-						<span className="tablet-tooltip">Clone</span>
+						<span className="">Clone</span>
 					</button>
 				</div>
 
@@ -124,7 +162,7 @@ function Campaign(props) {
 					return (
 							<InputGroup
 									key={prop}
-									config={campaignForm.info[prop]}
+									asset={campaignForm.info[prop]}
 									value={campaign.info[prop]}
 							/>
 					)
@@ -138,7 +176,7 @@ function Campaign(props) {
 									return (
 											<InputGroup
 													key={prop2}
-													config={campaignForm.data[prop][prop2]}
+													asset={campaignForm.data[prop][prop2]}
 													value={campaign.data[prop][prop2]}
 											/>
 									)
@@ -151,7 +189,7 @@ function Campaign(props) {
 					return (
 							<div key={prop}>
 								<h5>{prop}</h5>
-								<AssetList type={prop} list={campaign.assets[prop]} setTemplate={props.setTemplate}/>
+								<AssetList type={prop} list={campaign.assets[prop].list} setTemplate={props.setTemplate}/>
 							</div>
 					)
 				})}
@@ -159,45 +197,48 @@ function Campaign(props) {
 	)
 }
 function AssetList(props) {
+	let match = useRouteMatch();
+
 	return (
 			<div className="flex flex-auto">
-				{(props.list.list).map((config, index) => {
+				{(props.list).map((item, index) => {
 					return (
 							<div key={index} className="clearfix">
 								<div className="iframeWrapper" style={{float: "left"}}>
-									<iframe srcDoc={config.html} title="campaign preview"> </iframe>
+									<iframe srcDoc={item.html} title="campaign preview"> </iframe>
 								</div>
 								<div className="button-group button-group-sm flex-auto">
-									<button onClick={e => props.setTemplate(config.html)}>
-										<i className="far fa-edit"></i>
-										<span className="tablet-tooltip">Edit</span>
-									</button>
-									<button disabled={true}>
+									<Link className="button" to={`${match.url}asset/${item.id}`}>
+										<i className="fas fa-pen"></i>
+										{/* {JSON.stringify(match, null, "\t")} */}
+										<span className="">Open</span>
+									</Link>
+									{/* <button>
 										<i className="far fa-save"></i>
 										<span className="tablet-tooltip">Save</span>
-									</button>
-									<button disabled={true}>
+									</button> */}
+									<button>
 										<i className="fas fa-archive"></i>
-										<span className="tablet-tooltip">Archive</span>
+										<span className="">Archive</span>
 									</button>
-									<button disabled={true}>
+									{/* <button>
 										<i className="fas fa-arrows-alt"></i>
 										<span className="tablet-tooltip">Move</span>
-									</button>
-									<button disabled={true}>
+									</button> */}
+									<button>
 										<i className="far fa-clone"></i>
-										<span className="tablet-tooltip">Clone</span>
+										<span className="">Clone</span>
 									</button>
 								</div>
-								{Object.keys(Object.assign(config, props.list.defaults)).map(prop => {
-									return prop === "html" ? "" : ( (
+								{Object.keys(Object.assign(item)).map(prop => {
+									let formConfig = campaignForm.assets[props.type].defaults[prop];
+									return formConfig && (
 													<InputGroup
 															key={prop}
-															config={campaignForm.assets[props.type].defaults[prop]}
-															value={config[prop]}
+															asset={formConfig}
+															value={item[prop]}
 													/>
 											)
-									)
 								})}
 							</div>
 					)
@@ -206,17 +247,18 @@ function AssetList(props) {
 	)
 }
 function InputGroup(props) {
+	if (!props.asset) debugger;
 	return (
 		<div className="input-group">
-			<label>{props.config.label}</label>
+			<label>{props.asset.label}</label>
 			{
-				props.config.type === "text" ? <input type="text" name="value" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "number" ? <input type="number" name="value" min={props.config.min} max={props.config.max} defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "time" ? <input type="number" name="value" min="0" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "checkbox" ? <div><CheckboxList options={props.config.options} /></div> :
-				props.config.type === "date" ? <input type="date" name="value" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "textarea" ? <textarea name="value" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "conditions" ? <Conditions value={props.value} className="condition" /> : ""
+				props.asset.type === "text" ? <input type="text" name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "number" ? <input type="number" name="value" min={props.asset.min} max={props.asset.max} defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "time" ? <input type="number" name="value" min="0" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "checkbox" ? <div><CheckboxList options={props.asset.options} /></div> :
+				props.asset.type === "date" ? <input type="date" name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "textarea" ? <textarea name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "conditions" ? <Conditions value={props.value} className="condition" /> : ""
 			}
 		</div>
 	)
