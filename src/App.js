@@ -1,14 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useReducer,useContext, createContext} from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {Toolbar} from './Toolbar.js';
 import {Company} from './Overview.js';
 import {List} from './List.js';
-import {data} from './data.js';
+import {GlobalStateProvider} from './hooks/useGlobal.js';
 import './App.css';
 
 function App() {
-	const [templates, setTemplates] = useState(data.templates);
-	const [src_doc, setTemplate] = useState(templates[0].html);
+	const [src_doc, setTemplate] = useState("");
 	const [view, setView] = useState("visual");
 	const [show_images, toggleImages] = useState(true);
 	const [outlines, toggleOutlines] = useState(true);
@@ -23,6 +22,7 @@ function App() {
 	};
 
 	return (
+		<GlobalStateProvider>
 			<Router>
 				<Toolbar
 						src_doc={src_doc}
@@ -37,14 +37,14 @@ function App() {
 				<Switch>
 					<Route path="/company/:companyId">
 						<Company
-							data={data}
-							templates={templates}
 							view={view}
 							src_doc={src_doc}
 							show_images={show_images}
 							outlines={outlines}
 							device={device}
 							zoom={zoom}
+							setTemplate={setTemplate}
+							setView={setView}
 						/>
 					</Route>
 					<Route path="/">
@@ -52,6 +52,7 @@ function App() {
 					</Route>
 				</Switch>
 			</Router>
+		</GlobalStateProvider>
 	)
 }
 

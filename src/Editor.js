@@ -1,7 +1,8 @@
-import {elements} from "./elements";
+import {elements} from "./mocks/elements";
 import {styles} from "./styles";
 import React, {useState, useEffect} from "react";
-import {Controlled as CodeMirror} from 'react-codemirror2'
+import {Controlled as CodeMirror} from 'react-codemirror2';
+import {useGlobalState} from "./hooks/useGlobal";
 
 function Block(props) {
 	return (
@@ -267,15 +268,23 @@ function Style (props) {
 												<span className="tablet-tooltip">Delete</span>
 											</button>
 										</div>
-										<div className="input-group">
-											<label htmlFor={props.name}>@media</label>
+										{ rule.href ? <div className="input-group">
+											<label>@import</label>
+											<input
+													defaultValue={rule.href}
+													type="text"
+													autoComplete="off"
+											/>
+										</div> : <div className="input-group">
+											<label>@media</label>
 											<input
 													defaultValue={rule.media}
 													type="text"
 													autoComplete="off"
 											/>
-										</div>
-										{Array.from(rule.cssRules).map((rule, index) => {
+										</div>}
+										
+										{rule.cssRules && Array.from(rule.cssRules).map((rule, index) => {
 											return (
 													<StyleRule key={index} active_element={props.active_element} rule={rule} pattern={props.pattern}/>
 											)
@@ -290,9 +299,6 @@ function Style (props) {
 						})}
 					</div>
 				</details>
-				<datalist id="configStyles">
-					{Object.keys(props.styles).map(name => <option key={name} label={props.styles[name]} value={`--var(${name})`} />)}
-				</datalist>
 				{/*<datalist id="configColors">
 					{Object.keys(props.styles).map(name => !/^(#|hsl|rgb)/.test(props.styles[name]) ? "" : <option label={name} value={props.styles[name]} />)}
 				</datalist>*/}
@@ -304,6 +310,7 @@ function Style (props) {
 }
 
 export function Editor(props) {
+	let {data} = useGlobalState();
 	return (
 			<div id="editor">
 				<div id="tab_panels" className="scroll">
@@ -311,7 +318,7 @@ export function Editor(props) {
 						<Attributes active_element={props.active_element}/>
 						<Style active_element={props.active_element} canvas_styles={props.canvas_styles} styles={props.styles} pattern={props.pattern} />
 						<div className="blocks_tab">
-							{props.blocks.map((group, i) =>
+							{data.blocks.map((group, i) =>
 									<BlockGroup
 											key={group.name}
 											name={group.name}

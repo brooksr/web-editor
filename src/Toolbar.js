@@ -1,6 +1,7 @@
 import {keys} from "./keys";
 import React from "react";
-import {NavLink, Route, Switch, useParams, useRouteMatch} from "react-router-dom";
+import {NavLink, Route, Switch, useParams, useHistory} from "react-router-dom";
+import {useGlobalState} from "./hooks/useGlobal";
 
 export function Toolbar(props) {
     let toggleFullscreen = function () {
@@ -54,13 +55,20 @@ export function Toolbar(props) {
         let params = useParams();
         let to = "/";
         if (params.companyID) to = `/company/${params.companyID}/`
-        if (params.configID) to += `config/${params.configID}/`
+        if (params.assetID) to += `asset/${params.assetID}/`
         return (
             <li>
                 <NavLink exact to={to}>{props.name}</NavLink>
             </li>
         )
     }
+	const globalState = useGlobalState();
+    const history = useHistory();
+  
+    function handleChange(e) {
+        history.push("/company/" + document.getElementById("search").value);
+    }
+    //debugger;
     //TODO: Complete, save, toggle outlines, toggle images, autoformat, style inline
     return (
         <div className="scroll">
@@ -73,13 +81,25 @@ export function Toolbar(props) {
                         <Route path="/company/:companyID/">
                             <Breadcrumb name="Company" />
                         </Route>
-                        <Route path="/company/:companyID/config/:configID/">
-                            <Breadcrumb name="Config" />
+                        <Route path="/company/:companyID/asset/:assetID/">
+                            <Breadcrumb name="Asset" />
                         </Route>
                     </ul>
                 </nav>
+                <form className="save-group" onSubmit={handleChange}>
+                    <input 
+                        list="companies" id="search" type="search" placeholder="Search" defaultValue="" autoComplete="off"
+                    />
+                    <button type="submit">
+                        <i className="fas fa-search"> </i>
+                        <span className="tablet-tooltip">Search</span>
+                    </button>
+                    <datalist id="companies">
+                        {globalState.companies.map(c => <option value={c.companyName} key={c.companyID} />)}
+                    </datalist>
+                </form>
                 <Switch>
-                    <Route path="/company/:companyID/config/:configID/">
+                    <Route path="/company/:companyID/asset/:assetID/">
                         <div className="radio-buttons" id="editor-view" onChange={changeView}>
                             <input id="editor-view-menu" name="editor-view" type="radio" value="menu"/>
                             <label htmlFor="editor-view-menu">

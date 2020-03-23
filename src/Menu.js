@@ -1,22 +1,24 @@
 import React from "react";
-import {Controlled as CodeMirror} from 'react-codemirror2'
+import {Controlled as CodeMirror} from 'react-codemirror2';
+import {useGlobalState} from "./hooks/useGlobal";
 
 export function Menu(props) {
+	const {data} = useGlobalState();
 	return (
 			<div className={"scroll modal menu" + (props.view === "menu" ? "" : " invisible")}>
 				<button>Save as Template</button>
 				<div className="newItem">
 					<h3>New</h3>
 					<ul>
-						{props.templates.map((template, ind) =>
-								<Template setTemplate={props.setTemplate} template={template} key={ind}/>
+						{data.templates.map((template, ind) =>
+								<Template template={template} key={ind}/>
 						)}
 					</ul>
 				</div>
 				<div className="openItem">
 					<h3>Open</h3>
-					{props.campaigns.map((campaign, ind) =>
-							<CampaignSummary setTemplate={props.setTemplate} campaign={campaign} key={ind}/>
+					{data.campaigns.map((campaign, ind) =>
+							<CampaignSummary campaign={campaign} key={ind}/>
 					)}
 				</div>
 				<div className="shortcuts">
@@ -39,6 +41,7 @@ export function Menu(props) {
 }
 
 export function ImageMenu(props) {
+	const {data} = useGlobalState();
 	return (
 			<div className={"scroll modal menu" + (props.view === "images" ? "" : " invisible")}>
 				<h3>Images</h3>
@@ -47,7 +50,7 @@ export function ImageMenu(props) {
 					<input type="submit" value="Upload Image" name="submit"/>
 				</form>
 				<ul>
-					{props.images.map((i) =>
+					{data.images.map((i) =>
 							<li key={i.src}>
 								<img src={i.src} alt={i.alt}/>
 								<a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a>

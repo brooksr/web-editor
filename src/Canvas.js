@@ -1,8 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
-import {elements} from "./elements";
+import {elements} from "./mocks/elements";
+import {useGlobalState} from "./hooks/useGlobal";
 
 export function Canvas(props) {
-    let fontCSS = props.fonts.reduce((acc, style) => acc += `
+    let {data} = useGlobalState();
+
+    let fontCSS = data.fonts.reduce((acc, style) => acc += `
     @font-face {
         font-family: "${style.name}";
         src: url("${style.path}.eot"); /* IE9 Compat Modes */
@@ -16,7 +19,7 @@ export function Canvas(props) {
         font-style: normal;
         font-display: swap;
     }`, "");
-    let cssVars = Object.keys(props.styles).map(style => `--${style}: ${props.styles[style]};`).join("\n");
+    let cssVars = Object.keys(data.styles).map(style => `--${style}: ${data.styles[style]};`).join("\n");
     let [style, setCanvasStyle] = useState(`
     ${fontCSS}
     body, html {
@@ -243,7 +246,7 @@ export function Canvas(props) {
                 ref={iframe}
                 id="canvas"
                 title="canvas"
-                onChange={props.setActiveTemplate}
+                //onChange={props.setActiveTemplate}
                 srcDoc={props.src_doc}
                 style={{transform: `scale(${props.zoom})`}}
             />

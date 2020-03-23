@@ -72,25 +72,29 @@ a {
 .button-group {
   display: inline-flex;
 }
-.button-group-sm button {
+.button-group-sm > * {
   padding: 0.5em;
   font-size: 0.75em;
 }
-button {
+button, .button {
   cursor: pointer;
   color: inherit;
   background: #333;
   border: none;
   padding: 0.5em 1em;
   position: relative;
+  text-decoration:none;
 }
-button:hover {
+button svg, .button svg {
+  margin-right: 0.5em;
+}
+button:hover, .button:hover {
   background: #444;
 }
-button:focus {
+button:focus, .button:focus {
   outline: 1px solid #2ab34b;
 }
-button > * {
+button > *, .button > * {
   pointer-events: none;
 }
 .button-sm {
@@ -427,15 +431,15 @@ summary {
   padding: .75px;
 }
 
-.button-group button:first-child {
+.button-group > *:first-child {
   border-top-left-radius: 1em;
   border-bottom-left-radius: 1em;
 }
-.button-group button:last-child {
+.button-group  > *:last-child {
   border-top-right-radius: 1em;
   border-bottom-right-radius: 1em;
 }
-.button-group  button:not(:last-child){
+.button-group  > *:not(:last-child){
   border-right: 1px solid #222;
 }
 
@@ -613,6 +617,9 @@ input:invalid {
 }
 .scroll::-webkit-scrollbar-corner {
   background-color: #000;
+}
+.screen-height {
+  height: calc(100vh - 5em);
 }
 .text-center {
   text-align: center;

@@ -1,75 +1,72 @@
 import React, {useState} from "react";
 import {Route, Link, useRouteMatch, Switch} from "react-router-dom"
-import campaignForm from "./campaign";
-import {Canvas} from './Canvas.js';
-import {Editor} from './Editor.js';
-import {Menu, ImageMenu, ClientSettings, CodeEditor} from './Menu.js';
-import {Controlled as CodeMirror} from 'react-codemirror2'
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/htmlmixed/htmlmixed';
+import campaignForm from "./mocks/campaign";
+import Asset from "./Asset";
+import {useGlobalState} from "./hooks/useGlobal";
 
 function ClientOptions(props) {
+	const {data} = useGlobalState();
 	return (
 			<div className="flex flex-auto">
 				<div>
 					<h3>Fonts</h3>
-					<button className="button-sm" disabled={true}>
+					<button className="button-sm">
 						<i className="fas fa-plus"></i>
 						<span className="sr-only">Add</span>
 					</button>
-					{props.fonts.map((font, index) => {
+					{Object.keys(data.fonts).map((font, index) => {
 						return (
 								<div key={index} className="input-group">
-									<button className="button-sm button-transparent" disabled={true}>
+									<button className="button-sm button-transparent">
 										<i className="fas fa-times"></i>
 										<span className="sr-only">Delete</span>
 									</button>
 									<label className="sr-only">Font Name</label>
-									<input type="text" name="name" defaultValue={font.name} onChange={props.setFonts}/>
+									<input type="text" name="name" defaultValue={data.fonts[font].name} readOnly={true} />
 									<label className="sr-only">Font Path</label>
-									<input type="text" name="path" defaultValue={font.path} onChange={props.setFonts}/>
+									<input type="text" name="path" defaultValue={data.fonts[font].path} readOnly={true} />
 								</div>
 						)
 					})}
 				</div>
 				<div>
 					<h3>Styles</h3>
-					<button className="button-sm" disabled={true}>
+					<button className="button-sm">
 						<i className="fas fa-plus"></i>
 						<span className="sr-only">Add</span>
 					</button>
-					{Object.keys(props.styles).map((cssVar, index) => {
+					{Object.keys(data.styles).map((cssVar, index) => {
 						return (
 								<div key={index} className="input-group">
-									<button className="button-sm button-transparent" disabled={true}>
+									<button className="button-sm button-transparent">
 										<i className="fas fa-times"></i>
 										<span className="sr-only">Delete</span>
 									</button>
 									<label className="sr-only">Name</label>
-									<input type="text" name="name" defaultValue={cssVar} onChange={props.setStyles}/>
+									<input type="text" name="name" defaultValue={cssVar} readOnly={true} />
 									<label className="sr-only">Value</label>
-									<input type="text" name="value" defaultValue={props.styles[cssVar]} onChange={props.setStyles}/>
+									<input type="text" name="value" defaultValue={data.styles[cssVar]} readOnly={true} />
 								</div>
 						)
 					})}
 				</div>
 				<div>
-					<h3>Company</h3>
-					<button className="button-sm" disabled={true}>
+					<h3>Vars</h3>
+					<button className="button-sm">
 						<i className="fas fa-plus"></i>
 						<span className="sr-only">Add</span>
 					</button>
-					{Object.keys(props.company).map((name, index) => {
+					{Object.keys(data.vars).map((name, index) => {
 						return (
 								<div key={index} className="input-group">
-									<button className="button-sm button-transparent" disabled={true}>
+									<button className="button-sm button-transparent">
 										<i className="fas fa-times"></i>
 										<span className="sr-only">Delete</span>
 									</button>
 									<label className="sr-only">Name</label>
-									<input type="text" name="name" value={name} readOnly={true}/>
+									<input type="text" name="name" value={name} readOnly={true} />
 									<label className="sr-only">Value</label>
-									<input type="text" name="value" value={props.company[name]} readOnly={true}/>
+									<input type="text" name="value" value={data.vars[name]} readOnly={true} />
 								</div>
 						)
 					})}
@@ -79,14 +76,12 @@ function ClientOptions(props) {
 }
 
 export function Company(props) {
-	const [company, setCompany] = useState(props.data.company);
-	const [campaigns, setCampaigns] = useState(props.data.campaigns);
-	const [blocks, setBlocks] = useState(props.data.blocks);
-	const [images, setImages] = useState(props.data.images);
-	const [fonts, setFonts] = useState(props.data.fonts);
-	const [styles, setStyles] = useState(props.data.styles);
-	const [canvas_styles, setCanvasStyles] = useState({css: [], media: []});
-	const [active_element, setActive] = useState(null);
+	const {data} = useGlobalState();
+
+	//const [fonts, setFonts] = useState(props.data.fonts);
+	//const [styles, setStyles] = useState(props.data.styles);
+	//const [campaigns, setCampaigns] = useState(props.data.campaigns);
+	//const [vars, setVars] = useState(props.data.vars);
 
 
 	// shortcuts, need to rewrite for react
@@ -100,64 +95,30 @@ export function Company(props) {
 		});
 	});*/
 	
-	const setActiveTemplate = function (html) {
-		props.setView("visual");
-		props.setTemplate(html);
-	};
-	// + (props.view === "campaigns" ? "" : " invisible")
+	//debugger;
 	return (
 		<Switch>
-				<Route path="/company/:companyID/config/:configID">
-					<Menu
-							view={props.view}
-							campaigns={campaigns}
-							templates={props.templates}
-							setTemplate={setActiveTemplate}
-					/>
-					<ImageMenu
-							view={props.view}
-							images={images}
-					/>
-					<CodeEditor
-							view={props.view}
-							src_doc={props.src_doc}
-							setActiveTemplate={setActiveTemplate}
-							CodeMirror={CodeMirror}
-					/>
-					<Canvas
-							src_doc={props.src_doc}
-							fonts={fonts}
-							styles={styles}
-							show_images={props.show_images}
-							outlines={props.outlines}
-							device={props.device}
-							zoom={props.zoom}
-							//drag={drag}
-							setActiveTemplate={setActiveTemplate}
-							//setDragging={setDragging}
-							setActive={setActive}
-							setCanvasStyles={setCanvasStyles}
-					/>
-					<Editor
-							canvas_styles={canvas_styles}
-							styles={styles}
-							blocks={blocks}
-							active_element={active_element}
-							//setDragging={setDragging}
-							setCanvasStyles={setCanvasStyles}
-							CodeMirror={CodeMirror}
+				<Route path="/company/:companyID/asset/:assetID">
+					<Asset
+						view={props.view}
+						src_doc={props.src_doc}
+						show_images={props.show_images}
+						outlines={props.outlines}
+						device={props.device}
+						zoom={props.zoom}
+						setView={props.setView}
 					/>
 				</Route>
 				<Route path="/company/:companyID">
 				<div className={"scroll modal menu"}>
-					<h1>{company.name} Campaign Builder</h1>
-					<h2> Settings</h2>
+					<h1>{data.vars.name}</h1>
+					<h2>Company Data</h2>
 					<hr/>
-					<ClientOptions fonts={fonts} styles={styles} company={company} />
+					<ClientOptions />
 					<h3>Campaigns</h3>
 					<button>New Campaign</button>
-					{campaigns.map((campaign, ind) =>
-							<Campaign setTemplate={props.setTemplate} campaign={campaign} key={ind}/>
+					{data.campaigns.map((campaign, ind) =>
+							<Campaign campaign={campaign} key={ind}/>
 					)}
 				</div>
 				</Route>
@@ -178,27 +139,41 @@ function Campaign(props) {
 	return (
 			<div className="campaignWrapper clearfix">
 
-				<div className="button-group button-group-sm flex-auto">
-					<button disabled={true}>
+				<div className="button-group flex-auto">
+					{/* <button>
 						<i className="far fa-edit"></i>
 						<span className="tablet-tooltip">Edit</span>
-					</button>
-					<button disabled={true}>
+					</button> */}
+					<button>
 						<i className="far fa-save"></i>
-						<span className="tablet-tooltip">Save</span>
+						<span className="">Save</span>
 					</button>
-					<button disabled={true}>
+					<button>
 						<i className="fas fa-archive"></i>
-						<span className="tablet-tooltip">Archive</span>
+						<span className="">Archive</span>
 					</button>
-					<button disabled={true}>
+					<button>
 						<i className="far fa-clone"></i>
-						<span className="tablet-tooltip">Clone</span>
+						<span className="">Clone</span>
 					</button>
 				</div>
 
 				<h2><input className="input-heading" defaultValue={campaign.name}/></h2>
 				<textarea className="input-desc" defaultValue={campaign.notes} />
+				<div>
+					<h5>Modals</h5>
+					<button>
+						<i className="fas fa-plus"></i>
+						<span className="">New Modal</span>
+					</button>
+					{!campaign.modal ? "" : <AssetList type="modal" list={campaign.modal} />}
+					<h5>Emails</h5>
+					<button>
+						<i className="fas fa-plus"></i>
+						<span className="">New Email</span>
+					</button>
+					{!campaign.email ? "" : <AssetList type="email" list={campaign.email} />}
+				</div>
 
 				<div className="flex">
 					<div>
@@ -207,7 +182,7 @@ function Campaign(props) {
 							return (
 									<InputGroup
 											key={prop}
-											config={campaignForm.rules[prop]}
+											asset={campaignForm.rules[prop]}
 											value={campaign.rules[prop]}
 									/>
 							)
@@ -219,7 +194,7 @@ function Campaign(props) {
 							return (
 									<InputGroup
 											key={prop}
-											config={campaignForm.features[prop]}
+											asset={campaignForm.features[prop]}
 											value={campaign.features[prop]}
 									/>
 							)
@@ -231,61 +206,56 @@ function Campaign(props) {
 							return (
 									<InputGroup
 											key={prop}
-											config={campaignForm.admin[prop]}
+											asset={campaignForm.admin[prop]}
 											value={campaign.admin[prop]}
 									/>
 							)
 						})}
 					</div>
 				</div>
-				<div>
-					<h5>Modals</h5>
-					{!campaign.modal ? "" : <AssetList type="modal" list={campaign.modal} setTemplate={props.setTemplate}/>}
-					<h5>Emails</h5>
-					{!campaign.email ? "" : <AssetList type="email" list={campaign.email} setTemplate={props.setTemplate}/>}
-				</div>
 			</div>
 	)
 }
 function AssetList(props) {
-  let match = useRouteMatch();
+	let match = useRouteMatch();
 	return (
 			<div className="flex flex-auto">
-				{(props.list.list).map((config, index) => {
+				{(props.list.list).map((asset, index) => {
 					return (
 							<div key={index} className="clearfix">
 								<div className="iframeWrapper" style={{float: "left"}}>
-									<iframe srcDoc={config.html} title="campaign preview"> </iframe>
+									<iframe srcDoc={asset.html} title="campaign preview"> </iframe>
 								</div>
 								<div className="button-group button-group-sm flex-auto">
-									<Link to={`${match.url}/config/${config.name}`}>{/* onClick={e => props.setTemplate(config.html)} */}
-										<i className="far fa-edit"></i>
+									<Link className="button" to={`${match.url}asset/${asset.id}`}>
+										<i className="fas fa-pen"></i>
 										{/* {JSON.stringify(match, null, "\t")} */}
-										<span className="tablet-tooltip">Edit</span>
+										<span className="">Open</span>
 									</Link>
-									<button disabled={true}>
+									{/* <button>
 										<i className="far fa-save"></i>
 										<span className="tablet-tooltip">Save</span>
-									</button>
-									<button disabled={true}>
+									</button> */}
+									<button>
 										<i className="fas fa-archive"></i>
-										<span className="tablet-tooltip">Archive</span>
+										<span className="">Archive</span>
 									</button>
-									<button disabled={true}>
+									{/* <button>
 										<i className="fas fa-arrows-alt"></i>
 										<span className="tablet-tooltip">Move</span>
-									</button>
-									<button disabled={true}>
+									</button> */}
+									<button>
 										<i className="far fa-clone"></i>
-										<span className="tablet-tooltip">Clone</span>
+										<span className="">Clone</span>
 									</button>
 								</div>
-								{Object.keys(Object.assign(config, props.list.defaults)).map(prop => {
-									return prop === "html" ? "" : ( (
+								{Object.keys(Object.assign(asset, props.list.defaults)).map(prop => {
+									//debugger;	
+									return prop === "html" || prop === "id" ? "" : ( (
 													<InputGroup
 															key={prop}
-															config={campaignForm[props.type].defaults[prop]}
-															value={config[prop]}
+															asset={campaignForm[props.type].defaults[prop]}
+															value={asset[prop]}
 													/>
 											)
 									)
@@ -299,15 +269,15 @@ function AssetList(props) {
 function InputGroup(props) {
 	return (
 		<div className="input-group">
-			<label>{props.config.label}</label>
+			<label>{props.asset.label}</label>
 			{
-				props.config.type === "text" ? <input type="text" name="value" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "number" ? <input type="number" name="value" min={props.config.min} max={props.config.max} defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "time" ? <input type="number" name="value" min="0" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "checkbox" ? <div><CheckboxList options={props.config.options} /></div> :
-				props.config.type === "date" ? <input type="date" name="value" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "textarea" ? <textarea name="value" defaultValue={props.value} placeholder={props.config.title} /> :
-				props.config.type === "conditions" ? <Conditions value={props.value} className="condition" /> : ""
+				props.asset.type === "text" ? <input type="text" name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "number" ? <input type="number" name="value" min={props.asset.min} max={props.asset.max} defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "time" ? <input type="number" name="value" min="0" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "checkbox" ? <div><CheckboxList options={props.asset.options} /></div> :
+				props.asset.type === "date" ? <input type="date" name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "textarea" ? <textarea name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
+				props.asset.type === "conditions" ? <Conditions value={props.value} className="condition" /> : ""
 			}
 		</div>
 	)
