@@ -25,4 +25,4 @@ yarn-debug.log*
 yarn-error.log*
 
 
-mocks/_archive
+src/mocks/_archive
