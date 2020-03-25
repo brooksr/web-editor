@@ -1,4 +1,4 @@
-import React, {useState, useReducer,useContext, createContext} from 'react';
+import React, {useState} from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import {Toolbar} from './Toolbar.js';
 import {Company} from './Overview.js';

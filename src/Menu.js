@@ -15,12 +15,6 @@ export function Menu(props) {
 						)}
 					</ul>
 				</div>
-				<div className="openItem">
-					<h3>Open</h3>
-					{data.campaigns.map((campaign, ind) =>
-							<CampaignSummary campaign={campaign} key={ind}/>
-					)}
-				</div>
 				<div className="shortcuts">
 					<h3>Shortcuts</h3>
 					<dl className="flex">
@@ -76,27 +70,6 @@ export function CodeEditor(props) {
 	return (
 			<div className={"scroll modal menu" + (props.view === "code" ? "" : " invisible")}>
 				<CodeMirror value={props.src_doc} options={options}/>
-			</div>
-	)
-}
-
-
-function CampaignSummary(props) {
-	let campaign = props.campaign;
-	return (
-			<div className="campaignWrapper">
-				<h4><a href={campaign.data.admin.opp} rel="noopener noreferrer" target="_blank">{campaign.info.name}</a></h4>
-				<p>{campaign.notes}</p>
-				<div className="radio-buttons">
-					{campaign.modal && campaign.modal.list.map((i, index) => {
-						return <button key={index} onClick={e => props.setTemplate(i.html)}>{i.info.name}</button>
-					})}
-				</div>
-				<div className="radio-buttons">
-					{campaign.email && campaign.email.list.map((i, index) => {
-						return <button key={index} onClick={e => props.setTemplate(i.html)}>{i.info.name}</button>
-					})}
-				</div>
 			</div>
 	)
 }

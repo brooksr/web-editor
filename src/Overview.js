@@ -109,6 +109,9 @@ export function Company(props) {
 						setView={props.setView}
 					/>
 				</Route>
+				<Route path="/company/:companyID/campaign/:campaignID">
+						<Campaign />
+				</Route>
 				<Route path="/company/:companyID">
 				<div className={"scroll modal menu"}>
 					<h1>{data.vars.name}</h1>
@@ -117,8 +120,8 @@ export function Company(props) {
 					<ClientOptions />
 					<h3>Campaigns</h3>
 					<button>New Campaign</button>
-					{data.campaigns.map((campaign, ind) =>
-							<Campaign campaign={campaign} key={ind}/>
+					{data.campaigns.map((campaign) =>
+							<CampaignSummary campaign={campaign}/>
 					)}
 				</div>
 				</Route>
@@ -126,8 +129,36 @@ export function Company(props) {
 	)
 }
 
-function Campaign(props) {
+function CampaignSummary(props) {
+	let match = useRouteMatch();
 	let campaign = props.campaign;
+
+	return (
+			<div className="campaignWrapper">
+				<h4><a href={campaign.data.admin.opp} rel="noopener noreferrer" target="_blank">{campaign.info.name}</a></h4>
+				<p>{campaign.notes}</p>
+					<Link className="button" to={`/company/${match.params.companyID}/campaign/${campaign.id}`}>
+						<i className="fas fa-edit"></i>
+						<span className="">Open Campaign</span>
+					</Link>
+					{campaign.assets && Object.keys(campaign.assets).map(prop => {
+						return (
+								<div key={prop}>
+									<h5>{prop}</h5>
+									<AssetList type={prop} list={campaign.assets[prop].list} setTemplate={props.setTemplate}/>
+								</div>
+						)
+					})}
+			</div>
+	)
+}
+
+function Campaign(props) {
+	const {data} = useGlobalState();
+	let match = useRouteMatch();
+	let campaignID = match.params.campaignID ? match.params.campaignID : props.id;
+	let campaign = data.campaigns.find(c => c.id === Number(campaignID));
+	
 	//TODO:
 	// add button link after label for inputs that match URL regex
 	// add time converter from admin for time inputs
@@ -140,21 +171,17 @@ function Campaign(props) {
 			<div className="campaignWrapper clearfix">
 
 				<div className="button-group flex-auto">
-					{/* <button>
-						<i className="far fa-edit"></i>
-						<span className="tablet-tooltip">Edit</span>
-					</button> */}
 					<button>
 						<i className="far fa-save"></i>
-						<span className="">Save</span>
+						<span className="tablet-tooltip">Save</span>
 					</button>
 					<button>
 						<i className="fas fa-archive"></i>
-						<span className="">Archive</span>
+						<span className="tablet-tooltip">Archive</span>
 					</button>
 					<button>
 						<i className="far fa-clone"></i>
-						<span className="">Clone</span>
+						<span className="tablet-tooltip">Clone</span>
 					</button>
 				</div>
 
@@ -208,9 +235,8 @@ function AssetList(props) {
 									<iframe srcDoc={item.html} title="campaign preview"> </iframe>
 								</div>
 								<div className="button-group button-group-sm flex-auto">
-									<Link className="button" to={`${match.url}asset/${item.id}`}>
+									<Link className="button" to={`/company/${match.params.companyID}/asset/${item.id}`}>
 										<i className="fas fa-pen"></i>
-										{/* {JSON.stringify(match, null, "\t")} */}
 										<span className="">Open</span>
 									</Link>
 									{/* <button>

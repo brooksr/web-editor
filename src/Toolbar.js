@@ -76,6 +76,9 @@ export function Toolbar(props) {
                         <Route path="/company/:companyID/">
                             <Breadcrumb name="Company" />
                         </Route>
+                        <Route path="/company/:companyID/campaign/:campaignID/">
+                            <Breadcrumb name="Campaign" />
+                        </Route>
                         <Route path="/company/:companyID/asset/:assetID/">
                             <Breadcrumb name="Asset" />
                         </Route>

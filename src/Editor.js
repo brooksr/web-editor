@@ -7,7 +7,9 @@ import {useGlobalState} from "./hooks/useGlobal";
 function Block(props) {
 	return (
 			<div className="block">
+
 				<h5>{props.id}</h5>
+				
 				<div className="button-group button-group-sm">
 					<button disabled={true}>
 						<i className="far fa-edit"></i>
