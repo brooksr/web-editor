@@ -64,7 +64,7 @@ export function Toolbar(props) {
     function handleChange(e) {
         history.push("/company/" + document.getElementById("search").value);
     }
-    //TODO: Complete, save, toggle outlines, toggle images, autoformat, style inline
+    //TODO: Complete toggle outlines, toggle images, autoformat, style inline
     return (
         <div className="scroll">
             <div id="toolbar">

@@ -1,19 +1,15 @@
 import React from "react";
 import {Controlled as CodeMirror} from 'react-codemirror2';
-import {useGlobalState} from "./hooks/useGlobal";
+import {Images} from "./Images.js";
+import {Templates} from "./Templates.js";
 
 export function Menu(props) {
-	const {data} = useGlobalState();
 	return (
 			<div className={"scroll modal menu" + (props.view === "menu" ? "" : " invisible")}>
 				<button>Save as Template</button>
 				<div className="newItem">
 					<h3>New</h3>
-					<ul>
-						{data.templates.map((template, ind) =>
-								<Template template={template} key={ind}/>
-						)}
-					</ul>
+					<Templates />
 				</div>
 				<div className="shortcuts">
 					<h3>Shortcuts</h3>
@@ -35,24 +31,10 @@ export function Menu(props) {
 }
 
 export function ImageMenu(props) {
-	const {data} = useGlobalState();
 	return (
 			<div className={"scroll modal menu" + (props.view === "images" ? "" : " invisible")}>
 				<h3>Images</h3>
-				<form action="" method="post" encType="multipart/form-data">
-					<input type="file" name="fileToUpload" id="fileToUpload"/>
-					<input type="submit" value="Upload Image" name="submit"/>
-				</form>
-				<ul>
-					{data.images.map((i) =>
-							<li key={i.src}>
-								<img src={i.src} alt={i.alt}/>
-								<a href={i.src} target="_blank" rel="noopener noreferrer">{i.src}</a>
-								<p>{i.alt}</p>
-								<span className="image-size">{i.size}</span>
-							</li>
-					)}
-				</ul>
+				<Images />
 			</div>
 	)
 }
@@ -71,16 +53,5 @@ export function CodeEditor(props) {
 			<div className={"scroll modal menu" + (props.view === "code" ? "" : " invisible")}>
 				<CodeMirror value={props.src_doc} options={options}/>
 			</div>
-	)
-}
-
-function Template(props) {
-	return (
-			<li key={props.template.name} onClick={e => props.setTemplate(props.template.html)}>
-				<div className="iframeWrapper">
-					<iframe srcDoc={props.template.html} title="template preview"> </iframe>
-				</div>
-				<h4>{props.template.name}</h4>
-			</li>
 	)
 }

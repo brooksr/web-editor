@@ -28,10 +28,10 @@ export let data = {
     note: "Samsung placeholder note",
     fonts: [{
         name: "SamsungSansRegular",
-        path: "/fonts/SamsungSansRegular-webfont"
+        path: "/web-editor/fonts/SamsungSansRegular-webfont"
     }, {
         name: "SamsungSansSharp",
-        path: "/fonts/SamsungSharpSans-Medium"
+        path: "/web-editor/fonts/SamsungSharpSans-Medium"
     }],
     styles: {
         "display-font": "SamsungSansSharp",

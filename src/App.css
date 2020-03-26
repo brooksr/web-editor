@@ -63,11 +63,11 @@ a {
   padding: 0.5em;
 }
 .navbar a.active {
-  background: #666666;
+  background: hsl(33, 85%, 59%);
   color: #000;
 }
 .navbar a:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: hsl(33, 85%, 49%);
 }
 .button-group {
   display: inline-flex;
@@ -196,13 +196,12 @@ summary {
   margin: 1%;
   padding: 2%;
   position: relative;
-  max-height: 20em;
   text-align:center;
   background: #222;
 }
 .menu li img {
+  max-height: 20em;
   max-width: 100%;
-  max-height: 70%;
 }
 #menu_close {
   border-radius: 50px;
@@ -400,27 +399,23 @@ summary {
   width: 3em;
   color:#ddd;
   border: none;
-  border-bottom: 1px solid #4c494d;
+  /* border-bottom: 1px solid #4c494d; */
+  box-shadow: inset -1px -1px 2px 0px rgba(90, 90, 90, 1);
   background: transparent;
   line-height: 1.25;
   padding: .25em;
   font-size: inherit;
 }
-[type="checkbox"] {
+.input-group input[type="checkbox"] {
   height: 1.25em;
   width: 1.25em;
   margin: .25em 0.5em;
   cursor: pointer;
+  box-shadow: none;
 }
 .input-group textarea {
   flex: 1 0 100%;
-  width: 3em;
-  background: transparent;
-  color:#ddd;
-  border: none;
-  border-left: 1px solid #888;
-  line-height: 1.25;
-  padding: .25em;
+  box-shadow: inset 1px 1px 2px 0px rgba(90, 90, 90, 1), inset -1px -1px 2px 0px rgba(90, 90, 90, 1);
 }
 .input-group option {
   font-size: 0.8em;

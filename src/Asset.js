@@ -8,10 +8,9 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import {useGlobalState} from "./hooks/useGlobal";
 
-export default function Asset(props){
+export function Asset(props){
   let match = useRouteMatch();
   const {data, assets} = useGlobalState();
-	//debugger
 	let template = assets.find(a => a.id === Number(match.params.assetID));
 
 	const [canvas_styles, setCanvasStyles] = useState({css: [], media: []});

@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-import {Toolbar} from './Toolbar.js';
-import {Company} from './Overview.js';
-import {List} from './List.js';
 import {GlobalStateProvider} from './hooks/useGlobal.js';
 import './App.css';
+
+import {Toolbar} from './Toolbar.js';
+import {Company} from './Company.js';
+import {Campaign} from './Campaign.js';
+import {Asset} from './Asset.js';
+import {List} from './List.js';
 
 function App() {
 	const [src_doc, setTemplate] = useState("");
@@ -35,7 +38,22 @@ function App() {
 						changeDevice={changeDevice}
 				/>
 				<Switch>
-					<Route path="/company/:companyId">
+					<Route path="/company/:companyID/asset/:assetID">
+						<Asset
+							view={view}
+							src_doc={src_doc}
+							show_images={show_images}
+							outlines={outlines}
+							device={device}
+							zoom={zoom}
+							setTemplate={setTemplate}
+							setView={setView}
+						/>
+					</Route>
+					<Route path="/company/:companyID/campaign/:campaignID">
+						<Campaign />
+					</Route>
+					<Route path="/company/:companyID">
 						<Company
 							view={view}
 							src_doc={src_doc}
