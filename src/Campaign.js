@@ -11,6 +11,17 @@ export function Campaign(props) {
 	let campaignID = match.params.campaignID ? match.params.campaignID : props.id;
 	let campaign = data.campaigns.find(c => c.id === Number(campaignID));
 	
+
+	// shortcuts, need to rewrite for react
+	/*useEffect(() => {
+		document.addEventListener("keyup", function(event) {
+			let save = event.which === 83 && event.ctrlKey;
+			if (save) {
+				event.preventDefault();
+				alert("Save!")
+			}
+		});
+  });*/
 	//TODO:
 	// add button link after label for inputs that match URL regex
 	// add time converter from admin for time inputs
@@ -46,6 +57,18 @@ export function Campaign(props) {
 							/>
 					)
 				})}
+
+				<dl className="flex">
+					<dt>Version</dt><dd></dd>
+					<dt>Status</dt><dd></dd>
+					<dt>Type</dt><dd></dd>
+					<dt>Created On</dt><dd></dd>
+					<dt>Created By</dt><dd></dd>
+					<dt>Last Modified On</dt><dd></dd>
+					<dt>Last Modified By</dt><dd></dd>
+					<dt>Form Version</dt><dd></dd>
+				</dl>
+
 				<div className="flex">
 					{campaign.data && Object.keys(campaign.data).map(prop => {
 						return (

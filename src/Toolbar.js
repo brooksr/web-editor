@@ -65,6 +65,7 @@ export function Toolbar(props) {
         history.push("/company/" + document.getElementById("search").value);
     }
     //TODO: Complete toggle outlines, toggle images, autoformat, style inline
+    // use route match for breadcrumb
     return (
         <div className="scroll">
             <div id="toolbar">
@@ -109,13 +110,6 @@ export function Toolbar(props) {
                                 <i className="far fa-images"> </i>
                                 <span className="tablet-tooltip">Manage Images</span>
                             </label>
-                            {/*<input id="editor-view-campaigns" name="editor-view" type="radio" value="campaigns"/>
-                            <label htmlFor="editor-view-campaigns">
-                                <i className="fas fa-table"> </i>
-                                <span className="tablet-tooltip">Campaign Specs</span>
-                            </label>*/}
-                        </div>
-                        <div className="radio-buttons" id="editor-view" onChange={changeView}>
                             <input id="editor-view-code" name="editor-view" type="radio" value="code"/>
                             <label htmlFor="editor-view-code">
                                 <i className="fas fa-code"> </i>
@@ -127,13 +121,10 @@ export function Toolbar(props) {
                                 <span className="tablet-tooltip">Visual</span>
                             </label>
                         </div>
-                        {/* <div className="save-group">
-                            <input id="assetName" type="text" placeholder="Enter asset name" defaultValue="" autoComplete="off"/>
-                            <button type="button" id="save">
-                                <i className="far fa-save"> </i>
-                                <span className="tablet-tooltip">Save</span>
-                            </button>
-                        </div> */}
+                        <button type="button" id="save">
+                            <i className="far fa-save"> </i>
+                            <span className="">Save</span>
+                        </button>
                         <div className="radio-buttons code_control">
                             <button type="button" id="emailInline">Email Inline</button>
                             <button type="button" id="autoFormat">Autoformat</button>
@@ -175,8 +166,6 @@ export function Toolbar(props) {
                                 <i className="far fa-paper-plane"> </i>
                                 <span className="tablet-tooltip">EOA Test</span>
                             </button>
-                        </div>
-                        <div className="button-group visual_control">
                             <button type="button" id="toggleOutlines" onClick={props.toggleOutlines}>
                                 <i className="fas fa-border-none"> </i>
                                 <span className="tablet-tooltip">Toggle Outlines</span>

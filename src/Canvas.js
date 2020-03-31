@@ -1,198 +1,13 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef} from "react";
 import {elements} from "./mocks/elements";
 import {useGlobalState} from "./hooks/useGlobal";
 
 export function Canvas(props) {
     let {data} = useGlobalState();
-
-    let fontCSS = data.fonts.reduce((acc, style) => acc += `
-    @font-face {
-        font-family: "${style.name}";
-        src: url("${style.path}.eot"); /* IE9 Compat Modes */
-        src: url("${style.path}.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-            url("${style.path}.otf") format("opentype"), /* Open Type Font */
-            url("${style.path}.svg") format("svg"), /* Legacy iOS */
-            url("${style.path}.ttf") format("truetype"), /* Safari, Android, iOS */
-            url("${style.path}.woff") format("woff"), /* Modern Browsers */
-            url("${style.path}.woff2") format("woff2"); /* Modern Browsers */
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-    }`, "");
-    let cssVars = Object.keys(data.styles).map(style => `--${style}: ${data.styles[style]};`).join("\n");
-    let [style, setCanvasStyle] = useState(`
-    ${fontCSS}
-    body, html {
-        min-height:100vh;
-    }
-    body {
-        margin:0;
-        transform: scale(1);
-        overflow: auto;
-        transform-origin: top left;
-        transition: transform 0.5s ease;
-        box-sizing: border-box;
-        ${cssVars}
-    }
-    .hover {
-        opacity: 0.2;
-    }
-    * {
-        box-sizing: inherit;
-        outline: 1px dashed rgba(100, 100, 100, 0.5);
-    }
-    *:hover {
-        outline: 1px dashed rgba(47,165,228, 0.5);
-    }
-    [data-status="active"] {
-        outline: 1px dashed #4db357;
-    }
-    [draggable] {
-        user-select: none;
-    }
-    [data-status="match"]:before {
-        content: "Match";
-        float: left;
-        position: absolute;
-        width: 4em;
-        left: -4em;
-        background: #4db357;
-        color: #fff;
-        border-radius: 5px;
-        font-size: 0.5rem;
-        padding: 0.25em;
-        overflow: visible;
-        white-space: nowrap;
-        word-break: normal;
-    }
-    .no-outline * {
-        outline: none !important;
-    }   
-    `);
     let iframe = useRef(null);
 
-    let setDrag = (elm) => {
-        elm.draggable = "true";
-        elm.addEventListener('dragstart', function dragStart(e) {
-            e.stopPropagation();
-            e.dataTransfer.setData("text/plain", Array.from(iframe.current.contentDocument.querySelectorAll("*")).indexOf(e.target));
-            //debugger;
-            //props.setDragging(this);
-        }, false);
-        elm.addEventListener('dragend', function dragEnd(e) {
-            e.stopPropagation();
-        }, false);
-        elm.addEventListener('dragover', function dragOver(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }, false);
-        elm.addEventListener('dragenter', function dragEnter(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            let name = "";
-            //TODO: show the element being hovered
-            /*if (this.id) name += "#" + this.id;
-            if (this.className) name += "." + this.className;
-            document.getElementById("canvasNotice").textContent = name;
-            this.parentNode.style.paddingTop = "1em";*/
-            this.classList.toggle("hover");
-        }, false);
-        elm.addEventListener('dragleave', function dragLeave(e) {
-            e.stopPropagation();
-            this.parentNode.style.paddingTop = "";
-            this.classList.toggle("hover");
-        }, false);
-        elm.addEventListener('drop', function dragDrop(e) {
-            e.stopPropagation();
-            this.parentNode.style.paddingTop = "";
-            this.classList.toggle("hover");
-            //document.getElementById("canvasNotice").textContent = "";
-            if (elements[this.tagName.toLowerCase()] == null || elements[this.tagName.toLowerCase()].droppable === false) return;
-            //debugger;
-            let data = e.dataTransfer.getData("text");
-            if (!isNaN(Number(data))) this.append(iframe.current.contentDocument.querySelectorAll("*")[data]);
-            else this.append(document.createRange().createContextualFragment(data));
-            //editor.updateIds();
-        }, false);
-    };
-    let handleLoad = () => {
-        // add editing styles
-        let styleTag = document.createElement("style");
-        styleTag.title = "editor";
-        styleTag.innerHTML = style;
-        let canvas = iframe.current.contentDocument;
-        canvas.head.appendChild(styleTag);
-        //get css, reverse so most specific styles are on top.reverse()
-        let styles = {
-            css: [],
-            media: []
-        };
-        let initial_styles = Array.from(canvas.styleSheets).reduce((acc, sheet) => {
-            return acc.concat((sheet.title !== "editor" && !sheet.href) ? Array.from(sheet.rules) : []);
-        }, []);
-        initial_styles.forEach(rule => {
-            if (rule.media) {
-                styles.media.push(rule);
-            } else {
-                styles.css.push(rule);
-            }
-        });
-        props.setCanvasStyles(styles);
-        //console.log(initial_styles);
-        //let [styles, setStyles] = useState(initial_styles);
-        //TODO: how to bind outlines class to body?
-        if (props.outlines) canvas.body.classList.add("show-outlines");
-        else if (!props.outlines) canvas.body.classList.add("no-outline");
-        // change the active element with focus
-        canvas.body.addEventListener("focusin", e => {
-            if (canvas.querySelector("[data-status]")) {
-                canvas.querySelector("[data-status]").removeAttribute("data-status");
-            }
-            //let [styles, setStyles] = useState(initial_styles);
-            props.setActive(e.target);
-            e.target.setAttribute("data-status", "active");
-        });
-        // add content editable, make focusable, set drag handlers
-        canvas.body.querySelectorAll("*:not(style):not(script)").forEach((elm) => {
-            const hasTextNode = Array.from(elm.childNodes).filter(node => {
-                return node.nodeName === "#text"
-                    && node.textContent.replace(/\s/g, "") !== ""
-                    && !node.parentNode.isContentEditable;
-            }).length > 0;
-            if (hasTextNode) elm.contentEditable = true;
-            elm.setAttribute("tabindex", "0");
-            if (elements[elm.tagName.toLowerCase()] && elements[elm.tagName.toLowerCase()].draggable !== false) {
-                setDrag(elm);
-            }
-        });
-        //log mutations
-        const observer = new MutationObserver((mutationsList, observer) => {
-            for(let mutation of mutationsList) {
-                console.log(mutation.target);
-                if (mutation.type === 'childList') {
-                    if (mutation.addedNodes.length > 0) {
-                        console.log('Child node added');
-                        console.log(mutation.addedNodes);
-                    } else if (mutation.removedNodes.length > 0) {
-                        console.log('Child node removed');
-                        console.log(mutation.removedNodes);
-                    }
-                } else if (mutation.type === 'attributes') {
-                    let value = mutation.target.getAttribute(mutation.attributeName);
-                    if (value === null) {
-                        console.log(`${mutation.attributeName} removed`);
-                    } else {
-                        console.log(`${mutation.attributeName}="${value}"`);
-                    }
-                }
-            }
-        });
-        observer.observe(canvas, { attributes: true, childList: true, subtree: true });
-    };
-
+    //TODO replace document.getElementById("canvas")?
     useEffect(() => {
-        document.getElementById("canvas").addEventListener('load', handleLoad);
-
         //rewrite shortcuts for react
         /*document.getElementById("canvas").addEventListener("keydown", function(event) {
             let save = event.which === 83 && event.ctrlKey;//S
@@ -221,32 +36,147 @@ export function Canvas(props) {
                 }
             }
         });*/
-    });
+        let setDrag = (elm) => {
+            elm.draggable = "true";
+            elm.addEventListener('dragstart', function dragStart(e) {
+                e.stopPropagation();
+                e.dataTransfer.setData("text/plain", Array.from(iframe.current.contentDocument.querySelectorAll("*")).indexOf(e.target));
+            }, false);
+            elm.addEventListener('dragend', function dragEnd(e) {
+                e.stopPropagation();
+            }, false);
+            elm.addEventListener('dragover', function dragOver(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+            elm.addEventListener('dragenter', function dragEnter(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                //let name = "";
+                //TODO: show the element being hovered
+                /*if (this.id) name += "#" + this.id;
+                if (this.className) name += "." + this.className;
+                document.getElementById("canvasNotice").textContent = name;
+                this.parentNode.style.paddingTop = "1em";*/
+                this.classList.toggle("hover");
+            }, false);
+            elm.addEventListener('dragleave', function dragLeave(e) {
+                e.stopPropagation();
+                this.parentNode.style.paddingTop = "";
+                this.classList.toggle("hover");
+            }, false);
+            elm.addEventListener('drop', function dragDrop(e) {
+                e.stopPropagation();
+                this.parentNode.style.paddingTop = "";
+                this.classList.toggle("hover");
+                //document.getElementById("canvasNotice").textContent = "";
+                if (elements[this.tagName.toLowerCase()] == null || elements[this.tagName.toLowerCase()].droppable === false) return;
+                let data = e.dataTransfer.getData("text");
+                if (!isNaN(Number(data))) this.append(iframe.current.contentDocument.querySelectorAll("*")[data]);
+                else this.append(document.createRange().createContextualFragment(data));
+            }, false);
+        };
+        let handleLoad = () => {
+            // add editing styles
+            let styleTag = document.createElement("style");
+            styleTag.title = "editor";
+            styleTag.innerHTML = data.editor_style;
+            let canvas = iframe.current.contentDocument;
+            canvas.head.appendChild(styleTag);
+    
+            //get css
+            let styles = {
+                css: [],
+                media: []
+            };
+            let initial_styles = Array.from(canvas.styleSheets).reduce((acc, sheet) => {
+                return acc.concat((sheet.title !== "editor" && !sheet.href) ? Array.from(sheet.rules) : []);
+            }, []);
+            initial_styles.forEach(rule => {
+                //unshift so most specific styless are on
+                if (rule.media) {
+                    styles.media.push(rule);
+                } else {
+                    styles.css.push(rule);
+                }
+            });
+            props.setCanvasStyles(styles);
+            
+            // change the active element with focus
+            canvas.body.addEventListener("focusin", e => {
+                if (e.target === canvas.querySelector("[data-status]")) return;
+                if (canvas.querySelector("[data-status]")) {
+                    canvas.querySelector("[data-status]").removeAttribute("data-status");
+                }
+                props.setActive(e.target);
+                e.target.setAttribute("data-status", "active");
+            });
+    
+            // add content editable, make focusable, set drag handlers
+            canvas.body.querySelectorAll("*:not(style):not(script)").forEach((elm) => {
+                const hasTextNode = Array.from(elm.childNodes).filter(node => {
+                    return node.nodeName === "#text"
+                        && node.textContent.replace(/\s/g, "") !== ""
+                        && !node.parentNode.isContentEditable;
+                }).length > 0;
+                if (hasTextNode) elm.contentEditable = true;
+                elm.setAttribute("tabindex", "0");
+                if (elements[elm.tagName.toLowerCase()] && elements[elm.tagName.toLowerCase()].draggable !== false) {
+                    setDrag(elm);
+                }
+            });
+    
+            //log mutations
+            new MutationObserver((mutationsList, observer) => {
+                for(let mutation of mutationsList) {
+                    console.log(mutation.target);
+                    if (mutation.type === 'childList') {
+                        if (mutation.addedNodes.length > 0) {
+                            console.log('Child node added');
+                            console.log(mutation.addedNodes);
+                        } else if (mutation.removedNodes.length > 0) {
+                            console.log('Child node removed');
+                            console.log(mutation.removedNodes);
+                        }
+                    } else if (mutation.type === 'attributes') {
+                        let value = mutation.target.getAttribute(mutation.attributeName);
+                        if (value === null) {
+                            console.log(`${mutation.attributeName} removed`);
+                        } else {
+                            console.log(`${mutation.attributeName}="${value}"`);
+                        }
+                    }
+                }
+            }).observe(canvas, { attributes: true, childList: true, subtree: true });
+        };
+        document.getElementById("canvas").addEventListener('load', handleLoad);
+    }, [data.editor_style, props]);
 
-    //TODO: bind to props.show_images?
-    /*
-    function () {
-        let imgs = editor.doc.querySelectorAll("img")
+    useEffect(() => {
+        let imgs = document.getElementById("canvas").contentDocument.querySelectorAll("img");
         imgs.forEach(img => {
-            if (img.src === location.href) {
+            if (img.src === window.location.href) {
                 img.src = img.getAttribute("data-src");
                 img.removeAttribute("data-src");
             } else {
                 img.setAttribute("data-src", img.src);
-                img.src = location.href;
+                img.src = window.location.href;
             }
         });
-    });
-    */
-// onLoad={handleLoad}
-    let classes = "canvasWrapper scroll canvas_" + props.device;
+    }, [props.show_images]);
+
+    useEffect(() => {
+        let body = document.getElementById("canvas").contentDocument.body;
+        body.classList.toggle("no-outline");
+        
+    }, [props.outlines]);
+   
     return (
-        <div className={classes}>
+        <div className={`canvasWrapper scroll canvas_${props.device}`}>
             <iframe
                 ref={iframe}
                 id="canvas"
                 title="canvas"
-                //onChange={props.setActiveTemplate}
                 srcDoc={props.src_doc}
                 style={{transform: `scale(${props.zoom})`}}
             />

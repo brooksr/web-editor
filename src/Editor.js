@@ -157,9 +157,11 @@ function StyleRule(props) {
 									   defaultValue={line}
 									   list="cssNames"
 								/>
-								{Array.isArray(styles[line]) ?
-										<ValueSelect value={rules[line]} options={styles[line]}/> :
-										<ValueInput value={rules[line]} pattern={styles[line]}/>
+								{typeof styles[line] == "undefined" ?
+									<ValueInput value={rules[line]}/> :
+								typeof styles[line].options != "undefined" ?
+									<ValueSelect value={rules[line]} options={styles[line].options}/> :
+									<ValueInput value={rules[line]} pattern={styles[line].pattern}/>
 								}
 							</div>
 						)
@@ -213,7 +215,7 @@ function Attributes(props) {
 	return (
 			<div className="attributes_tab">
 				<h3>Active Block</h3>
-				<div className="button-group">
+				<div className="button-group" style={{paddingTop: '1em'}}>
 					<button>
 						<i className="far fa-save"></i>
 						<span className="tablet-tooltip">Save as Block</span>
@@ -231,18 +233,25 @@ function Attributes(props) {
 						<span className="tablet-tooltip">Move Down</span>
 					</button>
 				</div>
-				{Object.keys(attributes).map(attr => {
-					return (
-							<Attribute
-									key={attr}
-									pattern={attributes[attr]}
-									name={attr}
-									value={props.active_element.getAttribute(attr) ? props.active_element.getAttribute(attr) : ""}
-									setActiveAttribute={newAttr => props.active_element.setAttribute(attr, newAttr)}
-							/>
-					)
-				})}
-				<CodeMirror value={props.active_element.outerHTML} options={options}/>
+				<div style={{paddingTop: '1em'}}>
+					{Object.keys(attributes).map(attr => {
+						return (
+								<Attribute
+										key={attr}
+										pattern={attributes[attr]}
+										name={attr}
+										value={props.active_element.getAttribute(attr) ? props.active_element.getAttribute(attr) : ""}
+										setActiveAttribute={newAttr => props.active_element.setAttribute(attr, newAttr)}
+								/>
+						)
+					})}
+				</div>
+				<div style={{padding: '1em 0'}}>
+					<CodeMirror
+						value={props.active_element.outerHTML}
+						options={options}
+					/>
+				</div>
 			</div>
 	)
 }
@@ -251,9 +260,9 @@ function Style (props) {
 			<div className="styles_tab">
 				<details>
 					<summary>Styles</summary>
-					<div className="button-group button-group-sm">
-						<button>New CSS Rule</button>
-						<button>New Media Rule</button>
+					<div className="button-group button-group-sm" style={{padding: '1em 0'}}>
+						<button><i className="fas fa-plus"></i> CSS Rule</button>
+						<button><i className="fas fa-plus"></i> Media Rule</button>
 					</div>
 					<div className="flex">
 						{props.canvas_styles.media.map((rule, index) => {
@@ -301,9 +310,6 @@ function Style (props) {
 						})}
 					</div>
 				</details>
-				{/*<datalist id="configColors">
-					{Object.keys(props.styles).map(name => !/^(#|hsl|rgb)/.test(props.styles[name]) ? "" : <option label={name} value={props.styles[name]} />)}
-				</datalist>*/}
 				<datalist id="cssNames">
 					{Object.keys(styles).map(name => <option key={name} value={name} />)}
 				</datalist>
@@ -318,9 +324,9 @@ export function Editor(props) {
 				<div id="tab_panels" className="scroll">
 					<div className="editor_panel edit_tab editor_active">
 						<Attributes active_element={props.active_element}/>
-						<Style active_element={props.active_element} canvas_styles={props.canvas_styles} styles={props.styles} pattern={props.pattern} />
+						<Style active_element={props.active_element} canvas_styles={props.canvas_styles} />
 						<div className="blocks_tab">
-							{data.blocks.map((group, i) =>
+							{data.blocks.filter(b => b.type === props.type).map((group, i) =>
 									<BlockGroup
 											key={group.name}
 											name={group.name}

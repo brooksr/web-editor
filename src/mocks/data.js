@@ -1,27 +1,11 @@
-import {
-    modal
-} from "../templates/modal";
-import {
-    bar
-} from "../templates/bar";
-import {
-    uml_export
-} from "../templates/uml_export";
-import {
-    email
-} from "../templates/email";
-import {
-    email2
-} from "../templates/email2";
-import {
-    uml
-} from "../templates/uml";
-import {
-    modalBlocks
-} from "../modal-blocks";
-import {
-    emailBlocks
-} from "../email-blocks";
+import {modal} from "../templates/modal";
+import {bar} from "../templates/bar";
+import {uml_export} from "../templates/uml_export";
+import {email} from "../templates/email";
+import {email2} from "../templates/email2";
+import {uml} from "../templates/uml";
+import {modalBlocks} from "../templates/modal-blocks";
+import {emailBlocks} from "../templates/email-blocks";
 
 export let data = {
     name: "Samsung",
@@ -278,3 +262,65 @@ export let data = {
         }
     }],
 };
+
+data.editor_style = `
+body, html {
+    min-height:100vh;
+}
+body {
+    margin:0;
+    transform: scale(1);
+    overflow: auto;
+    transform-origin: top left;
+    transition: transform 0.5s ease;
+    box-sizing: border-box;
+    ${Object.keys(data.styles).map(style => `--${style}: ${data.styles[style]};`).join("\n")}
+}
+${data.fonts.reduce((acc, style) => acc += `
+@font-face {
+    font-family: "${style.name}";
+    src: url("${style.path}.eot"); /* IE9 Compat Modes */
+    src: url("${style.path}.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+        url("${style.path}.otf") format("opentype"), /* Open Type Font */
+        url("${style.path}.svg") format("svg"), /* Legacy iOS */
+        url("${style.path}.ttf") format("truetype"), /* Safari, Android, iOS */
+        url("${style.path}.woff") format("woff"), /* Modern Browsers */
+        url("${style.path}.woff2") format("woff2"); /* Modern Browsers */
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}`, "")}
+.hover {
+    opacity: 0.2;
+}
+* {
+    box-sizing: inherit;
+    outline: 1px dashed rgba(100, 100, 100, 0.5);
+}
+*:hover {
+    outline: 1px dashed rgba(47,165,228, 0.5);
+}
+[data-status="active"] {
+    outline: 1px dashed #4db357;
+}
+[draggable] {
+    user-select: none;
+}
+[data-status="match"]:before {
+    content: "Match";
+    float: left;
+    position: absolute;
+    width: 4em;
+    left: -4em;
+    background: #4db357;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 0.5rem;
+    padding: 0.25em;
+    overflow: visible;
+    white-space: nowrap;
+    word-break: normal;
+}
+.no-outline * {
+    outline: none !important;
+}`;

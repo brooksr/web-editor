@@ -11,11 +11,13 @@ export let assets = [
         html: modal,
         launch_settings: 6,
         launch_method: "abandonment",
+        type: "modal",
     }, {
         id: 1,
         name: "Coupon reminder",
         html: bar,
         launch_method: "coupon_reminder",
+        type: "modal",
     },
     {
         id: 2,
@@ -24,6 +26,7 @@ export let assets = [
         preheader: "preheader line 1",
         time: 3600,
         html: uml_export,
+        type: "email",
     }, {
         id: 3,
         name: "Email 2",
@@ -31,6 +34,7 @@ export let assets = [
         preheader: "preheader line 2",
         time: 86400 - 3600,
         html: email,
+        type: "email",
     }, {
         id: 4,
         name: "Email 3",
@@ -38,16 +42,19 @@ export let assets = [
         preheader: "preheader line 3",
         time: 86400 * 2,
         html: email2,
+        type: "email",
     },
     {
         id: 5,
         name: "Free Shipping",
         coupon: "FREESHIPPING",
         html: modal,
+        type: "modal",
     }, {
         id: 6,
         name: "Free Gift",
         coupon: "FREEGIFT",
         html: modal,
+        type: "modal",
     }
 ]
