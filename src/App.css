@@ -49,6 +49,9 @@ textarea {
 a {
   color: #2ab34b;
 }
+.navbar {
+  height: 100%;
+}
 .navbar ul {
   list-style: none;
   margin: 0;
@@ -140,11 +143,6 @@ summary {
   border-image-slice: 10;
   box-sizing: border-box;
   height: calc(100vh - 5em);
-  position: absolute;
-  top: 6em;
-  left: 0;
-  right: 25em;
-  margin: auto;
   width: calc(100% - 25em);
   max-width:100%;
   max-height:100%;
@@ -168,7 +166,7 @@ summary {
   width: 100%;
   z-index: 1;
   padding: 1em;
-  top: 6em;
+  top: 4em;
   height: calc(100vh - 5em);
   position: absolute;
   opacity: 1;
@@ -185,13 +183,13 @@ summary {
   padding: 0.25em;
   border-radius: 8px;
 }
-.menu ul {
+.list {
   display: flex;
   flex-wrap: wrap;
   padding: 0;
   justify-content: space-around;
 }
-.menu li {
+.list li {
   display: initial;
   flex: 0 1 14%;
   margin: 1%;
@@ -200,7 +198,7 @@ summary {
   text-align:center;
   background: #222;
 }
-.menu li img {
+.list li img {
   max-height: 20em;
   max-width: 100%;
 }
@@ -249,7 +247,7 @@ summary {
   display: flex;
   flex: 0 0 100%;
   background: #000;
-  padding: 1em;
+  padding: 0.5em;
   white-space: nowrap;
   /*position: fixed;*/
   top: 0;
@@ -258,7 +256,10 @@ summary {
   user-select: none;
 }
 #toolbar > *:not(:last-child) {
-  margin-right: 4em;
+  margin-right: 2em;
+}
+#toolbar > * {
+  align-items: center;
 }
 #toolbar .input-group input, #toolbar .input-group select {
   flex: 0 0 2em;
@@ -336,9 +337,6 @@ summary {
 }
 #editor {
   width: 25em;
-  position: fixed;
-  right: 0;
-  top: 6em;
 }
 #tab_panels {
   height: calc(100vh - 5em);
@@ -401,7 +399,8 @@ summary {
   color:#ddd;
   border: none;
   /* border-bottom: 1px solid #4c494d; */
-  box-shadow: inset -1px -1px 2px 0px rgba(90, 90, 90, 1);
+  border: 1px solid #666;
+      border-radius: 5px;
   background: transparent;
   line-height: 1.25;
   padding: .25em;
@@ -416,7 +415,8 @@ summary {
 }
 .input-group textarea {
   flex: 1 0 100%;
-  box-shadow: inset 1px 1px 2px 0px rgba(90, 90, 90, 1), inset -1px -1px 2px 0px rgba(90, 90, 90, 1);
+  border: 1px solid #666;
+  padding:0.5em;
 }
 .input-group option {
   font-size: 0.8em;
@@ -532,6 +532,7 @@ summary {
 .styles_tab input, .styles_tab select {
   flex: 1 0 auto;
   margin: 0;
+  border: none;
 }
 .styles_tab option {
   background: #333;
@@ -560,10 +561,10 @@ input:invalid {
   padding: 0 0.5em;
 }
 .campaignWrapper {
-  background: #0f0f0f;
+  background: #444;
   border: 1px solid #555;
   padding: 1em;
-  margin-bottom: 2em;
+  margin: 2em 0;
 }
 .iframeWrapper {
   position: relative;
@@ -633,11 +634,17 @@ button:hover .tablet-tooltip, label:hover .tablet-tooltip {
   background: rgba(42, 179, 75, 0.5);
   display: inherit;
   position: absolute;
-  top: -2em;
+  top: 2.5em;
   left: 0;
   padding: 0.25em;
   border-radius: 5px;
   font-size: 0.75em;
+}
+.asset {
+  border: 1px solid #333;
+  background-color: #000;
+  padding: 1em;
+  margin-bottom: 1em;
 }
 /* not really just tablet anymore */
 /* @media only screen and (max-width: 1500px) {

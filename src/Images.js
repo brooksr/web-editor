@@ -9,7 +9,7 @@ export function Images(props) {
 					<input type="file" name="fileToUpload" id="fileToUpload"/>
 					<input type="submit" value="Upload Image" name="submit"/>
 				</form>
-				<ul>
+				<ul className="list">
 					{data.images.map((i) =>
 							<li key={i.src}>
 								<img src={i.src} alt={i.alt}/>

@@ -167,13 +167,13 @@ export let data = {
                     html: modal,
                     launch_settings: 6,
                     link: "https://www.destination.com/cart",
-                    launch_method: "abandonment",
+                    launch_method: [0, 1],
                 }, {
                     id: 1,
                     name: "Coupon reminder",
                     html: bar,
                     link: "https://www.destination.com/cart",
-                    launch_method: "coupon_reminder",
+                    launch_method: [3],
                 }],
                 notes: "",
             },
@@ -245,7 +245,7 @@ export let data = {
                     split: 50, // 1 / configs.length
                     launch_settings: 6,
                     link: "https://www.destination.com/cart",
-                    launch_method: "abandonment",
+                    launch_method: [0, 1],
                     notes: "",
                 }, {
                     id: 6,
@@ -255,7 +255,7 @@ export let data = {
                     split: 50, // 1 / configs.length
                     launch_settings: 6,
                     link: "https://www.destination.com/cart",
-                    launch_method: "abandonment",
+                    launch_method: [0, 1],
                     notes: "",
                 }]
             }

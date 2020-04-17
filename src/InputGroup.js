@@ -9,7 +9,7 @@ export default function InputGroup(props) {
 				props.asset.type === "text" ? <input type="text" name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
 				props.asset.type === "number" ? <input type="number" name="value" min={props.asset.min} max={props.asset.max} defaultValue={props.value} placeholder={props.asset.title} /> :
 				props.asset.type === "time" ? <input type="number" name="value" min="0" defaultValue={props.value} placeholder={props.asset.title} /> :
-				props.asset.type === "checkbox" ? <div><CheckboxList options={props.asset.options} /></div> :
+				props.asset.type === "checkbox" ? <div><CheckboxList value={props.value} options={props.asset.options} /></div> :
 				props.asset.type === "date" ? <input type="date" name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
 				props.asset.type === "textarea" ? <textarea name="value" defaultValue={props.value} placeholder={props.asset.title} /> :
 				props.asset.type === "conditions" ? <Conditions value={props.value} className="condition" /> : ""
@@ -21,7 +21,7 @@ export default function InputGroup(props) {
 function CheckboxList (props) {
 	return props.options.map((o, i) =>
 			<div key={i}>
-				<input type="checkbox" name="value" value={o} defaultChecked={true} /> {o}
+				<input type="checkbox" name="value" checked={props.value.indexOf(i) > -1} /> {o}
 			</div>
 	)
 }

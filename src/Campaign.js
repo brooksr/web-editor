@@ -62,8 +62,8 @@ export function Campaign(props) {
 					<dt>Version</dt><dd></dd>
 					<dt>Status</dt><dd></dd>
 					<dt>Type</dt><dd></dd>
-					<dt>Created On</dt><dd></dd>
-					<dt>Created By</dt><dd></dd>
+					{/* <dt>Created On</dt><dd></dd>
+					<dt>Created By</dt><dd></dd> */}
 					<dt>Last Modified On</dt><dd></dd>
 					<dt>Last Modified By</dt><dd></dd>
 					<dt>Form Version</dt><dd></dd>

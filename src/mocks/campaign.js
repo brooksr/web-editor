@@ -167,8 +167,8 @@ export default {
 					title: "When should this modal be displayed",
 					options: [
 						"Abandonment: Predictive (desktop only)",
-						"Abandonment: Back off site",
 						"Abandonment: Back off page",
+						"Abandonment: Back off site",
 						"Proactive: After page load",
 						"Side Slider: Click on tab"
 					]

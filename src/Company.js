@@ -4,24 +4,28 @@ import AssetList from "./AssetList";
 import {Images} from "./Images.js"
 import {Templates} from "./Templates.js";
 import {useGlobalState} from "./hooks/useGlobal";
+import './Company.css';
 
 export function Company(props) {
 	const { data } = useGlobalState();
 
 	return (
-		<div className={"scroll modal menu"}>
+		<div class="company">
 			<h1>{data.name}</h1>
 			<div className="input-group">
 				<textarea value={data.note} readOnly={true} />
 			</div>
-			<dl className="flex">
+			{/* <dl className="flex">
 				<dt>Created On</dt><dd></dd>
 				<dt>Created By</dt><dd></dd>
 				<dt>Last Modified On</dt><dd></dd>
 				<dt>Last Modified By</dt><dd></dd>
-			</dl>
+			</dl> */}
 			<h2>Campaigns</h2>
-			<button>New Campaign</button>
+			<button>
+					<i className="fas fa-plus"></i>
+					New Campaign
+				</button>
 			{data.campaigns.map((campaign) =>
 				<CampaignSummary key={campaign.id} campaign={campaign} />
 			)}
@@ -117,11 +121,19 @@ function CampaignSummary(props) {
 	return (
 		<div className="campaignWrapper">
 			<h4><a href={campaign.data.admin.opp} rel="noopener noreferrer" target="_blank">{campaign.info.name}</a></h4>
-			<p>{campaign.notes}</p>
 			<Link className="button" to={`/company/${match.params.companyID}/campaign/${campaign.id}/`}>
 				<i className="fas fa-edit"></i>
 				<span className="">Open Campaign</span>
 			</Link>
+			<p>Notes: {campaign.notes}</p>
+			<dl className="flex">
+				<dt>Version</dt><dd></dd>
+				<dt>Status</dt><dd></dd>
+				<dt>Type</dt><dd></dd>
+				<dt>Last Modified On</dt><dd></dd>
+				<dt>Last Modified By</dt><dd></dd>
+			</dl>
+
 			{campaign.assets && Object.keys(campaign.assets).map(prop => {
 				return (
 					<div key={prop}>

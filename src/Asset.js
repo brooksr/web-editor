@@ -30,22 +30,24 @@ export function Asset(props) {
 				src_doc={asset.html}
 				CodeMirror={CodeMirror}
 			/>
-			<Canvas
-				src_doc={asset.html}
-				show_images={props.show_images}
-				outlines={props.outlines}
-				device={props.device}
-				zoom={props.zoom}
-				setActive={setActive}
-				setCanvasStyles={setCanvasStyles}
-			/>
-			<Editor
-				type={asset.type}
-				canvas_styles={canvas_styles}
-				active_element={active_element}
-				setCanvasStyles={setCanvasStyles}
-				CodeMirror={CodeMirror}
-			/>
+			<div class="flex flex-auto">
+				<Canvas
+					src_doc={asset.html}
+					show_images={props.show_images}
+					outlines={props.outlines}
+					device={props.device}
+					zoom={props.zoom}
+					setActive={setActive}
+					setCanvasStyles={setCanvasStyles}
+				/>
+				<Editor
+					type={asset.type}
+					canvas_styles={canvas_styles}
+					active_element={active_element}
+					setCanvasStyles={setCanvasStyles}
+					CodeMirror={CodeMirror}
+				/>
+			</div>
 			<datalist id="configStyles">
 				{Object.keys(data.styles).map(name => <option key={name} label={data.styles[name]} value={`--var(${name})`} />)}
 			</datalist>

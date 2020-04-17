@@ -4,7 +4,7 @@ import {useGlobalState} from "./hooks/useGlobal";
 export function Templates(props) {
 	const {data} = useGlobalState();
 	return (
-    <ul>
+    <ul className="list">
       {data.templates.map((template, ind) =>
           <Template template={template} key={ind}/>
       )}
